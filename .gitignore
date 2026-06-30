@@ -42,3 +42,6 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Generated ingestion cache (sample_players.json is committed; the live cache is not)
+data/players_raw.parquet

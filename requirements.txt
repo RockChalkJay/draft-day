@@ -6,3 +6,6 @@ pytest==8.2.2
 lxml==5.2.2
 nflreadpy==0.1.5
 pyarrow==24.0.0
+fastapi==0.115.6
+uvicorn==0.34.0
+httpx==0.28.1
