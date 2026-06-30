@@ -27,16 +27,26 @@ def records_to_df(records: list[dict]) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
+def _merge_category(base_cat: dict, override: dict | None) -> dict:
+    """Start from the preset's category weights and apply only the provided keys,
+    so a partial override (e.g. receiving {"rec": 0.5}) keeps the preset's other
+    weights (yards, TDs) instead of wiping them out."""
+    merged = dict(base_cat)
+    if override:
+        merged.update(override)
+    return merged
+
+
 def build_scoring(model: ScoringConfigModel) -> ScoringConfig:
-    """Resolve a preset and layer any provided category overrides on top."""
+    """Resolve a preset and layer any provided per-key category overrides on top."""
     base = PRESETS.get(model.preset or "ppr", PRESETS["ppr"])
     return ScoringConfig(
-        passing=model.passing if model.passing is not None else dict(base.passing),
-        rushing=model.rushing if model.rushing is not None else dict(base.rushing),
-        receiving=model.receiving if model.receiving is not None else dict(base.receiving),
-        kicking=model.kicking if model.kicking is not None else dict(base.kicking),
-        defense=model.defense if model.defense is not None else dict(base.defense),
-        misc=model.misc if model.misc is not None else dict(base.misc),
+        passing=_merge_category(base.passing, model.passing),
+        rushing=_merge_category(base.rushing, model.rushing),
+        receiving=_merge_category(base.receiving, model.receiving),
+        kicking=_merge_category(base.kicking, model.kicking),
+        defense=_merge_category(base.defense, model.defense),
+        misc=_merge_category(base.misc, model.misc),
     )
 
 
