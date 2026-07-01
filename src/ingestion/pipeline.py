@@ -87,9 +87,17 @@ def fetch_live(scoring_format: str = "ppr") -> pd.DataFrame:
     outage degrades gracefully rather than raising."""
     frames = []
 
+    # FantasyPros projections come back one frame per position, all tagged with
+    # the same "fantasypros" source. merge_sources keys columns by source name,
+    # so the six frames must be concatenated into one first -- otherwise their
+    # identically-prefixed stat columns collide ("Indexes have overlapping
+    # values"). Different positions carry different columns; a row-wise concat
+    # unions them and leaves NaN where a position lacks a stat.
     fp = FantasyProsFetcher()
-    for pos in POSITIONS:
-        frames.append(fp.fetch(pos))
+    fp_frames = [fp.fetch(pos) for pos in POSITIONS]
+    fp_frames = [f for f in fp_frames if f is not None and not f.empty]
+    if fp_frames:
+        frames.append(pd.concat(fp_frames, ignore_index=True))
 
     frames.append(FantasyProsECRFetcher().fetch(scoring_format=scoring_format))
     frames.append(FFCFetcher().fetch(scoring_format=scoring_format))
@@ -105,21 +113,22 @@ def load_player_table_with_source(
 ) -> tuple[pd.DataFrame, str]:
     """Resolve the merged player table and report where it came from.
 
-    Order of preference: parquet cache (unless ``refresh``), then a live fetch,
-    then the bundled sample. ``source`` is one of "cache", "live", "sample", or
-    "empty".
+    Order of preference: offline sample (if DRAFTDAY_OFFLINE), then the parquet
+    cache (unless ``refresh``), then a live fetch, then the bundled sample.
+    ``source`` is one of "cache", "live", "sample", or "empty".
     """
+    # Offline mode (DRAFTDAY_OFFLINE=1) is deterministic: always the bundled
+    # sample, ignoring any cached live pull. Used by tests and offline demos so
+    # first load is instant and reproducible. Checked before the cache so a
+    # previously-fetched real cache can't leak into an offline run.
+    if os.environ.get("DRAFTDAY_OFFLINE", "").lower() in ("1", "true", "yes"):
+        return load_sample(), "sample"
+
     if not refresh and os.path.exists(CACHE_PATH):
         try:
             return pd.read_parquet(CACHE_PATH), "cache"
         except Exception:
             pass  # corrupt cache -> fall through to a fresh build
-
-    # Offline mode (DRAFTDAY_OFFLINE=1) skips the network entirely and serves the
-    # bundled sample -- used by tests and offline demos so first load is instant
-    # instead of waiting on every source to time out.
-    if os.environ.get("DRAFTDAY_OFFLINE", "").lower() in ("1", "true", "yes"):
-        return load_sample(), "sample"
 
     try:
         live = fetch_live(scoring_format=scoring_format)

@@ -1,6 +1,32 @@
 import pandas as pd
+import pytest
 
+from src.ingestion.merge import merge_sources
 from src.ingestion.pipeline import ECR_RANK_COL, ensure_aav
+
+
+def _fp_position_frame(position, rows):
+    return pd.DataFrame(rows).assign(position=position, source="fantasypros")
+
+
+def test_same_source_position_frames_must_be_concatenated_before_merge():
+    # FantasyPros returns one frame per position, all source="fantasypros", and
+    # RB/WR/TE share stat columns (RECEIVING_*). merge_sources keys columns by
+    # source, so passing the frames separately collides on the shared prefixed
+    # columns -- the exact bug that silently forced the live pull to fall back to
+    # the sample. fetch_live must concat them into one frame first.
+    rb = _fp_position_frame("RB", [{"player_name": "Bijan Robinson", "team": "ATL",
+                                     "RUSHING_YDS": 1200, "RECEIVING_REC": 50}])
+    wr = _fp_position_frame("WR", [{"player_name": "Ja'Marr Chase", "team": "CIN",
+                                    "RECEIVING_REC": 100, "RECEIVING_YDS": 1400}])
+
+    with pytest.raises(ValueError):
+        merge_sources([rb, wr])
+
+    merged = merge_sources([pd.concat([rb, wr], ignore_index=True)])
+    assert len(merged) == 2
+    assert "fantasypros_RUSHING_YDS" in merged.columns
+    assert "fantasypros_RECEIVING_YDS" in merged.columns
 
 
 def test_existing_aav_is_preserved():
