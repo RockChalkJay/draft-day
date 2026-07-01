@@ -1,7 +1,7 @@
 import pandas as pd
 
 from src.rankings.league_state import LeagueState, RosterSlot, Team
-from src.rankings.pdm import calculate_pdm, calculate_personal_need
+from src.rankings.pdm import calculate_pdm
 
 
 def _board(elite_per_pos):
@@ -60,13 +60,3 @@ def test_k_dst_absent_from_map():
     ls = LeagueState(teams=[_team({"RB": 1})], drafted_player_ids=set())
     pdm = calculate_pdm(df, ls)
     assert set(pdm.keys()) == {"QB", "RB", "WR", "TE"}
-
-
-def test_personal_need_uses_one_teams_slots():
-    df = _board({"RB": 2, "WR": 5, "QB": 5, "TE": 5})
-    my_team = _team({"RB": 6})
-    other = _team({"RB": 0})
-    ls = LeagueState(teams=[my_team, other], drafted_player_ids=set())
-    # Personal need keys off my_team's 6 empty RB slots vs 2 elite -> sr 3 -> 1.2.
-    need = calculate_personal_need(df, my_team, ls)
-    assert need["RB"] == min(1.25, 1 + (6 / 2 - 1) * 0.1)

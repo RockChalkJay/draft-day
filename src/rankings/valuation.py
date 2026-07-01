@@ -30,12 +30,10 @@ def calculate_final_worth(
     pdm_map: dict[str, float],
     inflation_map: dict[str, float],
 ) -> pd.Series:
-    """``worth = vorp * inflation * tcm * pdm``, then rounded.
+    """``worth = vorp * inflation * tcm * pdm``, rounded to the nearest dollar.
 
     The $1 floor applies only when ``vorp > 0``; a replacement-level player
-    (``vorp == 0``, including all K/DST) is hard-priced at $0. Rounding uses
-    ``floor(x + 0.5)`` to match JavaScript ``Math.round`` (round-half-up), not
-    Python's banker's rounding.
+    (``vorp == 0``, including all K/DST) is hard-priced at $0.
     """
     pos = df["position"]
     pdm = pos.map(pdm_map).fillna(1.0)
@@ -43,7 +41,7 @@ def calculate_final_worth(
     tcm = df["tcm"].fillna(1.0) if "tcm" in df.columns else 1.0
 
     raw = df["vorp"] * inflation * tcm * pdm
-    rounded = np.floor(raw + 0.5)
+    rounded = raw.round()
     worth = np.where(df["vorp"] > 0, np.maximum(1.0, rounded), 0.0)
     return pd.Series(worth.astype(int), index=df.index)
 

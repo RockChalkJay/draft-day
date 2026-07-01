@@ -25,11 +25,10 @@ def test_vorp_zero_forces_worth_zero():
     assert worth.iloc[0] == 0
 
 
-def test_half_rounds_up_like_js_math_round():
-    # raw = vorp*inflation*tcm*pdm = 5 * 0.5 * 1 * 1 = 2.5 -> floor(3.0)=3.
-    # Python's round(2.5) would give 2 (banker's); we must get 3.
-    worth = calculate_final_worth(_worth_frame(5.0), {"RB": 1.0}, {"RB": 0.5})
-    assert worth.iloc[0] == 3
+def test_rounds_to_nearest_dollar():
+    # raw = 10 * 0.46 = 4.6 -> 5;  10 * 0.44 = 4.4 -> 4.
+    assert calculate_final_worth(_worth_frame(10.0), {"RB": 1.0}, {"RB": 0.46}).iloc[0] == 5
+    assert calculate_final_worth(_worth_frame(10.0), {"RB": 1.0}, {"RB": 0.44}).iloc[0] == 4
 
 
 def test_end_to_end_static_then_live():

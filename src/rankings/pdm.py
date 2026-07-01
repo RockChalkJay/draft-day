@@ -3,13 +3,12 @@
 A league-wide scarcity signal: how many empty slots chase how many elite
 (tier<=2) undrafted players at each position. Kept league-wide -- not
 personalized to the viewing team -- because ``worth`` is a market-price
-predictor and an auction price is set by aggregate demand, not one team's need
-(see ``calculate_personal_need`` for the separate, personalized signal).
+predictor and an auction price is set by aggregate demand, not one team's need.
 """
 
 import pandas as pd
 
-from src.rankings.league_state import LeagueState, Team
+from src.rankings.league_state import LeagueState
 
 PDM_POSITIONS = ("QB", "RB", "WR", "TE")  # K/DST never included
 
@@ -44,29 +43,5 @@ def calculate_pdm(df: pd.DataFrame, league_state: LeagueState) -> dict[str, floa
     result = {}
     for pos in PDM_POSITIONS:
         needed = empty.get(pos, 0) + (flex / 3 if pos in ("RB", "WR", "TE") else 0)
-        result[pos] = _scarcity_multiplier(needed, elite_counts[pos])
-    return result
-
-
-def calculate_personal_need(
-    df: pd.DataFrame,
-    team: Team,
-    league_state: LeagueState,
-) -> dict[str, float]:
-    """Same scarcity-ratio shape as ``calculate_pdm``, but the numerator is one
-    team's own empty slots, not the league's.
-
-    This is a separate signal -- "how badly do *you* need this position right
-    now" -- meant to be displayed alongside ``worth`` (the UI's "Best Value For
-    Your Needs"), never folded into it. Elite supply is still the league-wide
-    undrafted count.
-    """
-    own_empty = team.empty_slot_counts()
-    elite_counts = _elite_counts(df, league_state)
-    flex = own_empty.get("FLEX", 0)
-
-    result = {}
-    for pos in PDM_POSITIONS:
-        needed = own_empty.get(pos, 0) + (flex / 3 if pos in ("RB", "WR", "TE") else 0)
         result[pos] = _scarcity_multiplier(needed, elite_counts[pos])
     return result
