@@ -13,22 +13,48 @@ def _worth_frame(vorp, tcm=1.0):
     return pd.DataFrame([{"player_id": "p0", "position": "RB", "vorp": vorp, "tcm": tcm}])
 
 
-def test_dollar_floor_only_when_vorp_positive():
-    # vorp 1, inflation 0.2 -> raw 0.2 -> floor(0.7)=0 -> max(1,0)=1.
-    worth = calculate_final_worth(_worth_frame(1.0), {"RB": 1.0}, {"RB": 0.2})
-    assert worth.iloc[0] == 1
+def _pair(vorp_a, vorp_b, tcm_a=1.0, tcm_b=1.0):
+    return pd.DataFrame([
+        {"player_id": "a", "position": "RB", "vorp": vorp_a, "tcm": tcm_a},
+        {"player_id": "b", "position": "RB", "vorp": vorp_b, "tcm": tcm_b},
+    ])
+
+
+def test_single_player_gets_floor_plus_whole_pool():
+    # Only positive-VORP player in the RB pool -> $1 floor + the entire $40 pool.
+    worth = calculate_final_worth(_worth_frame(100.0), {"RB": 40.0}, set())
+    assert worth.iloc[0] == 41
 
 
 def test_vorp_zero_forces_worth_zero():
-    # Even with big multipliers, vorp 0 -> worth 0 (no $1 floor).
-    worth = calculate_final_worth(_worth_frame(0.0), {"RB": 1.25}, {"RB": 10.0})
+    worth = calculate_final_worth(_worth_frame(0.0), {"RB": 100.0}, set())
     assert worth.iloc[0] == 0
 
 
-def test_rounds_to_nearest_dollar():
-    # raw = 10 * 0.46 = 4.6 -> 5;  10 * 0.44 = 4.4 -> 4.
-    assert calculate_final_worth(_worth_frame(10.0), {"RB": 1.0}, {"RB": 0.46}).iloc[0] == 5
-    assert calculate_final_worth(_worth_frame(10.0), {"RB": 1.0}, {"RB": 0.44}).iloc[0] == 4
+def test_drafted_player_gets_zero():
+    worth = calculate_final_worth(_worth_frame(100.0), {"RB": 40.0}, {"p0"})
+    assert worth.iloc[0] == 0
+
+
+def test_pool_split_conserves_budget():
+    # compression 1.0: weights 100:25 -> 80:20 of the $100 pool, +$1 each.
+    worth = calculate_final_worth(_pair(100.0, 25.0), {"RB": 100.0}, set(), compression=1.0)
+    assert worth.tolist() == [81, 21]
+    assert worth.sum() == 102  # 2 players' $1 floors + $100 pool
+
+
+def test_compression_flattens_top_heavy_distribution():
+    hi = calculate_final_worth(_pair(100.0, 25.0), {"RB": 100.0}, set(), compression=1.0)
+    lo = calculate_final_worth(_pair(100.0, 25.0), {"RB": 100.0}, set(), compression=0.5)
+    assert lo.iloc[0] < hi.iloc[0]  # top pulled down
+    assert lo.iloc[1] > hi.iloc[1]  # middle lifted
+
+
+def test_tcm_tilts_pool_within_position():
+    # Equal VORP; the cliff player (tcm 1.5) takes a bigger slice, pool conserved.
+    worth = calculate_final_worth(_pair(50.0, 50.0, tcm_a=1.5, tcm_b=1.0), {"RB": 100.0}, set(), compression=1.0)
+    assert worth.iloc[0] > worth.iloc[1]
+    assert worth.sum() == 102
 
 
 def test_end_to_end_static_then_live():
@@ -60,12 +86,15 @@ def test_end_to_end_static_then_live():
     live = apply_live_valuation(static, ls)
     cols = live.players.columns
     assert {"tcm", "pdm", "worth"}.issubset(cols)
-    assert live.pdm_map is not None and live.inflation_map is not None
+    assert live.pdm_map is not None and live.position_budgets is not None
 
     # Sanity: worth is non-negative everywhere and the top RB outranks a deep RB.
     assert (live.players["worth"] >= 0).all()
     rb = live.players[live.players["position"] == "RB"].sort_values("points", ascending=False)
     assert rb["worth"].iloc[0] >= rb["worth"].iloc[-1]
+
+    # Budget-conserving: total predicted worth does not exceed cash in the room.
+    assert live.players["worth"].sum() <= ls.total_remaining_cash()
 
 
 def test_static_result_reusable_across_picks():

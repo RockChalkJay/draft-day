@@ -307,7 +307,7 @@ let rawPlayers = [];      // from GET /api/players (raw merged columns)
 let players = [];          // normalized UI objects + live valuations
 let byId = new Map();
 let staticResult = null;   // cached POST /api/rankings/static response
-let pdmMap = {}, inflationMap = {};
+let pdmMap = {}, positionBudgets = {};
 let teams = [];
 let draftStarted = false;
 let myTeamId = "t0";
@@ -373,7 +373,7 @@ async function recomputeLive(){
     const lp = liveById.get(pl.id);
     if(lp){ pl.tier=num(lp.tier); pl.vorp=num(lp.vorp); pl.worth=num(lp.worth); pl.tcm=num(lp.tcm); pl.pdm=num(lp.pdm); }
   }
-  pdmMap = live.pdm_map || {}; inflationMap = live.inflation_map || {};
+  pdmMap = live.pdm_map || {}; positionBudgets = live.position_budgets || {};
   setStatus("");
   renderAll();
 }

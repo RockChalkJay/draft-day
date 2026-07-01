@@ -60,7 +60,7 @@ def test_full_flow_static_then_live_produces_worth(players):
     assert resp.status_code == 200
     body = resp.json()
     assert set(body["pdm_map"]) == {"QB", "RB", "WR", "TE"}
-    assert "K" not in body["inflation_map"]
+    assert "K" not in body["position_budgets"]
 
     by_pos = {}
     for p in body["players"]:
@@ -73,7 +73,7 @@ def test_full_flow_static_then_live_produces_worth(players):
     assert max(by_pos["RB"]) > 0 and max(by_pos["WR"]) > 0
 
 
-def test_drafting_a_player_changes_inflation(players):
+def test_drafting_a_player_changes_budgets(players):
     static = client.post(
         "/api/rankings/static",
         json={"players": players, "scoring_config": {"preset": "ppr"}, "num_teams": 12},
@@ -86,9 +86,9 @@ def test_drafting_a_player_changes_inflation(players):
         return client.post("/api/rankings/live", json={"static_result": static, "league_state": ls}).json()
 
     start = live([], 200.0)
-    # Draft the three best RBs and reduce cash; RB inflation should move.
+    # Draft the three best RBs and reduce cash; the RB budget pool should move.
     after = live(rb_ids[:3], 140.0)
-    assert start["inflation_map"]["RB"] != after["inflation_map"]["RB"]
+    assert start["position_budgets"]["RB"] != after["position_budgets"]["RB"]
 
 
 def test_scoring_override_changes_points(players):

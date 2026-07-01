@@ -26,7 +26,15 @@ It does so with a six-piece valuation pipeline:
 6. **Inflation** — *live*; per-position price inflation as cash and VORP deplete
    unevenly.
 
-The product is `worth = vorp × inflation × tcm × pdm`, rounded to a dollar.
+`worth` is a **budget-conserving** auction price: $1 is reserved for every
+remaining roster slot, and the rest of the cash in the room is partitioned across
+the skill positions (by each position's original VORP share × its live demand)
+and then across players within a position (by `vorp^0.75 × tcm`). So the total of
+all predicted prices equals the money left to spend — `worth` is a partition of
+the budget, not an unbounded markup. The `vorp^0.75` compression corrects the way
+raw VORP over-prices elite studs relative to how auctions actually clear; the
+exponent is tunable per league.
+
 Pieces 1–3 are **static** (computed once per scoring/roster config); pieces 4–6
 are **live** (recomputed after every pick). Kickers and defenses are tracked for
 ownership and price paid only — they are never assigned a `worth` or surfaced as
@@ -135,7 +143,7 @@ sessions, no database.
 |---|---|---|
 | `GET /api/players` | app load | raw merged player table (cache → live → sample) |
 | `POST /api/rankings/static` | draft start / config change | points → tiers → VORP |
-| `POST /api/rankings/live` | after every pick / undo | TCM → PDM → inflation → worth |
+| `POST /api/rankings/live` | after every pick / undo | TCM → PDM → budgets → worth |
 
 The browser caches the `/static` response and includes it in every `/live`
 request along with the current `LeagueState`.
@@ -154,9 +162,11 @@ tests/           ingestion/, rankings/, api/  —  synthetic data, no network
 
 ## Notes & known scope
 
-- `worth` is a price *prediction*, not a budget partition; predicted totals can
-  exceed cash in the room (TCM/PDM only ever mark prices up). This is intended —
-  real auctions clear through bidding.
+- `worth` is budget-conserving: predicted prices sum to the cash left in the
+  room. TCM/PDM redistribute that fixed pot (toward cliffs and scarce positions)
+  rather than inflating the total; a uniform PDM across positions cancels out.
+- The `vorp^0.75` compression is a calibration for real-world bidding; adjust it
+  (`WORTH_COMPRESSION` in `valuation.py`) if your league prices studs differently.
 - K/DST price at `$0` by design (no VORP computed).
 - ECR data is ingested; currently only the consensus `rank_ecr` is surfaced (the
   `FP` column). Variance signals (`rank_std`, etc.) are ingested but not yet used.

@@ -6,13 +6,12 @@ TCM/PDM/inflation/worth recompute on demand after each pick
 (``apply_live_valuation``).
 """
 
-import math
 from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 
-from src.rankings.inflation import calculate_inflation_index
+from src.rankings.inflation import calculate_position_budgets
 from src.rankings.league_state import LeagueState
 from src.rankings.pdm import calculate_pdm
 from src.rankings.replacement import (
@@ -24,26 +23,44 @@ from src.rankings.scoring import ScoringConfig, calculate_points
 from src.rankings.tcm import calculate_tcm
 from src.rankings.tiers import calculate_tiers_by_cliffs
 
+# VORP-share pricing systematically overprices elite studs relative to how
+# auctions actually clear (you can't spend a third of your budget on one player
+# and still field a roster). Raising VORP to a sub-1 power compresses the top and
+# lifts the middle to match observed bidding. 0.75 lands the top tier around a
+# third of a $200 budget, the empirical rule of thumb. Tunable per league.
+WORTH_COMPRESSION = 0.75
+
 
 def calculate_final_worth(
     df: pd.DataFrame,
-    pdm_map: dict[str, float],
-    inflation_map: dict[str, float],
+    position_budgets: dict[str, float],
+    drafted_player_ids: set[str],
+    compression: float = WORTH_COMPRESSION,
 ) -> pd.Series:
-    """``worth = vorp * inflation * tcm * pdm``, rounded to the nearest dollar.
+    """Budget-conserving auction worth.
 
-    The $1 floor applies only when ``vorp > 0``; a replacement-level player
-    (``vorp == 0``, including all K/DST) is hard-priced at $0.
+    Each position's dollar pool (from ``calculate_position_budgets``) is
+    distributed across its *undrafted* players with positive VORP, weighted by
+    ``vorp**compression * tcm``. Every such player gets a $1 floor plus its share
+    of the pool, so the per-position totals sum back to the discretionary cash --
+    ``worth`` is a budget partition, not an unbounded markup. Replacement-level
+    players (``vorp == 0``, all K/DST) and already-drafted players are $0.
     """
-    pos = df["position"]
-    pdm = pos.map(pdm_map).fillna(1.0)
-    inflation = pos.map(inflation_map).fillna(0.0)
-    tcm = df["tcm"].fillna(1.0) if "tcm" in df.columns else 1.0
+    worth = pd.Series(0.0, index=df.index)
+    tcm = df["tcm"].fillna(1.0) if "tcm" in df.columns else pd.Series(1.0, index=df.index)
+    undrafted = ~df["player_id"].isin(drafted_player_ids)
 
-    raw = df["vorp"] * inflation * tcm * pdm
-    rounded = raw.round()
-    worth = np.where(df["vorp"] > 0, np.maximum(1.0, rounded), 0.0)
-    return pd.Series(worth.astype(int), index=df.index)
+    for pos, pool in position_budgets.items():
+        mask = undrafted & (df["position"] == pos) & (df["vorp"] > 0)
+        if not mask.any():
+            continue
+        weight = np.power(df.loc[mask, "vorp"], compression) * tcm[mask]
+        weight_total = float(weight.sum())
+        if weight_total <= 0:
+            continue
+        worth.loc[mask] = 1.0 + weight / weight_total * pool
+
+    return worth.round().clip(lower=0).astype(int)
 
 
 @dataclass
@@ -51,7 +68,7 @@ class RankingsResult:
     players: pd.DataFrame
     replacement_levels: dict[str, float]
     pdm_map: dict[str, float] | None = None
-    inflation_map: dict[str, float] | None = None
+    position_budgets: dict[str, float] | None = None
 
 
 def calculate_static_rankings(
@@ -86,20 +103,23 @@ def calculate_static_rankings(
 def apply_live_valuation(
     static_result: RankingsResult,
     league_state: LeagueState,
+    compression: float = WORTH_COMPRESSION,
 ) -> RankingsResult:
-    """Steps 3-6: tcm -> pdm -> inflation -> worth, layered onto a previously
+    """Steps 3-6: tcm -> pdm -> budgets -> worth, layered onto a previously
     computed static result. Call again after every pick (and undo)."""
     df = static_result.players.copy()
 
     df["tcm"] = calculate_tcm(df, league_state)
     pdm_map = calculate_pdm(df, league_state)
-    inflation_map = calculate_inflation_index(df, league_state)
+    position_budgets = calculate_position_budgets(df, league_state, pdm_map)
     df["pdm"] = df["position"].map(pdm_map).fillna(1.0)
-    df["worth"] = calculate_final_worth(df, pdm_map, inflation_map)
+    df["worth"] = calculate_final_worth(
+        df, position_budgets, league_state.drafted_player_ids, compression
+    )
 
     return RankingsResult(
         players=df,
         replacement_levels=static_result.replacement_levels,
         pdm_map=pdm_map,
-        inflation_map=inflation_map,
+        position_budgets=position_budgets,
     )
