@@ -13,17 +13,17 @@ def _wf(aav, pos="RB"):
     return pd.DataFrame([{"player_id": "p0", "position": pos, "aav": aav}])
 
 
-def test_worth_equals_aav_at_inflation_one():
+def test_worth_equals_ceiling_at_heat_one():
     assert calculate_final_worth(_wf(40), 1.0, set()).iloc[0] == 40
 
 
-def test_worth_scales_with_inflation():
+def test_worth_scales_with_heat():
     # 1 + (40-1)*1.5 = 59.5 -> 60
     assert calculate_final_worth(_wf(40), 1.5, set()).iloc[0] == 60
 
 
-def test_dollar_aav_stays_a_dollar_regardless_of_inflation():
-    # 1 + (1-1)*infl = 1 (a min-bid player never inflates)
+def test_dollar_ceiling_stays_a_dollar_regardless_of_heat():
+    # 1 + (1-1)*heat = 1 (a min-bid filler player never scales)
     assert calculate_final_worth(_wf(1), 3.0, set()).iloc[0] == 1
 
 
@@ -82,10 +82,10 @@ def test_end_to_end_static_then_live():
     rb = live.players[live.players["position"] == "RB"].sort_values("aav", ascending=False)
     assert rb["worth"].iloc[0] >= rb["worth"].iloc[-1]
 
-    # Roughly budget-scale: total predicted worth stays near the cash in the room
-    # (exactly conserving when priced players == slots; a little over when there
-    # are more priced players than slots, as here).
-    assert live.players["worth"].sum() <= ls.total_remaining_cash() * 1.15
+    # Value-ceiling (Option B): worth concentrates on the top and does NOT sum to
+    # the full budget -- only that the priciest ceiling doesn't exceed the pool.
+    assert live.players["worth"].sum() <= ls.total_remaining_cash()
+    assert live.players["worth"].max() <= ls.starting_bankroll
 
 
 def test_static_result_reusable_across_picks():

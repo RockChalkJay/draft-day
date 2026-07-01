@@ -37,26 +37,32 @@ def load_sample() -> pd.DataFrame:
 
 ECR_RANK_COL = "fantasypros_ecr_rank_ecr"
 
+# Value-ceiling AAV curve (Option B): worth is "the most you should pay", a steep
+# convex drop by value rank -- top ~= AAV_TOP, tapering to $1 by ~AAV_SPAN. It is
+# deliberately NOT budget-conserving: only the top tier carries real money, the
+# rest are $1 fliers, matching how bids concentrate on studs.
+AAV_TOP = 66.0     # dollars for the #1-ranked player
+AAV_SPAN = 45      # rank by which the curve reaches $1
+AAV_STEEP = 2.0    # convexity; higher = steeper drop through the middle
 
-def ensure_aav(
-    df: pd.DataFrame,
-    num_teams: int = 12,
-    budget: int = 200,
-    roster_size: int = 15,
-    cutoff: int = 180,
-    exponent: float = 1.3,
-) -> pd.DataFrame:
-    """Guarantee an ``aav`` (Average Auction Value) column.
+
+def steep_aav_curve(rank: pd.Series, top: float = AAV_TOP, span: int = AAV_SPAN,
+                    steep: float = AAV_STEEP) -> pd.Series:
+    """Dollar value for a 1-indexed value rank: ``top * (1 - (rank-1)/span)**steep``,
+    floored at $1 within ``span`` and $0 beyond it (undrafted-worthless)."""
+    frac = (1 - (rank - 1) / span).clip(lower=0)
+    raw = top * np.power(frac, steep)
+    return np.where(rank <= span, np.maximum(1, raw.round()), 1)
+
+
+def ensure_aav(df: pd.DataFrame) -> pd.DataFrame:
+    """Guarantee an ``aav`` (Average Auction Value / value-ceiling) column.
 
     If a market AAV feed already populated ``aav`` (the offline sample, or a
     future direct auction-$ source), it's left untouched. Otherwise AAV is
     synthesized from FantasyPros' ECR **consensus rank** -- real market-ranking
-    data -- via a decreasing curve normalized so the drafted pool sums to the
-    league budget. This is a market-grounded shape (not our own VORP); a direct
-    AAV-dollar feed can replace it by writing the ``aav`` column upstream.
-
-    The absolute level barely matters downstream: the live inflation term
-    rescales AAV to the cash actually in the room.
+    data -- through the steep value-ceiling curve. A direct AAV-dollar feed can
+    replace it by writing the ``aav`` column upstream.
     """
     if "aav" in df.columns and pd.to_numeric(df["aav"], errors="coerce").fillna(0).gt(0).any():
         return df
@@ -68,15 +74,10 @@ def ensure_aav(
 
     rank = pd.to_numeric(df[ECR_RANK_COL], errors="coerce")
     skill = df["position"].isin(["QB", "RB", "WR", "TE"]) & rank.notna()
-    weight = np.power((cutoff - (rank - 1)).clip(lower=0).where(skill, 0), exponent)
-    weight_total = float(weight[skill].sum())
-    if weight_total <= 0:
-        df["aav"] = 0
-        return df
-
-    discretionary = num_teams * budget - num_teams * roster_size
-    premium = weight / weight_total * discretionary
-    df["aav"] = np.where(skill, (1 + premium).round(), 0).astype(int)
+    # Rank within the skill pool so the curve is applied to consecutive 1..N ranks.
+    skill_rank = rank.where(skill).rank(method="first")
+    aav = steep_aav_curve(skill_rank)
+    df["aav"] = np.where(skill, aav, 0).astype(int)
     return df
 
 

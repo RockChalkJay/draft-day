@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from src.rankings.inflation import calculate_auction_inflation
+from src.rankings.inflation import calculate_market_heat
 from src.rankings.league_state import LeagueState
 from src.rankings.pdm import calculate_pdm
 from src.rankings.replacement import (
@@ -29,18 +29,19 @@ PRICED_POSITIONS = ("QB", "RB", "WR", "TE")
 
 def calculate_final_worth(
     df: pd.DataFrame,
-    inflation: float,
+    heat: float,
     drafted_player_ids: set[str],
     aav_col: str = "aav",
     priced_positions: tuple[str, ...] = PRICED_POSITIONS,
 ) -> pd.Series:
-    """Market-anchored auction worth: ``worth = 1 + (aav - 1) * inflation``.
+    """Value-ceiling worth: ``worth = 1 + (aav - 1) * heat``.
 
-    At draft start (``inflation == 1``) worth equals AAV. As money leaves the
-    room faster than value, inflation rises and every remaining player costs a
-    little over sticker. Priced only for undrafted skill players with a real
-    market value (``aav >= 1``); K/DST, already-drafted, and unpriced players
-    are $0.
+    ``aav`` is the steep value ceiling (top ~$66 tapering to $1 by ~rank 45), so
+    at draft start (``heat == 1``) worth equals that ceiling. As the room pays
+    over/under sticker, ``heat`` scales the premium up or down. The $1 base keeps
+    filler players at $1 regardless of heat. Priced only for undrafted skill
+    players with a real value (``aav >= 1``); K/DST, drafted, and worthless
+    players are $0.
     """
     if aav_col not in df.columns:
         return pd.Series(0, index=df.index, dtype=int)
@@ -49,7 +50,7 @@ def calculate_final_worth(
     undrafted = ~df["player_id"].isin(drafted_player_ids)
     priced = undrafted & df["position"].isin(priced_positions) & (aav >= 1.0)
 
-    worth = 1.0 + (aav - 1.0) * inflation
+    worth = 1.0 + (aav - 1.0) * heat
     return worth.where(priced, 0.0).round().clip(lower=0).astype(int)
 
 
@@ -94,20 +95,20 @@ def apply_live_valuation(
     static_result: RankingsResult,
     league_state: LeagueState,
 ) -> RankingsResult:
-    """Live layer: worth from AAV + inflation. TCM/PDM are still computed as
-    analytical signals (cliff / positional demand) for display, but no longer
-    fold into worth -- AAV already prices scarcity in. Call after every pick."""
+    """Live layer: worth = value-ceiling AAV scaled by market heat. TCM/PDM are
+    still computed as analytical signals (cliff / positional demand) for display,
+    but don't fold into worth. Call after every pick."""
     df = static_result.players.copy()
 
     df["tcm"] = calculate_tcm(df, league_state)
     pdm_map = calculate_pdm(df, league_state)
     df["pdm"] = df["position"].map(pdm_map).fillna(1.0)
-    inflation = calculate_auction_inflation(df, league_state)
-    df["worth"] = calculate_final_worth(df, inflation, league_state.drafted_player_ids)
+    heat = calculate_market_heat(df, league_state)
+    df["worth"] = calculate_final_worth(df, heat, league_state.drafted_player_ids)
 
     return RankingsResult(
         players=df,
         replacement_levels=static_result.replacement_levels,
         pdm_map=pdm_map,
-        inflation=inflation,
+        inflation=heat,
     )

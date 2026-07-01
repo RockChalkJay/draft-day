@@ -69,4 +69,8 @@ def build_league_state(model: LeagueStateModel) -> LeagueState:
         )
         for t in model.teams
     ]
-    return LeagueState(teams=teams, drafted_player_ids=set(model.drafted_player_ids))
+    return LeagueState(
+        teams=teams,
+        drafted_player_ids=set(model.drafted_player_ids),
+        starting_bankroll=model.starting_bankroll,
+    )

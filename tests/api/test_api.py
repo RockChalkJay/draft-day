@@ -76,7 +76,7 @@ def test_full_flow_static_then_live_produces_worth(players):
 ROSTER = ["QB", "RB", "RB", "WR", "WR", "TE", "FLEX", "BENCH", "BENCH", "K", "DST"]
 
 
-def test_overpay_deflates_bargain_inflates(players):
+def test_overpay_raises_heat_bargain_lowers(players):
     static = client.post(
         "/api/rankings/static",
         json={"players": players, "scoring_config": {"preset": "ppr"}, "num_teams": 12},
@@ -88,15 +88,15 @@ def test_overpay_deflates_bargain_inflates(players):
         teams = [{"team_id": "t0", "bankroll": t0_cash, "roster": [{"pos": p} for p in ROSTER]}]
         teams += [{"team_id": f"t{i}", "bankroll": 200.0, "roster": [{"pos": p} for p in ROSTER]} for i in range(1, 12)]
         return client.post("/api/rankings/live",
-                           json={"static_result": static, "league_state": {"teams": teams, "drafted_player_ids": drafted}}).json()
+                           json={"static_result": static, "league_state":
+                                 {"teams": teams, "drafted_player_ids": drafted, "starting_bankroll": 200.0}}).json()
 
     start = live(200.0, [])
-    # Overpaying leaves less money for the rest of the board -> deflation.
+    # Momentum: the room paying over sticker heats the market; a bargain cools it.
     over = live(200.0 - (top["aav"] + 40), [top["player_id"]])
-    # A bargain on the same player leaves more money behind -> inflation vs the overpay.
     under = live(200.0 - max(1, top["aav"] - 40), [top["player_id"]])
-    assert over["inflation"] < start["inflation"]
-    assert under["inflation"] > over["inflation"]
+    assert over["inflation"] > start["inflation"]
+    assert under["inflation"] < over["inflation"]
 
 
 def test_scoring_override_changes_points(players):

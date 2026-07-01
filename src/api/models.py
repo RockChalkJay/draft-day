@@ -45,6 +45,7 @@ class TeamModel(BaseModel):
 class LeagueStateModel(BaseModel):
     teams: list[TeamModel] = Field(default_factory=list)
     drafted_player_ids: list[str] = Field(default_factory=list)
+    starting_bankroll: float = 200.0
 
 
 class PlayersResult(BaseModel):
