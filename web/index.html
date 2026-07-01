@@ -254,7 +254,7 @@
         <div class="field"><label>FLEX spots</label><input type="number" id="rcFlex" value="1" min="0"><div class="hint" style="font-size:11px;color:var(--muted);margin-top:3px;">RB/WR/TE eligible</div></div>
         <div class="field"><label>K starters</label><input type="number" id="rcK" value="1"></div>
         <div class="field"><label>DST starters</label><input type="number" id="rcDST" value="1"></div>
-        <div class="field"><label>Bench spots</label><input type="number" id="rcBench" value="2"></div>
+        <div class="field"><label>Bench spots</label><input type="number" id="rcBench" value="6"></div>
       </div>
       <div id="roster-json" style="display:none;">
         <textarea id="rosterJsonText">{
@@ -265,7 +265,7 @@
   "flex_spots": 1,
   "k_starters": 1,
   "dst_starters": 1,
-  "bench_spots": 2
+  "bench_spots": 6
 }</textarea>
       </div>
     </div>
@@ -303,8 +303,18 @@
 // ============================ Config / constants ============================
 const POSITIONS = ["QB","RB","WR","TE","K","DST"];
 const SUGGESTION_POSITIONS = ["QB","RB","WR","TE"]; // K/DST excluded from suggestions
-const ROSTER_TEMPLATE = ["QB","RB","RB","WR","WR","TE","FLEX","BENCH","BENCH","K","DST"];
 const DEFAULT_TEAM_NAMES = ["Me","Dynasty Disasters","Gridiron Gang","End Zone Elite","Touchdown Titans","Blitz Brigade","Pigskin Pirates","Hail Mary Heroes","Red Zone Renegades","Fumble Force","Sack Attack","The Waiver Wired"];
+
+// Build the ordered list of roster slots from the roster config, so My Roster and
+// every team match the league's actual settings (Sleeper roster_positions).
+function buildRosterTemplate(cfg){
+  const t = [];
+  const push = (pos, n) => { for(let i=0;i<(n||0);i++) t.push(pos); };
+  push("QB", cfg.qb_starters); push("RB", cfg.rb_starters); push("WR", cfg.wr_starters);
+  push("TE", cfg.te_starters); push("FLEX", cfg.flex_spots);
+  push("K", cfg.k_starters); push("DST", cfg.dst_starters); push("BENCH", cfg.bench_spots);
+  return t;
+}
 
 // ============================ State ============================
 let rawPlayers = [];      // from GET /api/players (raw merged columns)
@@ -320,7 +330,7 @@ let sortKey = "worth", sortDir = -1;
 let posFilter = null, searchQuery = "";
 let numTiers = 5;
 let scoringConfig = { preset: "ppr" };
-let rosterConfig = { qb_starters:1, rb_starters:2, wr_starters:2, te_starters:1, flex_spots:1 };
+let rosterConfig = { qb_starters:1, rb_starters:2, wr_starters:2, te_starters:1, flex_spots:1, k_starters:1, dst_starters:1, bench_spots:6 };
 
 // ============================ API helpers ============================
 async function apiGet(path){ const r = await fetch(path); if(!r.ok) throw new Error(path+" → "+r.status); return r.json(); }
@@ -725,7 +735,8 @@ document.getElementById("confirmStartBtn").onclick = async () => {
   if(!names.length){ toast("Add at least one team."); return; }
   const bankroll = parseFloat(document.getElementById("modalBankroll").value) || 200;
   numTiers = parseInt(document.getElementById("modalNumTiers").value) || 5;
-  teams = names.map((name,i) => ({ id:"t"+i, name, bankroll, roster: ROSTER_TEMPLATE.map(pos=>({pos, playerId:null})) }));
+  const tmpl = buildRosterTemplate(rosterConfig);
+  teams = names.map((name,i) => ({ id:"t"+i, name, bankroll, roster: tmpl.map(pos=>({pos, playerId:null})) }));
   myTeamId = teams[0].id;
   draftStarted = true;
   modalOverlay.style.display = "none";
@@ -750,12 +761,14 @@ function readScoringConfig(){
     try { return JSON.parse(val("scoringJsonText")); }
     catch(e){ toast("Invalid scoring JSON"); throw e; }
   }
-  return {
-    preset: val("scoringPreset"),
-    receiving: { rec: parseFloat(val("scRec")) },
-    passing: { td: parseFloat(val("scPassTd")), int: parseFloat(val("scInt")) },
-    rushing: { td: parseFloat(val("scRushTd")) },
-  };
+  // Form mode exposes only the common fields; merge them onto the current config
+  // so imported values (yardage, etc.) aren't lost when saving from the form.
+  const c = JSON.parse(JSON.stringify(scoringConfig || {}));
+  delete c.preset;
+  c.receiving = Object.assign({}, c.receiving, { rec: parseFloat(val("scRec")) });
+  c.passing = Object.assign({}, c.passing, { td: parseFloat(val("scPassTd")), int: parseFloat(val("scInt")) });
+  c.rushing = Object.assign({}, c.rushing, { td: parseFloat(val("scRushTd")) });
+  return c;
 }
 function readRosterConfig(){
   if(document.getElementById("roster-json").style.display !== "none"){
@@ -765,14 +778,24 @@ function readRosterConfig(){
   return {
     qb_starters: parseInt(val("rcQB")), rb_starters: parseInt(val("rcRB")),
     wr_starters: parseInt(val("rcWR")), te_starters: parseInt(val("rcTE")),
-    flex_spots: parseInt(val("rcFlex")),
+    flex_spots: parseInt(val("rcFlex")), k_starters: parseInt(val("rcK")),
+    dst_starters: parseInt(val("rcDST")), bench_spots: parseInt(val("rcBench")),
   };
+}
+// Re-lay every team's roster slots to match rosterConfig. Skipped once any pick
+// is recorded so a mid-draft settings change can't wipe drafted players.
+function rebuildRosters(){
+  if(players.some(p => p.drafted)) return false;
+  const tmpl = buildRosterTemplate(rosterConfig);
+  teams.forEach(t => t.roster = tmpl.map(pos => ({ pos, playerId:null })));
+  return true;
 }
 document.getElementById("saveSettingsBtn").onclick = async () => {
   try {
     scoringConfig = readScoringConfig();
     rosterConfig = readRosterConfig();
   } catch(e){ return; }
+  rebuildRosters();
   await recomputeStatic();
   toast("Settings applied — rankings recomputed.");
 };
@@ -792,36 +815,48 @@ document.getElementById("sleeperFetchBtn").onclick = async () => {
     const rec = s.rec ?? 0;
     const preset = rec >= 1 ? "ppr" : rec >= 0.5 ? "half_ppr" : "standard";
 
+    // Full scoring config from Sleeper — all categories, not just the common few,
+    // so yardage and reception weights import correctly.
+    scoringConfig = {
+      passing: { yds: s.pass_yd ?? 0.04, td: s.pass_td ?? 4, int: s.pass_int ?? -2 },
+      rushing: { yds: s.rush_yd ?? 0.1, td: s.rush_td ?? 6 },
+      receiving: { rec: rec, yds: s.rec_yd ?? 0.1, td: s.rec_td ?? 6 },
+      misc: { fl: s.fum_lost ?? -2 },
+    };
+    // Reflect it in the form + JSON views.
     document.getElementById("scoringPreset").value = preset;
     document.getElementById("scRec").value = rec;
-    document.getElementById("scPassTd").value = s.pass_td ?? 4;
-    document.getElementById("scRushTd").value = s.rush_td ?? 6;
-    document.getElementById("scInt").value = s.pass_int ?? -2;
-    document.getElementById("scoringJsonText").value = JSON.stringify({
-      preset, receiving:{ rec, yds: s.rec_yd ?? 0.1, td: s.rec_td ?? 6 },
-      passing:{ td: s.pass_td ?? 4, int: s.pass_int ?? -2, yds: s.pass_yd ?? 0.04 },
-      rushing:{ td: s.rush_td ?? 6, yds: s.rush_yd ?? 0.1 },
-    }, null, 2);
+    document.getElementById("scPassTd").value = scoringConfig.passing.td;
+    document.getElementById("scRushTd").value = scoringConfig.rushing.td;
+    document.getElementById("scInt").value = scoringConfig.passing.int;
+    document.getElementById("scoringJsonText").value = JSON.stringify(scoringConfig, null, 2);
 
+    // Roster from Sleeper's roster_positions (FLEX variants and IDP-ish tags folded in).
     const count = pos => positions.filter(p => p === pos).length;
-    const flexCount = count("FLEX") + count("WRRB_FLEX") + count("REC_FLEX");
+    const flexCount = count("FLEX") + count("WRRB_FLEX") + count("REC_FLEX") + count("WRRB_WRT");
     const benchCount = count("BN");
-    document.getElementById("rcQB").value = count("QB");
-    document.getElementById("rcRB").value = count("RB");
-    document.getElementById("rcWR").value = count("WR");
-    document.getElementById("rcTE").value = count("TE");
-    document.getElementById("rcFlex").value = flexCount;
-    document.getElementById("rcK").value = count("K");
-    document.getElementById("rcDST").value = count("DEF");
-    document.getElementById("rcBench").value = benchCount;
-    document.getElementById("rosterJsonText").value = JSON.stringify({
+    rosterConfig = {
       qb_starters: count("QB"), rb_starters: count("RB"), wr_starters: count("WR"),
-      te_starters: count("TE"), flex_spots: flexCount, k_starters: count("K"),
-      dst_starters: count("DEF"), bench_spots: benchCount,
-    }, null, 2);
+      te_starters: count("TE"), flex_spots: flexCount,
+      k_starters: count("K"), dst_starters: count("DEF"), bench_spots: benchCount,
+    };
+    document.getElementById("rcQB").value = rosterConfig.qb_starters;
+    document.getElementById("rcRB").value = rosterConfig.rb_starters;
+    document.getElementById("rcWR").value = rosterConfig.wr_starters;
+    document.getElementById("rcTE").value = rosterConfig.te_starters;
+    document.getElementById("rcFlex").value = rosterConfig.flex_spots;
+    document.getElementById("rcK").value = rosterConfig.k_starters;
+    document.getElementById("rcDST").value = rosterConfig.dst_starters;
+    document.getElementById("rcBench").value = rosterConfig.bench_spots;
+    document.getElementById("rosterJsonText").value = JSON.stringify(rosterConfig, null, 2);
+
+    // Apply immediately: relay roster slots and recompute so the board reflects
+    // the league right away (no separate Save click needed).
+    rebuildRosters();
+    await recomputeStatic();
 
     status.style.color = "var(--good)";
-    status.textContent = `✓ Loaded "${data.name}" (${data.season} season, ${data.total_rosters} teams). Click "Save Settings & Recompute" to apply.`;
+    status.textContent = `✓ Loaded & applied "${data.name}" (${data.season}, ${data.total_rosters} teams, ${preset.toUpperCase()}).`;
   } catch(e){
     status.style.color = "var(--warn)";
     status.textContent = `Error: ${e.message}`;
@@ -830,7 +865,8 @@ document.getElementById("sleeperFetchBtn").onclick = async () => {
 
 // ============================ Boot ============================
 async function init(){
-  teams = DEFAULT_TEAM_NAMES.map((name,i) => ({ id:"t"+i, name, bankroll:200, roster: ROSTER_TEMPLATE.map(pos=>({pos, playerId:null})) }));
+  const tmpl = buildRosterTemplate(rosterConfig);
+  teams = DEFAULT_TEAM_NAMES.map((name,i) => ({ id:"t"+i, name, bankroll:200, roster: tmpl.map(pos=>({pos, playerId:null})) }));
   myTeamId = teams[0].id;
   showView("board");
   try {
