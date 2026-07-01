@@ -8,10 +8,9 @@ TCM/PDM/inflation/worth recompute on demand after each pick
 
 from dataclasses import dataclass
 
-import numpy as np
 import pandas as pd
 
-from src.rankings.inflation import calculate_position_budgets
+from src.rankings.inflation import calculate_auction_inflation
 from src.rankings.league_state import LeagueState
 from src.rankings.pdm import calculate_pdm
 from src.rankings.replacement import (
@@ -23,44 +22,35 @@ from src.rankings.scoring import ScoringConfig, calculate_points
 from src.rankings.tcm import calculate_tcm
 from src.rankings.tiers import calculate_tiers_by_cliffs
 
-# VORP-share pricing systematically overprices elite studs relative to how
-# auctions actually clear (you can't spend a third of your budget on one player
-# and still field a roster). Raising VORP to a sub-1 power compresses the top and
-# lifts the middle to match observed bidding. 0.75 lands the top tier around a
-# third of a $200 budget, the empirical rule of thumb. Tunable per league.
-WORTH_COMPRESSION = 0.75
+# K/DST are tracked (bid + ownership) but never priced -- they carry a market
+# AAV of ~$1 and were confirmed out of scope for suggestions/valuation.
+PRICED_POSITIONS = ("QB", "RB", "WR", "TE")
 
 
 def calculate_final_worth(
     df: pd.DataFrame,
-    position_budgets: dict[str, float],
+    inflation: float,
     drafted_player_ids: set[str],
-    compression: float = WORTH_COMPRESSION,
+    aav_col: str = "aav",
+    priced_positions: tuple[str, ...] = PRICED_POSITIONS,
 ) -> pd.Series:
-    """Budget-conserving auction worth.
+    """Market-anchored auction worth: ``worth = 1 + (aav - 1) * inflation``.
 
-    Each position's dollar pool (from ``calculate_position_budgets``) is
-    distributed across its *undrafted* players with positive VORP, weighted by
-    ``vorp**compression * tcm``. Every such player gets a $1 floor plus its share
-    of the pool, so the per-position totals sum back to the discretionary cash --
-    ``worth`` is a budget partition, not an unbounded markup. Replacement-level
-    players (``vorp == 0``, all K/DST) and already-drafted players are $0.
+    At draft start (``inflation == 1``) worth equals AAV. As money leaves the
+    room faster than value, inflation rises and every remaining player costs a
+    little over sticker. Priced only for undrafted skill players with a real
+    market value (``aav >= 1``); K/DST, already-drafted, and unpriced players
+    are $0.
     """
-    worth = pd.Series(0.0, index=df.index)
-    tcm = df["tcm"].fillna(1.0) if "tcm" in df.columns else pd.Series(1.0, index=df.index)
+    if aav_col not in df.columns:
+        return pd.Series(0, index=df.index, dtype=int)
+
+    aav = pd.to_numeric(df[aav_col], errors="coerce").fillna(0.0)
     undrafted = ~df["player_id"].isin(drafted_player_ids)
+    priced = undrafted & df["position"].isin(priced_positions) & (aav >= 1.0)
 
-    for pos, pool in position_budgets.items():
-        mask = undrafted & (df["position"] == pos) & (df["vorp"] > 0)
-        if not mask.any():
-            continue
-        weight = np.power(df.loc[mask, "vorp"], compression) * tcm[mask]
-        weight_total = float(weight.sum())
-        if weight_total <= 0:
-            continue
-        worth.loc[mask] = 1.0 + weight / weight_total * pool
-
-    return worth.round().clip(lower=0).astype(int)
+    worth = 1.0 + (aav - 1.0) * inflation
+    return worth.where(priced, 0.0).round().clip(lower=0).astype(int)
 
 
 @dataclass
@@ -68,7 +58,7 @@ class RankingsResult:
     players: pd.DataFrame
     replacement_levels: dict[str, float]
     pdm_map: dict[str, float] | None = None
-    position_budgets: dict[str, float] | None = None
+    inflation: float | None = None
 
 
 def calculate_static_rankings(
@@ -103,23 +93,21 @@ def calculate_static_rankings(
 def apply_live_valuation(
     static_result: RankingsResult,
     league_state: LeagueState,
-    compression: float = WORTH_COMPRESSION,
 ) -> RankingsResult:
-    """Steps 3-6: tcm -> pdm -> budgets -> worth, layered onto a previously
-    computed static result. Call again after every pick (and undo)."""
+    """Live layer: worth from AAV + inflation. TCM/PDM are still computed as
+    analytical signals (cliff / positional demand) for display, but no longer
+    fold into worth -- AAV already prices scarcity in. Call after every pick."""
     df = static_result.players.copy()
 
     df["tcm"] = calculate_tcm(df, league_state)
     pdm_map = calculate_pdm(df, league_state)
-    position_budgets = calculate_position_budgets(df, league_state, pdm_map)
     df["pdm"] = df["position"].map(pdm_map).fillna(1.0)
-    df["worth"] = calculate_final_worth(
-        df, position_budgets, league_state.drafted_player_ids, compression
-    )
+    inflation = calculate_auction_inflation(df, league_state)
+    df["worth"] = calculate_final_worth(df, inflation, league_state.drafted_player_ids)
 
     return RankingsResult(
         players=df,
         replacement_levels=static_result.replacement_levels,
         pdm_map=pdm_map,
-        position_budgets=position_budgets,
+        inflation=inflation,
     )

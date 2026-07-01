@@ -74,4 +74,4 @@ class LiveRequest(BaseModel):
 class LiveResult(BaseModel):
     players: list[dict[str, Any]]
     pdm_map: dict[str, float]
-    position_budgets: dict[str, float]
+    inflation: float

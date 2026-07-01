@@ -137,6 +137,10 @@
   <h1>🏈 Draft Day</h1>
   <nav id="nav"></nav>
   <span id="loadStatus"></span>
+  <div class="header-bankroll" title="Live auction inflation: how much remaining players cost vs their market AAV. >1 = board running hot, <1 = value left.">
+    <span class="label">Inflation</span>
+    <span class="value" id="inflation" style="color:var(--accent)">1.00×</span>
+  </div>
   <div class="header-bankroll">
     <span class="label">My Bankroll</span>
     <span class="value" id="myBankroll">$0</span>
@@ -307,7 +311,7 @@ let rawPlayers = [];      // from GET /api/players (raw merged columns)
 let players = [];          // normalized UI objects + live valuations
 let byId = new Map();
 let staticResult = null;   // cached POST /api/rankings/static response
-let pdmMap = {}, positionBudgets = {};
+let pdmMap = {}, inflation = 1;
 let teams = [];
 let draftStarted = false;
 let myTeamId = "t0";
@@ -334,7 +338,7 @@ function normalize(p){
   return {
     id: p.player_id, name: p.player_name, position: p.position, team: p.team,
     bye: num(p.fantasypros_ecr_bye), fp_rank: num(p.fantasypros_ecr_rank_ecr),
-    tier: null, vorp: null, worth: null, tcm: null, pdm: null,
+    aav: num(p.aav), tier: null, vorp: null, worth: null, tcm: null, pdm: null,
     drafted: false, bid: null,
   };
 }
@@ -373,7 +377,7 @@ async function recomputeLive(){
     const lp = liveById.get(pl.id);
     if(lp){ pl.tier=num(lp.tier); pl.vorp=num(lp.vorp); pl.worth=num(lp.worth); pl.tcm=num(lp.tcm); pl.pdm=num(lp.pdm); }
   }
-  pdmMap = live.pdm_map || {}; positionBudgets = live.position_budgets || {};
+  pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1;
   setStatus("");
   renderAll();
 }
@@ -549,8 +553,8 @@ async function undraftPlayer(playerId){
 const COLS = [
   {key:"rank", label:"#"}, {key:"fp_rank", label:"FP"},
   {key:"name", label:"Player"}, {key:"position", label:"Pos"}, {key:"team", label:"Team"},
-  {key:"bye", label:"Bye"}, {key:"worth", label:"Worth"}, {key:"tier", label:"Tier"},
-  {key:"vorp", label:"VORP"}, {key:"tcm", label:"TCM"}, {key:"pdm", label:"PDM"},
+  {key:"bye", label:"Bye"}, {key:"worth", label:"Worth"}, {key:"aav", label:"AAV"},
+  {key:"tier", label:"Tier"}, {key:"vorp", label:"VORP"}, {key:"tcm", label:"TCM"}, {key:"pdm", label:"PDM"},
 ];
 function renderBoardHeader(){
   const tr = document.getElementById("boardHeaderRow");
@@ -559,7 +563,9 @@ function renderBoardHeader(){
     const th = document.createElement("th");
     th.textContent = c.label + (sortKey===c.key ? (sortDir===1?" ▲":" ▼") : " ↕");
     if(c.key==="fp_rank") th.title = "FantasyPros expert consensus rank (ECR). Green ▲ = our algorithm likes this player more than FP. Red ▼ = FP likes them more.";
-    if(c.key==="rank") th.title = "Overall rank by computed auction worth";
+    if(c.key==="rank") th.title = "Overall rank by live auction worth";
+    if(c.key==="worth") th.title = "Live auction value = AAV adjusted for money left in the room";
+    if(c.key==="aav") th.title = "Average Auction Value — the pre-draft market baseline";
     if(sortKey===c.key) th.classList.add("sorted");
     th.onclick = () => { if(sortKey===c.key) sortDir*=-1; else { sortKey=c.key; sortDir=-1; } renderBoard(); };
     tr.appendChild(th);
@@ -625,6 +631,7 @@ function renderBoardBody(){
       <td>${p.team||""}</td>
       <td class="bye">${p.bye==null?"–":p.bye}${conflict?" ⚠":""}</td>
       <td style="font-weight:600;">${money(p.worth)}</td>
+      <td style="color:var(--muted);">${money(p.aav)}</td>
       <td>${p.tier==null?"–":p.tier}</td>
       <td>${ri(p.vorp)}</td>
       <td>${f2(p.tcm)}</td>
@@ -687,6 +694,9 @@ function renderLeague(){
 function renderBoard(){ renderBoardHeader(); renderPosFilter(); renderBoardBody(); }
 function renderAll(){
   document.getElementById("myBankroll").textContent = myTeam() ? `$${myTeam().bankroll}` : "$0";
+  const infEl = document.getElementById("inflation");
+  infEl.textContent = inflation.toFixed(2) + "×";
+  infEl.style.color = inflation > 1.03 ? "var(--warn)" : inflation < 0.97 ? "var(--good)" : "var(--accent)";
   renderBoard(); renderTopOverall(); renderBestStrip(); renderNeedStrip();
   renderNominateBar(); renderMyTeam(); renderLeague();
 }

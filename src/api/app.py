@@ -86,7 +86,7 @@ def rankings_live(req: LiveRequest) -> LiveResult:
     return LiveResult(
         players=df_to_records(live.players),
         pdm_map=live.pdm_map or {},
-        position_budgets=live.position_budgets or {},
+        inflation=live.inflation if live.inflation is not None else 1.0,
     )
 
 

@@ -9,52 +9,41 @@ from src.rankings.valuation import (
 )
 
 
-def _worth_frame(vorp, tcm=1.0):
-    return pd.DataFrame([{"player_id": "p0", "position": "RB", "vorp": vorp, "tcm": tcm}])
+def _wf(aav, pos="RB"):
+    return pd.DataFrame([{"player_id": "p0", "position": pos, "aav": aav}])
 
 
-def _pair(vorp_a, vorp_b, tcm_a=1.0, tcm_b=1.0):
-    return pd.DataFrame([
-        {"player_id": "a", "position": "RB", "vorp": vorp_a, "tcm": tcm_a},
-        {"player_id": "b", "position": "RB", "vorp": vorp_b, "tcm": tcm_b},
-    ])
+def test_worth_equals_aav_at_inflation_one():
+    assert calculate_final_worth(_wf(40), 1.0, set()).iloc[0] == 40
 
 
-def test_single_player_gets_floor_plus_whole_pool():
-    # Only positive-VORP player in the RB pool -> $1 floor + the entire $40 pool.
-    worth = calculate_final_worth(_worth_frame(100.0), {"RB": 40.0}, set())
-    assert worth.iloc[0] == 41
+def test_worth_scales_with_inflation():
+    # 1 + (40-1)*1.5 = 59.5 -> 60
+    assert calculate_final_worth(_wf(40), 1.5, set()).iloc[0] == 60
 
 
-def test_vorp_zero_forces_worth_zero():
-    worth = calculate_final_worth(_worth_frame(0.0), {"RB": 100.0}, set())
-    assert worth.iloc[0] == 0
+def test_dollar_aav_stays_a_dollar_regardless_of_inflation():
+    # 1 + (1-1)*infl = 1 (a min-bid player never inflates)
+    assert calculate_final_worth(_wf(1), 3.0, set()).iloc[0] == 1
+
+
+def test_k_dst_not_priced():
+    assert calculate_final_worth(_wf(3, "K"), 1.0, set()).iloc[0] == 0
+    assert calculate_final_worth(_wf(3, "DST"), 1.0, set()).iloc[0] == 0
 
 
 def test_drafted_player_gets_zero():
-    worth = calculate_final_worth(_worth_frame(100.0), {"RB": 40.0}, {"p0"})
-    assert worth.iloc[0] == 0
+    assert calculate_final_worth(_wf(40), 1.0, {"p0"}).iloc[0] == 0
 
 
-def test_pool_split_conserves_budget():
-    # compression 1.0: weights 100:25 -> 80:20 of the $100 pool, +$1 each.
-    worth = calculate_final_worth(_pair(100.0, 25.0), {"RB": 100.0}, set(), compression=1.0)
-    assert worth.tolist() == [81, 21]
-    assert worth.sum() == 102  # 2 players' $1 floors + $100 pool
+def test_below_market_players_are_zero():
+    # aav < 1 (no real market value) -> not a draft target -> $0.
+    assert calculate_final_worth(_wf(0), 2.0, set()).iloc[0] == 0
 
 
-def test_compression_flattens_top_heavy_distribution():
-    hi = calculate_final_worth(_pair(100.0, 25.0), {"RB": 100.0}, set(), compression=1.0)
-    lo = calculate_final_worth(_pair(100.0, 25.0), {"RB": 100.0}, set(), compression=0.5)
-    assert lo.iloc[0] < hi.iloc[0]  # top pulled down
-    assert lo.iloc[1] > hi.iloc[1]  # middle lifted
-
-
-def test_tcm_tilts_pool_within_position():
-    # Equal VORP; the cliff player (tcm 1.5) takes a bigger slice, pool conserved.
-    worth = calculate_final_worth(_pair(50.0, 50.0, tcm_a=1.5, tcm_b=1.0), {"RB": 100.0}, set(), compression=1.0)
-    assert worth.iloc[0] > worth.iloc[1]
-    assert worth.sum() == 102
+def test_missing_aav_column_is_zero():
+    df = pd.DataFrame([{"player_id": "p0", "position": "RB"}])
+    assert calculate_final_worth(df, 1.5, set()).iloc[0] == 0
 
 
 def test_end_to_end_static_then_live():
@@ -63,15 +52,15 @@ def test_end_to_end_static_then_live():
         rows.append({"player_id": f"rb{i}", "player_name": f"RB{i}", "position": "RB",
                      "fantasypros_RUSHING_YDS": 1600 - i * 70, "fantasypros_RUSHING_TDS": 14 - i * 0.5,
                      "fantasypros_RECEIVING_REC": 50 - i, "fantasypros_RECEIVING_YDS": 400 - i * 12,
-                     "fantasypros_RECEIVING_TDS": 3})
+                     "fantasypros_RECEIVING_TDS": 3, "aav": max(1, 55 - i * 3)})
     for i in range(18):
         rows.append({"player_id": f"wr{i}", "player_name": f"WR{i}", "position": "WR",
                      "fantasypros_RECEIVING_REC": 110 - i * 4, "fantasypros_RECEIVING_YDS": 1500 - i * 70,
-                     "fantasypros_RECEIVING_TDS": 11 - i * 0.4})
+                     "fantasypros_RECEIVING_TDS": 11 - i * 0.4, "aav": max(1, 58 - i * 3)})
     for i in range(14):
         rows.append({"player_id": f"qb{i}", "player_name": f"QB{i}", "position": "QB",
                      "fantasypros_PASSING_YDS": 4800 - i * 160, "fantasypros_PASSING_TDS": 38 - i,
-                     "fantasypros_PASSING_INTS": 9})
+                     "fantasypros_PASSING_INTS": 9, "aav": max(1, 18 - i)})
     df = pd.DataFrame(rows)
 
     static = calculate_static_rankings(df, PRESETS["ppr"], num_teams=12, num_tiers=5)
@@ -86,15 +75,17 @@ def test_end_to_end_static_then_live():
     live = apply_live_valuation(static, ls)
     cols = live.players.columns
     assert {"tcm", "pdm", "worth"}.issubset(cols)
-    assert live.pdm_map is not None and live.position_budgets is not None
+    assert live.pdm_map is not None and live.inflation is not None
 
-    # Sanity: worth is non-negative everywhere and the top RB outranks a deep RB.
+    # Sanity: worth is non-negative and the priciest AAV commands the most worth.
     assert (live.players["worth"] >= 0).all()
-    rb = live.players[live.players["position"] == "RB"].sort_values("points", ascending=False)
+    rb = live.players[live.players["position"] == "RB"].sort_values("aav", ascending=False)
     assert rb["worth"].iloc[0] >= rb["worth"].iloc[-1]
 
-    # Budget-conserving: total predicted worth does not exceed cash in the room.
-    assert live.players["worth"].sum() <= ls.total_remaining_cash()
+    # Roughly budget-scale: total predicted worth stays near the cash in the room
+    # (exactly conserving when priced players == slots; a little over when there
+    # are more priced players than slots, as here).
+    assert live.players["worth"].sum() <= ls.total_remaining_cash() * 1.15
 
 
 def test_static_result_reusable_across_picks():

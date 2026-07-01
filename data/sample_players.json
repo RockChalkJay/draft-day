@@ -11,7 +11,8 @@
     "fantasypros_RUSHING_TDS": 3,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 5,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 47
   },
   {
     "player_id": "lamarjackson_qb",
@@ -25,7 +26,8 @@
     "fantasypros_RUSHING_TDS": 3,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 8,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 46
   },
   {
     "player_id": "jalenhurts_qb",
@@ -39,7 +41,8 @@
     "fantasypros_RUSHING_TDS": 3,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 9,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 42
   },
   {
     "player_id": "patrickmahomes_qb",
@@ -53,7 +56,8 @@
     "fantasypros_RUSHING_TDS": 3,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 12,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 38
   },
   {
     "player_id": "joeburrow_qb",
@@ -67,7 +71,8 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 28,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 18
   },
   {
     "player_id": "cjstroud_qb",
@@ -81,7 +86,8 @@
     "fantasypros_RUSHING_TDS": 3,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 22,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 24
   },
   {
     "player_id": "dakprescott_qb",
@@ -95,7 +101,8 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 31,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 13
   },
   {
     "player_id": "jordanlove_qb",
@@ -109,11 +116,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 35,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 12
   },
   {
-    "player_id": "jaylencoleman_qb",
-    "player_name": "Jaylen Coleman",
+    "player_id": "jaylenwarren_qb",
+    "player_name": "Jaylen Warren",
     "team": "ATL",
     "position": "QB",
     "fantasypros_PASSING_YDS": 3212,
@@ -123,11 +131,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 11
   },
   {
-    "player_id": "marcusdowdle_qb",
-    "player_name": "Marcus Dowdle",
+    "player_id": "marcuswarren_qb",
+    "player_name": "Marcus Warren",
     "team": "BAL",
     "position": "QB",
     "fantasypros_PASSING_YDS": 3168,
@@ -137,11 +146,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 9
   },
   {
-    "player_id": "trevorcorum_qb",
-    "player_name": "Trevor Corum",
+    "player_id": "trevorwarren_qb",
+    "player_name": "Trevor Warren",
     "team": "BUF",
     "position": "QB",
     "fantasypros_PASSING_YDS": 3124,
@@ -151,11 +161,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 5
   },
   {
-    "player_id": "deshaunwashington_qb",
-    "player_name": "Deshaun Washington",
+    "player_id": "deshaunwarren_qb",
+    "player_name": "Deshaun Warren",
     "team": "CAR",
     "position": "QB",
     "fantasypros_PASSING_YDS": 3080,
@@ -165,11 +176,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 4
   },
   {
-    "player_id": "malikbaker_qb",
-    "player_name": "Malik Baker",
+    "player_id": "malikwarren_qb",
+    "player_name": "Malik Warren",
     "team": "CHI",
     "position": "QB",
     "fantasypros_PASSING_YDS": 3036,
@@ -179,11 +191,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "isaiahfreeman_qb",
-    "player_name": "Isaiah Freeman",
+    "player_id": "isaiahwarren_qb",
+    "player_name": "Isaiah Warren",
     "team": "CIN",
     "position": "QB",
     "fantasypros_PASSING_YDS": 3003,
@@ -193,11 +206,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "xaviermooney_qb",
-    "player_name": "Xavier Mooney",
+    "player_id": "xavierwarren_qb",
+    "player_name": "Xavier Warren",
     "team": "CLE",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2959,
@@ -207,11 +221,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "cammims_qb",
-    "player_name": "Cam Mims",
+    "player_id": "camwarren_qb",
+    "player_name": "Cam Warren",
     "team": "DAL",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2915,
@@ -221,11 +236,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "elijahburton_qb",
-    "player_name": "Elijah Burton",
+    "player_id": "elijahwarren_qb",
+    "player_name": "Elijah Warren",
     "team": "DEN",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2871,
@@ -235,11 +251,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "treyneal_qb",
-    "player_name": "Trey Neal",
+    "player_id": "treywarren_qb",
+    "player_name": "Trey Warren",
     "team": "DET",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2827,
@@ -249,11 +266,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "kadariusbrooks_qb",
-    "player_name": "Kadarius Brooks",
+    "player_id": "kadariuswarren_qb",
+    "player_name": "Kadarius Warren",
     "team": "GB",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2783,
@@ -263,11 +281,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "rondaleshaheed_qb",
-    "player_name": "Rondale Shaheed",
+    "player_id": "rondalewarren_qb",
+    "player_name": "Rondale Warren",
     "team": "HOU",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2739,
@@ -277,11 +296,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "rashodflowers_qb",
-    "player_name": "Rashod Flowers",
+    "player_id": "rashodwarren_qb",
+    "player_name": "Rashod Warren",
     "team": "IND",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2695,
@@ -291,11 +311,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "jamesonmclaughlin_qb",
-    "player_name": "Jameson McLaughlin",
+    "player_id": "jamesonwarren_qb",
+    "player_name": "Jameson Warren",
     "team": "JAC",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2651,
@@ -305,11 +326,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "tylerward_qb",
-    "player_name": "Tyler Ward",
+    "player_id": "tylerwarren_qb",
+    "player_name": "Tyler Warren",
     "team": "KC",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2607,
@@ -319,11 +341,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "brandonreed_qb",
-    "player_name": "Brandon Reed",
+    "player_id": "brandonwarren_qb",
+    "player_name": "Brandon Warren",
     "team": "LV",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2563,
@@ -333,11 +356,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "darnelltracy_qb",
-    "player_name": "Darnell Tracy",
+    "player_id": "darnellwarren_qb",
+    "player_name": "Darnell Warren",
     "team": "LAC",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2530,
@@ -347,11 +371,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "khalilbigsby_qb",
-    "player_name": "Khalil Bigsby",
+    "player_id": "khalilwarren_qb",
+    "player_name": "Khalil Warren",
     "team": "LAR",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2486,
@@ -361,11 +386,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "devinguerendo_qb",
-    "player_name": "Devin Guerendo",
+    "player_id": "devinwarren_qb",
+    "player_name": "Devin Warren",
     "team": "MIA",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2442,
@@ -375,7 +401,8 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
     "player_id": "kennethwarren_qb",
@@ -389,11 +416,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "zamirpalmer_qb",
-    "player_name": "Zamir Palmer",
+    "player_id": "zamirwarren_qb",
+    "player_name": "Zamir Warren",
     "team": "NE",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2354,
@@ -403,11 +431,12 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "roschonallgeier_qb",
-    "player_name": "Roschon Allgeier",
+    "player_id": "roschonwarren_qb",
+    "player_name": "Roschon Warren",
     "team": "NO",
     "position": "QB",
     "fantasypros_PASSING_YDS": 2310,
@@ -417,7 +446,8 @@
     "fantasypros_RUSHING_TDS": 2,
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
     "player_id": "christianmccaffrey_rb",
@@ -431,7 +461,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 1,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 74
   },
   {
     "player_id": "bijanrobinson_rb",
@@ -445,7 +476,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 6,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 67
   },
   {
     "player_id": "breecehall_rb",
@@ -459,7 +491,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 7,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 66
   },
   {
     "player_id": "devonachane_rb",
@@ -473,7 +506,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 11,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 60
   },
   {
     "player_id": "jahmyrgibbs_rb",
@@ -487,7 +521,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 13,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 59
   },
   {
     "player_id": "jonathantaylor_rb",
@@ -501,7 +536,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 17,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 52
   },
   {
     "player_id": "derrickhenry_rb",
@@ -515,7 +551,8 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 19,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 51
   },
   {
     "player_id": "joshjacobs_rb",
@@ -529,7 +566,8 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 33,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 33
   },
   {
     "player_id": "tonypollard_rb",
@@ -543,7 +581,8 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 25,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 40
   },
   {
     "player_id": "jamescook_rb",
@@ -557,7 +596,8 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 29,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 38
   },
   {
     "player_id": "rhamondrestevenson_rb",
@@ -571,7 +611,8 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 38,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 28
   },
   {
     "player_id": "kyrenwilliams_rb",
@@ -585,11 +626,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 43,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 24
   },
   {
-    "player_id": "tyjaewright_rb",
-    "player_name": "Tyjae Wright",
+    "player_id": "tyjaewarren_rb",
+    "player_name": "Tyjae Warren",
     "team": "NYG",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 601,
@@ -599,11 +641,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 23
   },
   {
-    "player_id": "blakeirving_rb",
-    "player_name": "Blake Irving",
+    "player_id": "blakewarren_rb",
+    "player_name": "Blake Warren",
     "team": "NYJ",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 594,
@@ -613,11 +656,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 22
   },
   {
-    "player_id": "chasesanders_rb",
-    "player_name": "Chase Sanders",
+    "player_id": "chasewarren_rb",
+    "player_name": "Chase Warren",
     "team": "PHI",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 583,
@@ -627,11 +671,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 21
   },
   {
-    "player_id": "huntersutton_rb",
-    "player_name": "Hunter Sutton",
+    "player_id": "hunterwarren_rb",
+    "player_name": "Hunter Warren",
     "team": "PIT",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 572,
@@ -641,11 +686,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 20
   },
   {
-    "player_id": "dontayvionspears_rb",
-    "player_name": "Dontayvion Spears",
+    "player_id": "dontayvionwarren_rb",
+    "player_name": "Dontayvion Warren",
     "team": "SF",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 562,
@@ -655,11 +701,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 20
   },
   {
-    "player_id": "wandalejohnson_rb",
-    "player_name": "Wan'Dale Johnson",
+    "player_id": "wandalewarren_rb",
+    "player_name": "Wan'Dale Warren",
     "team": "SEA",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 554,
@@ -669,11 +716,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 19
   },
   {
-    "player_id": "jalintuten_rb",
-    "player_name": "Jalin Tuten",
+    "player_id": "jalinwarren_rb",
+    "player_name": "Jalin Warren",
     "team": "TB",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 544,
@@ -683,11 +731,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 18
   },
   {
-    "player_id": "quentinmitchell_rb",
-    "player_name": "Quentin Mitchell",
+    "player_id": "quentinwarren_rb",
+    "player_name": "Quentin Warren",
     "team": "TEN",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 533,
@@ -697,11 +746,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 17
   },
   {
-    "player_id": "braelonpickens_rb",
-    "player_name": "Braelon Pickens",
+    "player_id": "braelonwarren_rb",
+    "player_name": "Braelon Warren",
     "team": "WAS",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 526,
@@ -711,11 +761,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 16
   },
   {
-    "player_id": "rayford_rb",
-    "player_name": "Ray Ford",
+    "player_id": "raywarren_rb",
+    "player_name": "Ray Warren",
     "team": "ARI",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 515,
@@ -725,11 +776,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 16
   },
   {
-    "player_id": "antoniovele_rb",
-    "player_name": "Antonio Vele",
+    "player_id": "antoniowarren_rb",
+    "player_name": "Antonio Warren",
     "team": "ATL",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 504,
@@ -739,11 +791,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 11
   },
   {
-    "player_id": "jeromeford_rb",
-    "player_name": "Jerome Ford",
+    "player_id": "jeromewarren_rb",
+    "player_name": "Jerome Warren",
     "team": "BAL",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 497,
@@ -753,11 +806,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 11
   },
   {
-    "player_id": "jaylencoleman_rb",
-    "player_name": "Jaylen Coleman",
+    "player_id": "jaylensanders_rb",
+    "player_name": "Jaylen Sanders",
     "team": "BUF",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 486,
@@ -767,11 +821,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 10
   },
   {
-    "player_id": "marcusdowdle_rb",
-    "player_name": "Marcus Dowdle",
+    "player_id": "marcussanders_rb",
+    "player_name": "Marcus Sanders",
     "team": "CAR",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 475,
@@ -781,11 +836,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 8
   },
   {
-    "player_id": "trevorcorum_rb",
-    "player_name": "Trevor Corum",
+    "player_id": "trevorsanders_rb",
+    "player_name": "Trevor Sanders",
     "team": "CHI",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 464,
@@ -795,11 +851,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 7
   },
   {
-    "player_id": "deshaunwashington_rb",
-    "player_name": "Deshaun Washington",
+    "player_id": "deshaunsanders_rb",
+    "player_name": "Deshaun Sanders",
     "team": "CIN",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 457,
@@ -809,11 +866,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 6
   },
   {
-    "player_id": "malikbaker_rb",
-    "player_name": "Malik Baker",
+    "player_id": "maliksanders_rb",
+    "player_name": "Malik Sanders",
     "team": "CLE",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 446,
@@ -823,11 +881,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 5
   },
   {
-    "player_id": "isaiahfreeman_rb",
-    "player_name": "Isaiah Freeman",
+    "player_id": "isaiahsanders_rb",
+    "player_name": "Isaiah Sanders",
     "team": "DAL",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 436,
@@ -837,11 +896,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 2
   },
   {
-    "player_id": "xaviermooney_rb",
-    "player_name": "Xavier Mooney",
+    "player_id": "xaviersanders_rb",
+    "player_name": "Xavier Sanders",
     "team": "DEN",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 428,
@@ -851,11 +911,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "cammims_rb",
-    "player_name": "Cam Mims",
+    "player_id": "camsanders_rb",
+    "player_name": "Cam Sanders",
     "team": "DET",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 418,
@@ -865,11 +926,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "elijahburton_rb",
-    "player_name": "Elijah Burton",
+    "player_id": "elijahsanders_rb",
+    "player_name": "Elijah Sanders",
     "team": "GB",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 407,
@@ -879,11 +941,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "treyneal_rb",
-    "player_name": "Trey Neal",
+    "player_id": "treysanders_rb",
+    "player_name": "Trey Sanders",
     "team": "HOU",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 396,
@@ -893,11 +956,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "kadariusbrooks_rb",
-    "player_name": "Kadarius Brooks",
+    "player_id": "kadariussanders_rb",
+    "player_name": "Kadarius Sanders",
     "team": "IND",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 389,
@@ -907,11 +971,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "rondaleshaheed_rb",
-    "player_name": "Rondale Shaheed",
+    "player_id": "rondalesanders_rb",
+    "player_name": "Rondale Sanders",
     "team": "JAC",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 378,
@@ -921,11 +986,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "rashodflowers_rb",
-    "player_name": "Rashod Flowers",
+    "player_id": "rashodsanders_rb",
+    "player_name": "Rashod Sanders",
     "team": "KC",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 367,
@@ -935,11 +1001,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "jamesonmclaughlin_rb",
-    "player_name": "Jameson McLaughlin",
+    "player_id": "jamesonsanders_rb",
+    "player_name": "Jameson Sanders",
     "team": "LV",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 360,
@@ -949,11 +1016,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "tylerward_rb",
-    "player_name": "Tyler Ward",
+    "player_id": "tylersanders_rb",
+    "player_name": "Tyler Sanders",
     "team": "LAC",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 349,
@@ -963,11 +1031,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "brandonreed_rb",
-    "player_name": "Brandon Reed",
+    "player_id": "brandonsanders_rb",
+    "player_name": "Brandon Sanders",
     "team": "LAR",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 338,
@@ -977,11 +1046,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "darnelltracy_rb",
-    "player_name": "Darnell Tracy",
+    "player_id": "darnellsanders_rb",
+    "player_name": "Darnell Sanders",
     "team": "MIA",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 328,
@@ -991,11 +1061,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "khalilbigsby_rb",
-    "player_name": "Khalil Bigsby",
+    "player_id": "khalilsanders_rb",
+    "player_name": "Khalil Sanders",
     "team": "MIN",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 320,
@@ -1005,11 +1076,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "devinguerendo_rb",
-    "player_name": "Devin Guerendo",
+    "player_id": "devinsanders_rb",
+    "player_name": "Devin Sanders",
     "team": "NE",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 310,
@@ -1019,11 +1091,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "kennethwarren_rb",
-    "player_name": "Kenneth Warren",
+    "player_id": "kennethsanders_rb",
+    "player_name": "Kenneth Sanders",
     "team": "NO",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 299,
@@ -1033,11 +1106,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "zamirpalmer_rb",
-    "player_name": "Zamir Palmer",
+    "player_id": "zamirsanders_rb",
+    "player_name": "Zamir Sanders",
     "team": "NYG",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 292,
@@ -1047,11 +1121,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "roschonallgeier_rb",
-    "player_name": "Roschon Allgeier",
+    "player_id": "roschonsanders_rb",
+    "player_name": "Roschon Sanders",
     "team": "NYJ",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 281,
@@ -1061,11 +1136,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "tyjaewright_rb",
-    "player_name": "Tyjae Wright",
+    "player_id": "tyjaesanders_rb",
+    "player_name": "Tyjae Sanders",
     "team": "PHI",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 270,
@@ -1075,11 +1151,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "blakeirving_rb",
-    "player_name": "Blake Irving",
+    "player_id": "blakesanders_rb",
+    "player_name": "Blake Sanders",
     "team": "PIT",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 259,
@@ -1089,7 +1166,8 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
     "player_id": "chasesanders_rb",
@@ -1103,11 +1181,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "huntersutton_rb",
-    "player_name": "Hunter Sutton",
+    "player_id": "huntersanders_rb",
+    "player_name": "Hunter Sanders",
     "team": "SEA",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 241,
@@ -1117,11 +1196,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "dontayvionspears_rb",
-    "player_name": "Dontayvion Spears",
+    "player_id": "dontayvionsanders_rb",
+    "player_name": "Dontayvion Sanders",
     "team": "TB",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 230,
@@ -1131,11 +1211,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "wandalejohnson_rb",
-    "player_name": "Wan'Dale Johnson",
+    "player_id": "wandalesanders_rb",
+    "player_name": "Wan'Dale Sanders",
     "team": "TEN",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 223,
@@ -1145,11 +1226,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "jalintuten_rb",
-    "player_name": "Jalin Tuten",
+    "player_id": "jalinsanders_rb",
+    "player_name": "Jalin Sanders",
     "team": "WAS",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 212,
@@ -1159,11 +1241,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "quentinmitchell_rb",
-    "player_name": "Quentin Mitchell",
+    "player_id": "quentinsanders_rb",
+    "player_name": "Quentin Sanders",
     "team": "ARI",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 202,
@@ -1173,11 +1256,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "braelonpickens_rb",
-    "player_name": "Braelon Pickens",
+    "player_id": "braelonsanders_rb",
+    "player_name": "Braelon Sanders",
     "team": "ATL",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 194,
@@ -1187,11 +1271,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "rayford_rb",
-    "player_name": "Ray Ford",
+    "player_id": "raysanders_rb",
+    "player_name": "Ray Sanders",
     "team": "BAL",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 184,
@@ -1201,11 +1286,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "antoniovele_rb",
-    "player_name": "Antonio Vele",
+    "player_id": "antoniosanders_rb",
+    "player_name": "Antonio Sanders",
     "team": "BUF",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 173,
@@ -1215,11 +1301,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "jeromeford_rb",
-    "player_name": "Jerome Ford",
+    "player_id": "jeromesanders_rb",
+    "player_name": "Jerome Sanders",
     "team": "CAR",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 162,
@@ -1229,11 +1316,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "jaylencoleman_rb",
-    "player_name": "Jaylen Coleman",
+    "player_id": "jaylenmitchell_rb",
+    "player_name": "Jaylen Mitchell",
     "team": "CHI",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 155,
@@ -1243,11 +1331,12 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "marcusdowdle_rb",
-    "player_name": "Marcus Dowdle",
+    "player_id": "marcusmitchell_rb",
+    "player_name": "Marcus Mitchell",
     "team": "CIN",
     "position": "RB",
     "fantasypros_RUSHING_YDS": 144,
@@ -1257,7 +1346,8 @@
     "fantasypros_RECEIVING_TDS": 0,
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
     "player_id": "justinjefferson_wr",
@@ -1271,7 +1361,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 2,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 74
   },
   {
     "player_id": "ceedeelamb_wr",
@@ -1285,7 +1376,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 4,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 72
   },
   {
     "player_id": "tyreekhill_wr",
@@ -1299,7 +1391,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 10,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 72
   },
   {
     "player_id": "amonrastbrown_wr",
@@ -1313,7 +1406,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 14,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 66
   },
   {
     "player_id": "ajbrown_wr",
@@ -1327,7 +1421,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 16,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 62
   },
   {
     "player_id": "stefondiggs_wr",
@@ -1341,7 +1436,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 20,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 56
   },
   {
     "player_id": "garrettwilson_wr",
@@ -1355,7 +1451,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 26,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 51
   },
   {
     "player_id": "djmoore_wr",
@@ -1369,7 +1466,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 28,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 50
   },
   {
     "player_id": "davanteadams_wr",
@@ -1383,7 +1481,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 24,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 53
   },
   {
     "player_id": "chrisolave_wr",
@@ -1397,7 +1496,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 33,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 44
   },
   {
     "player_id": "tankdell_wr",
@@ -1411,7 +1511,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 44,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 33
   },
   {
     "player_id": "pukanacua_wr",
@@ -1425,11 +1526,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 51,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 29
   },
   {
-    "player_id": "trevorcorum_wr",
-    "player_name": "Trevor Corum",
+    "player_id": "trevormitchell_wr",
+    "player_name": "Trevor Mitchell",
     "team": "CLE",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 56,
@@ -1439,11 +1541,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 28
   },
   {
-    "player_id": "deshaunwashington_wr",
-    "player_name": "Deshaun Washington",
+    "player_id": "deshaunmitchell_wr",
+    "player_name": "Deshaun Mitchell",
     "team": "DAL",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 55,
@@ -1453,11 +1556,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 27
   },
   {
-    "player_id": "malikbaker_wr",
-    "player_name": "Malik Baker",
+    "player_id": "malikmitchell_wr",
+    "player_name": "Malik Mitchell",
     "team": "DEN",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 54,
@@ -1467,11 +1571,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 23
   },
   {
-    "player_id": "isaiahfreeman_wr",
-    "player_name": "Isaiah Freeman",
+    "player_id": "isaiahmitchell_wr",
+    "player_name": "Isaiah Mitchell",
     "team": "DET",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 53,
@@ -1481,11 +1586,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 22
   },
   {
-    "player_id": "xaviermooney_wr",
-    "player_name": "Xavier Mooney",
+    "player_id": "xaviermitchell_wr",
+    "player_name": "Xavier Mitchell",
     "team": "GB",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 52,
@@ -1495,11 +1601,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 21
   },
   {
-    "player_id": "cammims_wr",
-    "player_name": "Cam Mims",
+    "player_id": "cammitchell_wr",
+    "player_name": "Cam Mitchell",
     "team": "HOU",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 52,
@@ -1509,11 +1616,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 21
   },
   {
-    "player_id": "elijahburton_wr",
-    "player_name": "Elijah Burton",
+    "player_id": "elijahmitchell_wr",
+    "player_name": "Elijah Mitchell",
     "team": "IND",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 51,
@@ -1523,11 +1631,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 20
   },
   {
-    "player_id": "treyneal_wr",
-    "player_name": "Trey Neal",
+    "player_id": "treymitchell_wr",
+    "player_name": "Trey Mitchell",
     "team": "JAC",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 50,
@@ -1537,11 +1646,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 19
   },
   {
-    "player_id": "kadariusbrooks_wr",
-    "player_name": "Kadarius Brooks",
+    "player_id": "kadariusmitchell_wr",
+    "player_name": "Kadarius Mitchell",
     "team": "KC",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 49,
@@ -1551,11 +1661,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 18
   },
   {
-    "player_id": "rondaleshaheed_wr",
-    "player_name": "Rondale Shaheed",
+    "player_id": "rondalemitchell_wr",
+    "player_name": "Rondale Mitchell",
     "team": "LV",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 49,
@@ -1565,11 +1676,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 17
   },
   {
-    "player_id": "rashodflowers_wr",
-    "player_name": "Rashod Flowers",
+    "player_id": "rashodmitchell_wr",
+    "player_name": "Rashod Mitchell",
     "team": "LAC",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 48,
@@ -1579,11 +1691,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 16
   },
   {
-    "player_id": "jamesonmclaughlin_wr",
-    "player_name": "Jameson McLaughlin",
+    "player_id": "jamesonmitchell_wr",
+    "player_name": "Jameson Mitchell",
     "team": "LAR",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 47,
@@ -1593,11 +1706,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 15
   },
   {
-    "player_id": "tylerward_wr",
-    "player_name": "Tyler Ward",
+    "player_id": "tylermitchell_wr",
+    "player_name": "Tyler Mitchell",
     "team": "MIA",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 46,
@@ -1607,11 +1721,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 14
   },
   {
-    "player_id": "brandonreed_wr",
-    "player_name": "Brandon Reed",
+    "player_id": "brandonmitchell_wr",
+    "player_name": "Brandon Mitchell",
     "team": "MIN",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 45,
@@ -1621,11 +1736,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 9
   },
   {
-    "player_id": "darnelltracy_wr",
-    "player_name": "Darnell Tracy",
+    "player_id": "darnellmitchell_wr",
+    "player_name": "Darnell Mitchell",
     "team": "NE",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 44,
@@ -1635,11 +1751,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 8
   },
   {
-    "player_id": "khalilbigsby_wr",
-    "player_name": "Khalil Bigsby",
+    "player_id": "khalilmitchell_wr",
+    "player_name": "Khalil Mitchell",
     "team": "NO",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 43,
@@ -1649,11 +1766,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 6
   },
   {
-    "player_id": "devinguerendo_wr",
-    "player_name": "Devin Guerendo",
+    "player_id": "devinmitchell_wr",
+    "player_name": "Devin Mitchell",
     "team": "NYG",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 43,
@@ -1663,11 +1781,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 5
   },
   {
-    "player_id": "kennethwarren_wr",
-    "player_name": "Kenneth Warren",
+    "player_id": "kennethmitchell_wr",
+    "player_name": "Kenneth Mitchell",
     "team": "NYJ",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 42,
@@ -1677,11 +1796,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 4
   },
   {
-    "player_id": "zamirpalmer_wr",
-    "player_name": "Zamir Palmer",
+    "player_id": "zamirmitchell_wr",
+    "player_name": "Zamir Mitchell",
     "team": "PHI",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 41,
@@ -1691,11 +1811,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "roschonallgeier_wr",
-    "player_name": "Roschon Allgeier",
+    "player_id": "roschonmitchell_wr",
+    "player_name": "Roschon Mitchell",
     "team": "PIT",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 40,
@@ -1705,11 +1826,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "tyjaewright_wr",
-    "player_name": "Tyjae Wright",
+    "player_id": "tyjaemitchell_wr",
+    "player_name": "Tyjae Mitchell",
     "team": "SF",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 39,
@@ -1719,11 +1841,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "blakeirving_wr",
-    "player_name": "Blake Irving",
+    "player_id": "blakemitchell_wr",
+    "player_name": "Blake Mitchell",
     "team": "SEA",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 38,
@@ -1733,11 +1856,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "chasesanders_wr",
-    "player_name": "Chase Sanders",
+    "player_id": "chasemitchell_wr",
+    "player_name": "Chase Mitchell",
     "team": "TB",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 38,
@@ -1747,11 +1871,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "huntersutton_wr",
-    "player_name": "Hunter Sutton",
+    "player_id": "huntermitchell_wr",
+    "player_name": "Hunter Mitchell",
     "team": "TEN",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 37,
@@ -1761,11 +1886,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "dontayvionspears_wr",
-    "player_name": "Dontayvion Spears",
+    "player_id": "dontayvionmitchell_wr",
+    "player_name": "Dontayvion Mitchell",
     "team": "WAS",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 36,
@@ -1775,11 +1901,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "wandalejohnson_wr",
-    "player_name": "Wan'Dale Johnson",
+    "player_id": "wandalemitchell_wr",
+    "player_name": "Wan'Dale Mitchell",
     "team": "ARI",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 35,
@@ -1789,11 +1916,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "jalintuten_wr",
-    "player_name": "Jalin Tuten",
+    "player_id": "jalinmitchell_wr",
+    "player_name": "Jalin Mitchell",
     "team": "ATL",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 34,
@@ -1803,7 +1931,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
     "player_id": "quentinmitchell_wr",
@@ -1817,11 +1946,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "braelonpickens_wr",
-    "player_name": "Braelon Pickens",
+    "player_id": "braelonmitchell_wr",
+    "player_name": "Braelon Mitchell",
     "team": "BUF",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 32,
@@ -1831,11 +1961,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "rayford_wr",
-    "player_name": "Ray Ford",
+    "player_id": "raymitchell_wr",
+    "player_name": "Ray Mitchell",
     "team": "CAR",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 32,
@@ -1845,11 +1976,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "antoniovele_wr",
-    "player_name": "Antonio Vele",
+    "player_id": "antoniomitchell_wr",
+    "player_name": "Antonio Mitchell",
     "team": "CHI",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 31,
@@ -1859,11 +1991,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "jeromeford_wr",
-    "player_name": "Jerome Ford",
+    "player_id": "jeromemitchell_wr",
+    "player_name": "Jerome Mitchell",
     "team": "CIN",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 30,
@@ -1873,7 +2006,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
     "player_id": "jaylencoleman_wr",
@@ -1887,11 +2021,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "marcusdowdle_wr",
-    "player_name": "Marcus Dowdle",
+    "player_id": "marcuscoleman_wr",
+    "player_name": "Marcus Coleman",
     "team": "DAL",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 28,
@@ -1901,11 +2036,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "trevorcorum_wr",
-    "player_name": "Trevor Corum",
+    "player_id": "trevorcoleman_wr",
+    "player_name": "Trevor Coleman",
     "team": "DEN",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 27,
@@ -1915,11 +2051,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "deshaunwashington_wr",
-    "player_name": "Deshaun Washington",
+    "player_id": "deshauncoleman_wr",
+    "player_name": "Deshaun Coleman",
     "team": "DET",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 27,
@@ -1929,11 +2066,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "malikbaker_wr",
-    "player_name": "Malik Baker",
+    "player_id": "malikcoleman_wr",
+    "player_name": "Malik Coleman",
     "team": "GB",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 26,
@@ -1943,11 +2081,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "isaiahfreeman_wr",
-    "player_name": "Isaiah Freeman",
+    "player_id": "isaiahcoleman_wr",
+    "player_name": "Isaiah Coleman",
     "team": "HOU",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 25,
@@ -1957,11 +2096,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "xaviermooney_wr",
-    "player_name": "Xavier Mooney",
+    "player_id": "xaviercoleman_wr",
+    "player_name": "Xavier Coleman",
     "team": "IND",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 24,
@@ -1971,11 +2111,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "cammims_wr",
-    "player_name": "Cam Mims",
+    "player_id": "camcoleman_wr",
+    "player_name": "Cam Coleman",
     "team": "JAC",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 23,
@@ -1985,11 +2126,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "elijahburton_wr",
-    "player_name": "Elijah Burton",
+    "player_id": "elijahcoleman_wr",
+    "player_name": "Elijah Coleman",
     "team": "KC",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 22,
@@ -1999,11 +2141,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "treyneal_wr",
-    "player_name": "Trey Neal",
+    "player_id": "treycoleman_wr",
+    "player_name": "Trey Coleman",
     "team": "LV",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 21,
@@ -2013,11 +2156,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "kadariusbrooks_wr",
-    "player_name": "Kadarius Brooks",
+    "player_id": "kadariuscoleman_wr",
+    "player_name": "Kadarius Coleman",
     "team": "LAC",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 21,
@@ -2027,11 +2171,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "rondaleshaheed_wr",
-    "player_name": "Rondale Shaheed",
+    "player_id": "rondalecoleman_wr",
+    "player_name": "Rondale Coleman",
     "team": "LAR",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 20,
@@ -2041,11 +2186,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "rashodflowers_wr",
-    "player_name": "Rashod Flowers",
+    "player_id": "rashodcoleman_wr",
+    "player_name": "Rashod Coleman",
     "team": "MIA",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 19,
@@ -2055,11 +2201,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "jamesonmclaughlin_wr",
-    "player_name": "Jameson McLaughlin",
+    "player_id": "jamesoncoleman_wr",
+    "player_name": "Jameson Coleman",
     "team": "MIN",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 18,
@@ -2069,11 +2216,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "tylerward_wr",
-    "player_name": "Tyler Ward",
+    "player_id": "tylercoleman_wr",
+    "player_name": "Tyler Coleman",
     "team": "NE",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 17,
@@ -2083,11 +2231,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "brandonreed_wr",
-    "player_name": "Brandon Reed",
+    "player_id": "brandoncoleman_wr",
+    "player_name": "Brandon Coleman",
     "team": "NO",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 16,
@@ -2097,11 +2246,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "darnelltracy_wr",
-    "player_name": "Darnell Tracy",
+    "player_id": "darnellcoleman_wr",
+    "player_name": "Darnell Coleman",
     "team": "NYG",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 16,
@@ -2111,11 +2261,12 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "khalilbigsby_wr",
-    "player_name": "Khalil Bigsby",
+    "player_id": "khalilcoleman_wr",
+    "player_name": "Khalil Coleman",
     "team": "NYJ",
     "position": "WR",
     "fantasypros_RECEIVING_REC": 15,
@@ -2125,7 +2276,8 @@
     "fantasypros_RUSHING_TDS": 0,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
     "player_id": "traviskelce_te",
@@ -2137,7 +2289,8 @@
     "fantasypros_RECEIVING_TDS": 8,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 18,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 57
   },
   {
     "player_id": "samlaporta_te",
@@ -2149,7 +2302,8 @@
     "fantasypros_RECEIVING_TDS": 7,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 15,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 51
   },
   {
     "player_id": "treymcbride_te",
@@ -2161,7 +2315,8 @@
     "fantasypros_RECEIVING_TDS": 6,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 23,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 44
   },
   {
     "player_id": "markandrews_te",
@@ -2173,7 +2328,8 @@
     "fantasypros_RECEIVING_TDS": 6,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 30,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 40
   },
   {
     "player_id": "jakeferguson_te",
@@ -2185,7 +2341,8 @@
     "fantasypros_RECEIVING_TDS": 5,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 37,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 29
   },
   {
     "player_id": "daltonkincaid_te",
@@ -2197,11 +2354,12 @@
     "fantasypros_RECEIVING_TDS": 5,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 45,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 25
   },
   {
-    "player_id": "devinguerendo_te",
-    "player_name": "Devin Guerendo",
+    "player_id": "devincoleman_te",
+    "player_name": "Devin Coleman",
     "team": "PHI",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 50,
@@ -2209,11 +2367,12 @@
     "fantasypros_RECEIVING_TDS": 4,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 20
   },
   {
-    "player_id": "kennethwarren_te",
-    "player_name": "Kenneth Warren",
+    "player_id": "kennethcoleman_te",
+    "player_name": "Kenneth Coleman",
     "team": "PIT",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 48,
@@ -2221,11 +2380,12 @@
     "fantasypros_RECEIVING_TDS": 4,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 18
   },
   {
-    "player_id": "zamirpalmer_te",
-    "player_name": "Zamir Palmer",
+    "player_id": "zamircoleman_te",
+    "player_name": "Zamir Coleman",
     "team": "SF",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 46,
@@ -2233,11 +2393,12 @@
     "fantasypros_RECEIVING_TDS": 4,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 16
   },
   {
-    "player_id": "roschonallgeier_te",
-    "player_name": "Roschon Allgeier",
+    "player_id": "roschoncoleman_te",
+    "player_name": "Roschon Coleman",
     "team": "SEA",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 44,
@@ -2245,11 +2406,12 @@
     "fantasypros_RECEIVING_TDS": 4,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 14
   },
   {
-    "player_id": "tyjaewright_te",
-    "player_name": "Tyjae Wright",
+    "player_id": "tyjaecoleman_te",
+    "player_name": "Tyjae Coleman",
     "team": "TB",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 42,
@@ -2257,11 +2419,12 @@
     "fantasypros_RECEIVING_TDS": 4,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 12
   },
   {
-    "player_id": "blakeirving_te",
-    "player_name": "Blake Irving",
+    "player_id": "blakecoleman_te",
+    "player_name": "Blake Coleman",
     "team": "TEN",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 40,
@@ -2269,11 +2432,12 @@
     "fantasypros_RECEIVING_TDS": 4,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 9
   },
   {
-    "player_id": "chasesanders_te",
-    "player_name": "Chase Sanders",
+    "player_id": "chasecoleman_te",
+    "player_name": "Chase Coleman",
     "team": "WAS",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 38,
@@ -2281,11 +2445,12 @@
     "fantasypros_RECEIVING_TDS": 3,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "huntersutton_te",
-    "player_name": "Hunter Sutton",
+    "player_id": "huntercoleman_te",
+    "player_name": "Hunter Coleman",
     "team": "ARI",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 36,
@@ -2293,11 +2458,12 @@
     "fantasypros_RECEIVING_TDS": 3,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "dontayvionspears_te",
-    "player_name": "Dontayvion Spears",
+    "player_id": "dontayvioncoleman_te",
+    "player_name": "Dontayvion Coleman",
     "team": "ATL",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 35,
@@ -2305,11 +2471,12 @@
     "fantasypros_RECEIVING_TDS": 3,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "wandalejohnson_te",
-    "player_name": "Wan'Dale Johnson",
+    "player_id": "wandalecoleman_te",
+    "player_name": "Wan'Dale Coleman",
     "team": "BAL",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 33,
@@ -2317,11 +2484,12 @@
     "fantasypros_RECEIVING_TDS": 3,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
-    "player_id": "jalintuten_te",
-    "player_name": "Jalin Tuten",
+    "player_id": "jalincoleman_te",
+    "player_name": "Jalin Coleman",
     "team": "BUF",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 31,
@@ -2329,11 +2497,12 @@
     "fantasypros_RECEIVING_TDS": 3,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 0
   },
   {
-    "player_id": "quentinmitchell_te",
-    "player_name": "Quentin Mitchell",
+    "player_id": "quentincoleman_te",
+    "player_name": "Quentin Coleman",
     "team": "CAR",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 29,
@@ -2341,11 +2510,12 @@
     "fantasypros_RECEIVING_TDS": 3,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 0
   },
   {
-    "player_id": "braelonpickens_te",
-    "player_name": "Braelon Pickens",
+    "player_id": "braeloncoleman_te",
+    "player_name": "Braelon Coleman",
     "team": "CHI",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 27,
@@ -2353,11 +2523,12 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 0
   },
   {
-    "player_id": "rayford_te",
-    "player_name": "Ray Ford",
+    "player_id": "raycoleman_te",
+    "player_name": "Ray Coleman",
     "team": "CIN",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 25,
@@ -2365,11 +2536,12 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 0
   },
   {
-    "player_id": "antoniovele_te",
-    "player_name": "Antonio Vele",
+    "player_id": "antoniocoleman_te",
+    "player_name": "Antonio Coleman",
     "team": "CLE",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 23,
@@ -2377,11 +2549,12 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 0
   },
   {
-    "player_id": "jeromeford_te",
-    "player_name": "Jerome Ford",
+    "player_id": "jeromecoleman_te",
+    "player_name": "Jerome Coleman",
     "team": "DAL",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 21,
@@ -2389,11 +2562,12 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 0
   },
   {
-    "player_id": "jaylencoleman_te",
-    "player_name": "Jaylen Coleman",
+    "player_id": "jaylenfreeman_te",
+    "player_name": "Jaylen Freeman",
     "team": "DEN",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 19,
@@ -2401,11 +2575,12 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 0
   },
   {
-    "player_id": "marcusdowdle_te",
-    "player_name": "Marcus Dowdle",
+    "player_id": "marcusfreeman_te",
+    "player_name": "Marcus Freeman",
     "team": "DET",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 17,
@@ -2413,11 +2588,12 @@
     "fantasypros_RECEIVING_TDS": 2,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 0
   },
   {
-    "player_id": "trevorcorum_te",
-    "player_name": "Trevor Corum",
+    "player_id": "trevorfreeman_te",
+    "player_name": "Trevor Freeman",
     "team": "GB",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 16,
@@ -2425,11 +2601,12 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 0
   },
   {
-    "player_id": "deshaunwashington_te",
-    "player_name": "Deshaun Washington",
+    "player_id": "deshaunfreeman_te",
+    "player_name": "Deshaun Freeman",
     "team": "HOU",
     "position": "TE",
     "fantasypros_RECEIVING_REC": 14,
@@ -2437,7 +2614,8 @@
     "fantasypros_RECEIVING_TDS": 1,
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 0
   },
   {
     "player_id": "balkicker_k",
@@ -2447,7 +2625,8 @@
     "fantasypros_FG": 30,
     "fantasypros_XPT": 40,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 1
   },
   {
     "player_id": "kckicker_k",
@@ -2457,7 +2636,8 @@
     "fantasypros_FG": 29,
     "fantasypros_XPT": 39,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 1
   },
   {
     "player_id": "dalkicker_k",
@@ -2467,7 +2647,8 @@
     "fantasypros_FG": 28,
     "fantasypros_XPT": 38,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 1
   },
   {
     "player_id": "sfkicker_k",
@@ -2477,7 +2658,8 @@
     "fantasypros_FG": 27,
     "fantasypros_XPT": 37,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 1
   },
   {
     "player_id": "detkicker_k",
@@ -2487,7 +2669,8 @@
     "fantasypros_FG": 26,
     "fantasypros_XPT": 36,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 1
   },
   {
     "player_id": "bufkicker_k",
@@ -2497,7 +2680,8 @@
     "fantasypros_FG": 25,
     "fantasypros_XPT": 35,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 1
   },
   {
     "player_id": "phikicker_k",
@@ -2507,7 +2691,8 @@
     "fantasypros_FG": 24,
     "fantasypros_XPT": 34,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 1
   },
   {
     "player_id": "miakicker_k",
@@ -2517,7 +2702,8 @@
     "fantasypros_FG": 23,
     "fantasypros_XPT": 33,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 1
   },
   {
     "player_id": "gbkicker_k",
@@ -2527,7 +2713,8 @@
     "fantasypros_FG": 22,
     "fantasypros_XPT": 32,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 1
   },
   {
     "player_id": "pitkicker_k",
@@ -2537,7 +2724,8 @@
     "fantasypros_FG": 21,
     "fantasypros_XPT": 31,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 1
   },
   {
     "player_id": "houkicker_k",
@@ -2547,7 +2735,8 @@
     "fantasypros_FG": 20,
     "fantasypros_XPT": 30,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 1
   },
   {
     "player_id": "larkicker_k",
@@ -2557,7 +2746,8 @@
     "fantasypros_FG": 19,
     "fantasypros_XPT": 29,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 1
   },
   {
     "player_id": "sfdst_dst",
@@ -2571,7 +2761,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 1
   },
   {
     "player_id": "daldst_dst",
@@ -2585,7 +2776,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 1
   },
   {
     "player_id": "bufdst_dst",
@@ -2599,7 +2791,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 7
+    "fantasypros_ecr_bye": 7,
+    "aav": 1
   },
   {
     "player_id": "baldst_dst",
@@ -2613,7 +2806,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 8
+    "fantasypros_ecr_bye": 8,
+    "aav": 1
   },
   {
     "player_id": "nyjdst_dst",
@@ -2627,7 +2821,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 9
+    "fantasypros_ecr_bye": 9,
+    "aav": 1
   },
   {
     "player_id": "cledst_dst",
@@ -2641,7 +2836,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 10
+    "fantasypros_ecr_bye": 10,
+    "aav": 1
   },
   {
     "player_id": "pitdst_dst",
@@ -2655,7 +2851,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 11
+    "fantasypros_ecr_bye": 11,
+    "aav": 1
   },
   {
     "player_id": "phidst_dst",
@@ -2669,7 +2866,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 12
+    "fantasypros_ecr_bye": 12,
+    "aav": 1
   },
   {
     "player_id": "kcdst_dst",
@@ -2683,7 +2881,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 13
+    "fantasypros_ecr_bye": 13,
+    "aav": 1
   },
   {
     "player_id": "dendst_dst",
@@ -2697,7 +2896,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 14
+    "fantasypros_ecr_bye": 14,
+    "aav": 1
   },
   {
     "player_id": "houdst_dst",
@@ -2711,7 +2911,8 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 5
+    "fantasypros_ecr_bye": 5,
+    "aav": 1
   },
   {
     "player_id": "miadst_dst",
@@ -2725,6 +2926,7 @@
     "fantasypros_TD": 4,
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
-    "fantasypros_ecr_bye": 6
+    "fantasypros_ecr_bye": 6,
+    "aav": 1
   }
 ]

@@ -60,7 +60,7 @@ def test_full_flow_static_then_live_produces_worth(players):
     assert resp.status_code == 200
     body = resp.json()
     assert set(body["pdm_map"]) == {"QB", "RB", "WR", "TE"}
-    assert "K" not in body["position_budgets"]
+    assert isinstance(body["inflation"], (int, float))
 
     by_pos = {}
     for p in body["players"]:
@@ -73,22 +73,30 @@ def test_full_flow_static_then_live_produces_worth(players):
     assert max(by_pos["RB"]) > 0 and max(by_pos["WR"]) > 0
 
 
-def test_drafting_a_player_changes_budgets(players):
+ROSTER = ["QB", "RB", "RB", "WR", "WR", "TE", "FLEX", "BENCH", "BENCH", "K", "DST"]
+
+
+def test_overpay_deflates_bargain_inflates(players):
     static = client.post(
         "/api/rankings/static",
         json={"players": players, "scoring_config": {"preset": "ppr"}, "num_teams": 12},
     ).json()
-    rb_ids = [p["player_id"] for p in static["players"] if p["position"] == "RB"]
+    priced = [p for p in static["players"] if p.get("aav", 0) and p["position"] in ("QB", "RB", "WR", "TE")]
+    top = max(priced, key=lambda p: p["aav"])
 
-    def live(drafted, cash):
-        roster = [{"pos": p} for p in ["RB", "WR", "QB", "FLEX"]]
-        ls = {"teams": [{"team_id": "t0", "bankroll": cash, "roster": roster}], "drafted_player_ids": drafted}
-        return client.post("/api/rankings/live", json={"static_result": static, "league_state": ls}).json()
+    def live(t0_cash, drafted):
+        teams = [{"team_id": "t0", "bankroll": t0_cash, "roster": [{"pos": p} for p in ROSTER]}]
+        teams += [{"team_id": f"t{i}", "bankroll": 200.0, "roster": [{"pos": p} for p in ROSTER]} for i in range(1, 12)]
+        return client.post("/api/rankings/live",
+                           json={"static_result": static, "league_state": {"teams": teams, "drafted_player_ids": drafted}}).json()
 
-    start = live([], 200.0)
-    # Draft the three best RBs and reduce cash; the RB budget pool should move.
-    after = live(rb_ids[:3], 140.0)
-    assert start["position_budgets"]["RB"] != after["position_budgets"]["RB"]
+    start = live(200.0, [])
+    # Overpaying leaves less money for the rest of the board -> deflation.
+    over = live(200.0 - (top["aav"] + 40), [top["player_id"]])
+    # A bargain on the same player leaves more money behind -> inflation vs the overpay.
+    under = live(200.0 - max(1, top["aav"] - 40), [top["player_id"]])
+    assert over["inflation"] < start["inflation"]
+    assert under["inflation"] > over["inflation"]
 
 
 def test_scoring_override_changes_points(players):
