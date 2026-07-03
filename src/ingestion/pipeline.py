@@ -64,6 +64,12 @@ def _injury_risk(df: pd.DataFrame) -> pd.Series:
     return risk
 
 
+# nflverse uses different team codes than the FantasyPros/id_mapping convention
+# the rest of the pipeline follows (id_mapping.TEAM_NAME_TO_ABBR: LAR, JAC).
+# Remapped at the join boundary rather than changing the shared convention.
+_NFLVERSE_TO_FP_TEAM = {"LA": "LAR", "JAX": "JAC"}
+
+
 def _join_vegas(df: pd.DataFrame, seasons=None) -> pd.DataFrame:
     """Left-join the team-level Vegas implied total onto the player table by team."""
     try:
@@ -72,7 +78,8 @@ def _join_vegas(df: pd.DataFrame, seasons=None) -> pd.DataFrame:
         v = pd.DataFrame()
     if v is None or v.empty or "team" not in df.columns:
         return df
-    tmap = dict(zip(v["team"], pd.to_numeric(v["vegas_implied_team_total"], errors="coerce")))
+    teams = v["team"].replace(_NFLVERSE_TO_FP_TEAM)
+    tmap = dict(zip(teams, pd.to_numeric(v["vegas_implied_team_total"], errors="coerce")))
     df = df.copy()
     df["vegas_implied_team_total"] = df["team"].map(tmap)
     return df
