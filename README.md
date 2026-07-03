@@ -14,39 +14,60 @@ you; once a bankroll-heavy team empties out, inflation shifts. Draft Day models
 that live state and answers one clean question per player: **what should this
 cost right now?**
 
-### How `worth` is computed
+### How Value / Worth / Bargain are computed
 
-`worth` is a **value ceiling** — the most you should pay for a player — scaled
-live by market heat:
+The board leads with three numbers, and the gap between two of them is the
+actual signal:
 
-```
-worth = 1 + (AAV − 1) × heat
-heat  = (total_spent − num_drafted) / Σ(AAV − 1 over drafted players)
-```
+- **Value** — a stable salary-cap dollar figure: what a player is worth to a
+  roster, independent of how the draft is unfolding. Computed the same way
+  FantasyPros' own salary-cap calculator works — VBD (value over replacement)
+  converted to dollars — run on FantasyPros projections and parameterized by
+  your league's teams/budget/roster. It sums to the full league budget across
+  the drafted pool (a real auction-value baseline, not an arbitrary curve).
+- **Worth** (the headline column) — the *live* price: what it should actually
+  take to win him right now, given who's already gone and how much money is
+  left in the room:
 
-`AAV` here is a steep value curve (top ≈ $66, tapering to $1 by ~rank 45): the
-top tier carries real money and everyone else is a $1 flier, matching how bids
-concentrate on studs. It is deliberately **not** budget-conserving — worth
-answers "what's this player worth to me," not "what will the market clear at."
+  ```
+  worth = 1 + (value − 1) × inflation
+  inflation = (remaining_cash − remaining_slots) / Σ(value − 1 over expected picks)
+  ```
 
-`heat` is the live market signal, starting at 1.0. It compares dollars actually
-spent to the value bought: if the room is paying over sticker (a hot draft) heat
-rises and the remaining ceilings scale up with it; bargains cool it down. Because
-it's driven by spending vs. value — not slot counts — it makes no assumption that
-every roster spot gets filled.
+  At draft start `inflation == 1`, so Worth equals Value. As the room spends
+  faster or slower than the board's value depletes, Worth scales with it — an
+  early run of overpays drains cash faster than value leaves the board, so
+  `inflation` drops and every remaining Worth falls with it (the dollars a rival
+  overspent are dollars no longer chasing everyone else); a run of bargains
+  pushes it back up.
+- **Bargain** = `Value − Worth`. Positive (green) means the live price has
+  fallen below what he's actually worth — a target. Negative (red) means the
+  room is paying more than he's worth — let him go. This is the most
+  decision-useful column on the board: rankings alone don't tell you where the
+  market is mispricing someone, but this does.
 
-Alongside `worth`, the engine computes projection-based analytical signals for
-display (they don't feed the price):
+Alongside these, the engine computes projection-based analytical signals shown
+as columns but that don't feed the price directly (FantasyPros' projections
+already price in a player's role, so folding these on top would double-count):
 
-1. **Scoring** — projections → fantasy `points`, for your league's scoring.
-2. **Tiers** — cliff detection on `points` (real score drops, not arbitrary cuts).
-3. **VORP** — value over the waiver-wire replacement at each position.
-4. **TCM / PDM** — tier-cliff steepness and positional demand, shown as columns.
+- **Injury risk** — Low/Med/High from multi-season injury-report history
+  (nflverse).
+- **Target share** — prior-season share of team targets (nflverse); receiving
+  volume signal.
+- **Team total** — the player's team's Vegas-implied scoring total (nflverse
+  schedule/odds data); a proxy for offensive environment.
+- **Tier / TCM / PDM** — cliff detection on projected points, tier-cliff
+  steepness, and positional scarcity vs. open slots.
 
-`points`/`tiers`/`VORP` are **static** (computed once per config); `worth`,
-`heat`, TCM and PDM are **live** (recomputed after every pick). Kickers and
-defenses are tracked for ownership and price paid only — never assigned a `worth`
-or surfaced as a suggestion.
+`points`/`tier`/`VORP`/**Value** are **static** (computed once per scoring/
+roster config); **Worth**, **Bargain**, `inflation`, TCM and PDM are **live**
+(recomputed after every pick). Kickers and defenses are tracked for ownership
+and price paid only — never assigned a Value/Worth or surfaced as a suggestion.
+
+An optional `data/auction_values.csv` (columns: `player`, `value`) overrides
+the computed Value with your own figures if you have them (e.g. exported from
+a tool you have access to) — matched by player name, applied automatically
+when present.
 
 ## Installation
 
@@ -103,18 +124,20 @@ The app has three full-screen views (top nav) plus a one-time **Start Draft** mo
   and **Record Pick**. The roster slot is auto-assigned (position → FLEX →
   BENCH); if the winning team has no eligible open slot the pick is blocked. Live
   valuation reruns automatically.
-- **Main table** — the full undrafted board, sortable by any column:
-  - `#` — overall rank by computed `worth`.
-  - `FP` — FantasyPros expert consensus rank (ECR). **Green ▲** = our algorithm
-    rates the player higher than FP (potential value); **red ▼** = FP rates them
-    higher.
+- **Main table** — the full undrafted board, sortable by any column, default
+  sorted by FantasyPros overall rank (ECR):
+  - `#` — overall rank by live `Worth`.
+  - `ECR` — FantasyPros expert consensus overall rank.
   - `Bye` — flagged with ⚠ when it collides with a starter you already roster at
     the same position.
-  - `Worth` (live auction value) and `AAV` (market baseline) side by side, plus
-    `Tier`, `VORP`, `TCM`, `PDM`.
+  - `Worth` (live price) and `Value` (stable salary-cap baseline) side by side,
+    plus `Bargain` (Value − Worth, green = target / red = reach).
+  - `Inj` (injury-risk tier), `Tgt%` (prior-season target share), `TmTot`
+    (Vegas-implied team scoring total), `Tier`.
   - A search box filters by player or team name.
-- **Market** (header) — live market-heat multiplier: >1 means the room is bidding
-  over value ceilings (hot), <1 means value is going through.
+- **Market** (header) — live inflation multiplier: >1 means Worth has climbed
+  above Value (prices running hot), <1 means Worth has fallen below Value
+  (bargains on the board).
 - **My Roster** (top-right) — your slots, byes, and prices paid. The ↩ button
   undoes a pick (returns the bid, frees the slot, reruns valuation).
 
@@ -154,7 +177,7 @@ sessions, no database.
 |---|---|---|
 | `GET /api/players` | app load | raw merged player table (cache → live → sample) |
 | `POST /api/rankings/static` | draft start / config change | points → tiers → VORP |
-| `POST /api/rankings/live` | after every pick / undo | TCM/PDM signals → market heat → worth |
+| `POST /api/rankings/live` | after every pick / undo | TCM/PDM/Value → inflation → Worth/Bargain |
 
 The browser caches the `/static` response and includes it in every `/live`
 request along with the current `LeagueState`.
@@ -173,16 +196,19 @@ tests/           ingestion/, rankings/, api/  —  synthetic data, no network
 
 ## Notes & known scope
 
-- `worth` is a **value ceiling** ("most you should pay"), not a market-clearing
-  price: it's steep (top tier carries the money, the rest are $1) and does not
-  sum to the budget. The steepness curve lives in `pipeline.py` (`AAV_TOP`,
-  `AAV_SPAN`, `AAV_STEEP`) if you want to tune it.
-- The value curve is synthesized from FantasyPros ECR **consensus rank** when no
-  direct AAV-$ feed is present; a real auction-value source can populate the
-  `aav` column upstream to override it.
-- Market heat is a single global multiplier and clamped to [0.5, 2.0] so one
-  early over/underpay can't swing the board. Per-position heat is a possible
+- **Value** is computed (VBD → dollars from FantasyPros projections), not
+  scraped from FantasyPros' own salary-cap calculator: that tool's per-player
+  output only renders after login, in a JS app, and customizing league settings
+  (teams/budget/roster) is gated behind FantasyPros Premium — so it can't be
+  scraped for free, and its login is reCAPTCHA-protected. Computing Value from
+  the same projections/methodology sidesteps both.
+- `inflation` is a single global multiplier (not per-position) and clamped to
+  [0.5, 1.8] so one early over/underpay can't swing the whole board. Per-position
+  inflation (an RB run pricing up remaining RBs specifically) is a possible
   refinement.
+- `target_share` / `team_total` / injury history are prior-season nflverse data
+  (free, no key). Rookies and players with no NFL history have blank values —
+  there's no projection-adjustment for a rookie's expected role.
 - K/DST price at `$0` by design; they're tracked for ownership and bid only.
-- ECR data is ingested; currently only the consensus `rank_ecr` is surfaced (the
-  `FP` column). Variance signals (`rank_std`, etc.) are ingested but not yet used.
+- FantasyPros projections are pulled with `week=draft` (full-season totals);
+  without it the page defaults to next week's per-game numbers.

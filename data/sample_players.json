@@ -12,7 +12,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 5,
     "fantasypros_ecr_bye": 12,
-    "aav": 24
+    "target_share": null,
+    "team_total": 19.4,
+    "injury_risk": "Low"
   },
   {
     "player_id": "lamarjackson_qb",
@@ -27,7 +29,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 8,
     "fantasypros_ecr_bye": 14,
-    "aav": 22
+    "target_share": null,
+    "team_total": 24.3,
+    "injury_risk": ""
   },
   {
     "player_id": "jalenhurts_qb",
@@ -42,7 +46,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 9,
     "fantasypros_ecr_bye": 5,
-    "aav": 17
+    "target_share": null,
+    "team_total": 19.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "patrickmahomes_qb",
@@ -57,7 +63,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 12,
     "fantasypros_ecr_bye": 10,
-    "aav": 13
+    "target_share": null,
+    "team_total": 22.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "joeburrow_qb",
@@ -72,7 +80,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 28,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": null,
+    "team_total": 25.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "cjstroud_qb",
@@ -87,7 +97,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 22,
     "fantasypros_ecr_bye": 7,
-    "aav": 3
+    "target_share": null,
+    "team_total": 20.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "dakprescott_qb",
@@ -102,7 +114,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 31,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jordanlove_qb",
@@ -117,7 +131,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": 35,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": null,
+    "team_total": 20.1,
+    "injury_risk": "Med"
   },
   {
     "player_id": "jaylenwarren_qb",
@@ -132,7 +148,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.8,
+    "injury_risk": ""
   },
   {
     "player_id": "marcuswarren_qb",
@@ -147,7 +165,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": null,
+    "team_total": 24.3,
+    "injury_risk": "Med"
   },
   {
     "player_id": "trevorwarren_qb",
@@ -162,7 +182,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.4,
+    "injury_risk": "Low"
   },
   {
     "player_id": "deshaunwarren_qb",
@@ -177,7 +199,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": null,
+    "team_total": 21.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "malikwarren_qb",
@@ -192,7 +216,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": null,
+    "team_total": 26.3,
+    "injury_risk": "High"
   },
   {
     "player_id": "isaiahwarren_qb",
@@ -207,7 +233,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": null,
+    "team_total": 25.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "xavierwarren_qb",
@@ -222,7 +250,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": null,
+    "team_total": 26.1,
+    "injury_risk": "Med"
   },
   {
     "player_id": "camwarren_qb",
@@ -237,7 +267,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": null,
+    "team_total": 19.8,
+    "injury_risk": "High"
   },
   {
     "player_id": "elijahwarren_qb",
@@ -252,7 +284,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": null,
+    "team_total": 26.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "treywarren_qb",
@@ -267,7 +301,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": null,
+    "team_total": 19.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "kadariuswarren_qb",
@@ -282,7 +318,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": null,
+    "team_total": 20.1,
+    "injury_risk": ""
   },
   {
     "player_id": "rondalewarren_qb",
@@ -297,7 +335,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": null,
+    "team_total": 20.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "rashodwarren_qb",
@@ -312,7 +352,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": null,
+    "team_total": 27.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jamesonwarren_qb",
@@ -327,7 +369,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": null,
+    "team_total": 25.7,
+    "injury_risk": "High"
   },
   {
     "player_id": "tylerwarren_qb",
@@ -342,7 +386,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": null,
+    "team_total": 22.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "brandonwarren_qb",
@@ -357,7 +403,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": null,
+    "team_total": 25.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "darnellwarren_qb",
@@ -372,7 +420,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": null,
+    "team_total": 28.0,
+    "injury_risk": "Low"
   },
   {
     "player_id": "khalilwarren_qb",
@@ -387,7 +437,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": null,
+    "team_total": 23.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "devinwarren_qb",
@@ -402,7 +454,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": null,
+    "team_total": 25.7,
+    "injury_risk": "Med"
   },
   {
     "player_id": "kennethwarren_qb",
@@ -417,7 +471,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": null,
+    "team_total": 26.6,
+    "injury_risk": "Med"
   },
   {
     "player_id": "zamirwarren_qb",
@@ -432,7 +488,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": null,
+    "team_total": 21.7,
+    "injury_risk": "High"
   },
   {
     "player_id": "roschonwarren_qb",
@@ -447,7 +505,9 @@
     "fantasypros_MISC_FL": 3,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": null,
+    "team_total": 24.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "christianmccaffrey_rb",
@@ -462,7 +522,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 1,
     "fantasypros_ecr_bye": 9,
-    "aav": 66
+    "target_share": 0.16,
+    "team_total": 28.0,
+    "injury_risk": ""
   },
   {
     "player_id": "bijanrobinson_rb",
@@ -477,7 +539,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 6,
     "fantasypros_ecr_bye": 11,
-    "aav": 55
+    "target_share": 0.158,
+    "team_total": 19.8,
+    "injury_risk": "High"
   },
   {
     "player_id": "breecehall_rb",
@@ -492,7 +556,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 7,
     "fantasypros_ecr_bye": 12,
-    "aav": 50
+    "target_share": 0.156,
+    "team_total": 22.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "devonachane_rb",
@@ -507,7 +573,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 11,
     "fantasypros_ecr_bye": 6,
-    "aav": 45
+    "target_share": 0.154,
+    "team_total": 25.7,
+    "injury_risk": "High"
   },
   {
     "player_id": "jahmyrgibbs_rb",
@@ -522,7 +590,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 13,
     "fantasypros_ecr_bye": 5,
-    "aav": 42
+    "target_share": 0.152,
+    "team_total": 19.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jonathantaylor_rb",
@@ -537,7 +607,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 17,
     "fantasypros_ecr_bye": 14,
-    "aav": 33
+    "target_share": 0.151,
+    "team_total": 27.7,
+    "injury_risk": "Med"
   },
   {
     "player_id": "derrickhenry_rb",
@@ -552,7 +624,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 19,
     "fantasypros_ecr_bye": 14,
-    "aav": 27
+    "target_share": 0.149,
+    "team_total": 24.3,
+    "injury_risk": "Low"
   },
   {
     "player_id": "joshjacobs_rb",
@@ -567,7 +641,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 33,
     "fantasypros_ecr_bye": 10,
-    "aav": 11
+    "target_share": 0.143,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "tonypollard_rb",
@@ -582,7 +658,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 25,
     "fantasypros_ecr_bye": 6,
-    "aav": 14
+    "target_share": 0.147,
+    "team_total": 21.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "jamescook_rb",
@@ -597,7 +675,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 29,
     "fantasypros_ecr_bye": 12,
-    "aav": 12
+    "target_share": 0.145,
+    "team_total": 19.4,
+    "injury_risk": "Med"
   },
   {
     "player_id": "rhamondrestevenson_rb",
@@ -612,7 +692,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 38,
     "fantasypros_ecr_bye": 14,
-    "aav": 6
+    "target_share": 0.141,
+    "team_total": 21.7,
+    "injury_risk": ""
   },
   {
     "player_id": "kyrenwilliams_rb",
@@ -627,7 +709,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": 43,
     "fantasypros_ecr_bye": 6,
-    "aav": 3
+    "target_share": 0.139,
+    "team_total": 23.2,
+    "injury_risk": "Med"
   },
   {
     "player_id": "tyjaewarren_rb",
@@ -642,7 +726,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 2
+    "target_share": 0.137,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "blakewarren_rb",
@@ -657,7 +743,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": 0.135,
+    "team_total": 22.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "chasewarren_rb",
@@ -672,7 +760,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": 0.133,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "hunterwarren_rb",
@@ -687,7 +777,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": 0.132,
+    "team_total": 19.5,
+    "injury_risk": "High"
   },
   {
     "player_id": "dontayvionwarren_rb",
@@ -702,7 +794,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": 0.13,
+    "team_total": 28.0,
+    "injury_risk": "Low"
   },
   {
     "player_id": "wandalewarren_rb",
@@ -717,7 +811,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 1
+    "target_share": 0.128,
+    "team_total": 25.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jalinwarren_rb",
@@ -732,7 +828,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 1
+    "target_share": 0.126,
+    "team_total": 24.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "quentinwarren_rb",
@@ -747,7 +845,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": 0.124,
+    "team_total": 21.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "braelonwarren_rb",
@@ -762,7 +862,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": 0.122,
+    "team_total": 20.6,
+    "injury_risk": "Low"
   },
   {
     "player_id": "raywarren_rb",
@@ -777,7 +879,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": 0.12,
+    "team_total": 23.0,
+    "injury_risk": "Med"
   },
   {
     "player_id": "antoniowarren_rb",
@@ -792,7 +896,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 1
+    "target_share": 0.118,
+    "team_total": 19.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "jeromewarren_rb",
@@ -807,7 +913,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": 0.116,
+    "team_total": 24.3,
+    "injury_risk": "High"
   },
   {
     "player_id": "jaylensanders_rb",
@@ -822,7 +930,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": 0.114,
+    "team_total": 19.4,
+    "injury_risk": "Low"
   },
   {
     "player_id": "marcussanders_rb",
@@ -837,7 +947,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": 0.113,
+    "team_total": 21.1,
+    "injury_risk": "Med"
   },
   {
     "player_id": "trevorsanders_rb",
@@ -852,7 +964,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": 0.111,
+    "team_total": 26.3,
+    "injury_risk": "Low"
   },
   {
     "player_id": "deshaunsanders_rb",
@@ -867,7 +981,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 1
+    "target_share": 0.109,
+    "team_total": 25.9,
+    "injury_risk": "Med"
   },
   {
     "player_id": "maliksanders_rb",
@@ -882,7 +998,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 1
+    "target_share": 0.107,
+    "team_total": 26.1,
+    "injury_risk": ""
   },
   {
     "player_id": "isaiahsanders_rb",
@@ -897,7 +1015,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": 0.105,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "xaviersanders_rb",
@@ -912,7 +1032,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.103,
+    "team_total": 26.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "camsanders_rb",
@@ -927,7 +1049,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.101,
+    "team_total": 19.9,
+    "injury_risk": "Med"
   },
   {
     "player_id": "elijahsanders_rb",
@@ -942,7 +1066,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.099,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "treysanders_rb",
@@ -957,7 +1083,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.097,
+    "team_total": 20.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "kadariussanders_rb",
@@ -972,7 +1100,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.095,
+    "team_total": 27.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "rondalesanders_rb",
@@ -987,7 +1117,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.094,
+    "team_total": 25.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "rashodsanders_rb",
@@ -1002,7 +1134,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.092,
+    "team_total": 22.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jamesonsanders_rb",
@@ -1017,7 +1151,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.09,
+    "team_total": 25.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "tylersanders_rb",
@@ -1032,7 +1168,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.088,
+    "team_total": 28.0,
+    "injury_risk": ""
   },
   {
     "player_id": "brandonsanders_rb",
@@ -1047,7 +1185,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.086,
+    "team_total": 23.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "darnellsanders_rb",
@@ -1062,7 +1202,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.084,
+    "team_total": 25.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "khalilsanders_rb",
@@ -1077,7 +1219,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.082,
+    "team_total": 26.6,
+    "injury_risk": "Low"
   },
   {
     "player_id": "devinsanders_rb",
@@ -1092,7 +1236,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.08,
+    "team_total": 21.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "kennethsanders_rb",
@@ -1107,7 +1253,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.078,
+    "team_total": 24.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "zamirsanders_rb",
@@ -1122,7 +1270,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.076,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "roschonsanders_rb",
@@ -1137,7 +1287,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.075,
+    "team_total": 22.5,
+    "injury_risk": "High"
   },
   {
     "player_id": "tyjaesanders_rb",
@@ -1152,7 +1304,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.073,
+    "team_total": 19.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "blakesanders_rb",
@@ -1167,7 +1321,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.071,
+    "team_total": 19.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "chasesanders_rb",
@@ -1182,7 +1338,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.069,
+    "team_total": 28.0,
+    "injury_risk": "Low"
   },
   {
     "player_id": "huntersanders_rb",
@@ -1197,7 +1355,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.067,
+    "team_total": 25.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "dontayvionsanders_rb",
@@ -1212,7 +1372,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.065,
+    "team_total": 24.9,
+    "injury_risk": "Med"
   },
   {
     "player_id": "wandalesanders_rb",
@@ -1227,7 +1389,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.063,
+    "team_total": 21.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jalinsanders_rb",
@@ -1242,7 +1406,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.061,
+    "team_total": 20.6,
+    "injury_risk": "Low"
   },
   {
     "player_id": "quentinsanders_rb",
@@ -1257,7 +1423,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.059,
+    "team_total": 23.0,
+    "injury_risk": "High"
   },
   {
     "player_id": "braelonsanders_rb",
@@ -1272,7 +1440,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.057,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "raysanders_rb",
@@ -1287,7 +1457,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.056,
+    "team_total": 24.3,
+    "injury_risk": "Med"
   },
   {
     "player_id": "antoniosanders_rb",
@@ -1302,7 +1474,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.054,
+    "team_total": 19.4,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jeromesanders_rb",
@@ -1317,7 +1491,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.052,
+    "team_total": 21.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jaylenmitchell_rb",
@@ -1332,7 +1508,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.05,
+    "team_total": 26.3,
+    "injury_risk": "Low"
   },
   {
     "player_id": "marcusmitchell_rb",
@@ -1347,7 +1525,9 @@
     "fantasypros_MISC_FL": 2,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.048,
+    "team_total": 25.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "justinjefferson_wr",
@@ -1362,7 +1542,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 2,
     "fantasypros_ecr_bye": 13,
-    "aav": 63
+    "target_share": 0.28,
+    "team_total": 26.6,
+    "injury_risk": ""
   },
   {
     "player_id": "ceedeelamb_wr",
@@ -1377,7 +1559,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 4,
     "fantasypros_ecr_bye": 7,
-    "aav": 60
+    "target_share": 0.277,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "tyreekhill_wr",
@@ -1392,7 +1576,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 10,
     "fantasypros_ecr_bye": 6,
-    "aav": 57
+    "target_share": 0.274,
+    "team_total": 25.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "amonrastbrown_wr",
@@ -1407,7 +1593,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 14,
     "fantasypros_ecr_bye": 5,
-    "aav": 52
+    "target_share": 0.27,
+    "team_total": 19.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "ajbrown_wr",
@@ -1422,7 +1610,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 16,
     "fantasypros_ecr_bye": 5,
-    "aav": 47
+    "target_share": 0.267,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "stefondiggs_wr",
@@ -1437,7 +1627,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 20,
     "fantasypros_ecr_bye": 7,
-    "aav": 38
+    "target_share": 0.264,
+    "team_total": 20.5,
+    "injury_risk": "High"
   },
   {
     "player_id": "garrettwilson_wr",
@@ -1452,7 +1644,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 26,
     "fantasypros_ecr_bye": 12,
-    "aav": 31
+    "target_share": 0.258,
+    "team_total": 22.5,
+    "injury_risk": "High"
   },
   {
     "player_id": "djmoore_wr",
@@ -1467,7 +1661,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 28,
     "fantasypros_ecr_bye": 7,
-    "aav": 26
+    "target_share": 0.254,
+    "team_total": 26.3,
+    "injury_risk": ""
   },
   {
     "player_id": "davanteadams_wr",
@@ -1482,7 +1678,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 24,
     "fantasypros_ecr_bye": 12,
-    "aav": 35
+    "target_share": 0.261,
+    "team_total": 22.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "chrisolave_wr",
@@ -1497,7 +1695,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 33,
     "fantasypros_ecr_bye": 11,
-    "aav": 20
+    "target_share": 0.251,
+    "team_total": 24.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "tankdell_wr",
@@ -1512,7 +1712,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 44,
     "fantasypros_ecr_bye": 7,
-    "aav": 9
+    "target_share": 0.248,
+    "team_total": 20.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "pukanacua_wr",
@@ -1527,7 +1729,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 51,
     "fantasypros_ecr_bye": 6,
-    "aav": 7
+    "target_share": 0.245,
+    "team_total": 23.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "trevormitchell_wr",
@@ -1542,7 +1746,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 6
+    "target_share": 0.241,
+    "team_total": 26.1,
+    "injury_risk": "Med"
   },
   {
     "player_id": "deshaunmitchell_wr",
@@ -1557,7 +1763,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 5
+    "target_share": 0.238,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "malikmitchell_wr",
@@ -1572,7 +1780,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 2
+    "target_share": 0.235,
+    "team_total": 26.7,
+    "injury_risk": "High"
   },
   {
     "player_id": "isaiahmitchell_wr",
@@ -1587,7 +1797,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": 0.232,
+    "team_total": 19.9,
+    "injury_risk": ""
   },
   {
     "player_id": "xaviermitchell_wr",
@@ -1602,7 +1814,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": 0.229,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "cammitchell_wr",
@@ -1617,7 +1831,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": 0.225,
+    "team_total": 20.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "elijahmitchell_wr",
@@ -1632,7 +1848,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": 0.222,
+    "team_total": 27.7,
+    "injury_risk": "Med"
   },
   {
     "player_id": "treymitchell_wr",
@@ -1647,7 +1865,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 1
+    "target_share": 0.219,
+    "team_total": 25.7,
+    "injury_risk": "Med"
   },
   {
     "player_id": "kadariusmitchell_wr",
@@ -1662,7 +1882,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 1
+    "target_share": 0.216,
+    "team_total": 22.8,
+    "injury_risk": ""
   },
   {
     "player_id": "rondalemitchell_wr",
@@ -1677,7 +1899,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": 0.213,
+    "team_total": 25.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "rashodmitchell_wr",
@@ -1692,7 +1916,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": 0.209,
+    "team_total": 28.0,
+    "injury_risk": "Med"
   },
   {
     "player_id": "jamesonmitchell_wr",
@@ -1707,7 +1933,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": 0.206,
+    "team_total": 23.2,
+    "injury_risk": "Med"
   },
   {
     "player_id": "tylermitchell_wr",
@@ -1722,7 +1950,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 1
+    "target_share": 0.203,
+    "team_total": 25.7,
+    "injury_risk": "High"
   },
   {
     "player_id": "brandonmitchell_wr",
@@ -1737,7 +1967,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": 0.2,
+    "team_total": 26.6,
+    "injury_risk": "Low"
   },
   {
     "player_id": "darnellmitchell_wr",
@@ -1752,7 +1984,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": 0.196,
+    "team_total": 21.7,
+    "injury_risk": "Med"
   },
   {
     "player_id": "khalilmitchell_wr",
@@ -1767,7 +2001,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": 0.193,
+    "team_total": 24.5,
+    "injury_risk": ""
   },
   {
     "player_id": "devinmitchell_wr",
@@ -1782,7 +2018,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": 0.19,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "kennethmitchell_wr",
@@ -1797,7 +2035,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 1
+    "target_share": 0.187,
+    "team_total": 22.5,
+    "injury_risk": ""
   },
   {
     "player_id": "zamirmitchell_wr",
@@ -1812,7 +2052,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.184,
+    "team_total": 19.5,
+    "injury_risk": "High"
   },
   {
     "player_id": "roschonmitchell_wr",
@@ -1827,7 +2069,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.18,
+    "team_total": 19.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "tyjaemitchell_wr",
@@ -1842,7 +2086,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.177,
+    "team_total": 28.0,
+    "injury_risk": "Low"
   },
   {
     "player_id": "blakemitchell_wr",
@@ -1857,7 +2103,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.174,
+    "team_total": 25.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "chasemitchell_wr",
@@ -1872,7 +2120,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.171,
+    "team_total": 24.9,
+    "injury_risk": "High"
   },
   {
     "player_id": "huntermitchell_wr",
@@ -1887,7 +2137,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.168,
+    "team_total": 21.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "dontayvionmitchell_wr",
@@ -1902,7 +2154,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.164,
+    "team_total": 20.6,
+    "injury_risk": "Low"
   },
   {
     "player_id": "wandalemitchell_wr",
@@ -1917,7 +2171,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.161,
+    "team_total": 23.0,
+    "injury_risk": "Med"
   },
   {
     "player_id": "jalinmitchell_wr",
@@ -1932,7 +2188,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.158,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "quentinmitchell_wr",
@@ -1947,7 +2205,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.155,
+    "team_total": 24.3,
+    "injury_risk": "Med"
   },
   {
     "player_id": "braelonmitchell_wr",
@@ -1962,7 +2222,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.151,
+    "team_total": 19.4,
+    "injury_risk": "Low"
   },
   {
     "player_id": "raymitchell_wr",
@@ -1977,7 +2239,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.148,
+    "team_total": 21.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "antoniomitchell_wr",
@@ -1992,7 +2256,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.145,
+    "team_total": 26.3,
+    "injury_risk": "High"
   },
   {
     "player_id": "jeromemitchell_wr",
@@ -2007,7 +2273,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.142,
+    "team_total": 25.9,
+    "injury_risk": ""
   },
   {
     "player_id": "jaylencoleman_wr",
@@ -2022,7 +2290,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.139,
+    "team_total": 26.1,
+    "injury_risk": "Med"
   },
   {
     "player_id": "marcuscoleman_wr",
@@ -2037,7 +2307,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.135,
+    "team_total": 19.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "trevorcoleman_wr",
@@ -2052,7 +2324,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.132,
+    "team_total": 26.7,
+    "injury_risk": "Med"
   },
   {
     "player_id": "deshauncoleman_wr",
@@ -2067,7 +2341,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.129,
+    "team_total": 19.9,
+    "injury_risk": "Low"
   },
   {
     "player_id": "malikcoleman_wr",
@@ -2082,7 +2358,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.126,
+    "team_total": 20.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "isaiahcoleman_wr",
@@ -2097,7 +2375,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.123,
+    "team_total": 20.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "xaviercoleman_wr",
@@ -2112,7 +2392,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.119,
+    "team_total": 27.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "camcoleman_wr",
@@ -2127,7 +2409,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.116,
+    "team_total": 25.7,
+    "injury_risk": "Low"
   },
   {
     "player_id": "elijahcoleman_wr",
@@ -2142,7 +2426,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.113,
+    "team_total": 22.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "treycoleman_wr",
@@ -2157,7 +2443,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.11,
+    "team_total": 25.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "kadariuscoleman_wr",
@@ -2172,7 +2460,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.106,
+    "team_total": 28.0,
+    "injury_risk": "Med"
   },
   {
     "player_id": "rondalecoleman_wr",
@@ -2187,7 +2477,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.103,
+    "team_total": 23.2,
+    "injury_risk": "Low"
   },
   {
     "player_id": "rashodcoleman_wr",
@@ -2202,7 +2494,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.1,
+    "team_total": 25.7,
+    "injury_risk": ""
   },
   {
     "player_id": "jamesoncoleman_wr",
@@ -2217,7 +2511,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.097,
+    "team_total": 26.6,
+    "injury_risk": "High"
   },
   {
     "player_id": "tylercoleman_wr",
@@ -2232,7 +2528,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.094,
+    "team_total": 21.7,
+    "injury_risk": "High"
   },
   {
     "player_id": "brandoncoleman_wr",
@@ -2247,7 +2545,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.09,
+    "team_total": 24.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "darnellcoleman_wr",
@@ -2262,7 +2562,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.087,
+    "team_total": 20.1,
+    "injury_risk": "High"
   },
   {
     "player_id": "khalilcoleman_wr",
@@ -2277,7 +2579,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.084,
+    "team_total": 22.5,
+    "injury_risk": "Low"
   },
   {
     "player_id": "traviskelce_te",
@@ -2290,7 +2594,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 18,
     "fantasypros_ecr_bye": 10,
-    "aav": 40
+    "target_share": 0.22,
+    "team_total": 22.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "samlaporta_te",
@@ -2303,7 +2609,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 15,
     "fantasypros_ecr_bye": 5,
-    "aav": 29
+    "target_share": 0.214,
+    "team_total": 19.9,
+    "injury_risk": "High"
   },
   {
     "player_id": "treymcbride_te",
@@ -2316,7 +2624,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 23,
     "fantasypros_ecr_bye": 11,
-    "aav": 19
+    "target_share": 0.208,
+    "team_total": 23.0,
+    "injury_risk": "High"
   },
   {
     "player_id": "markandrews_te",
@@ -2329,7 +2639,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 30,
     "fantasypros_ecr_bye": 14,
-    "aav": 16
+    "target_share": 0.202,
+    "team_total": 24.3,
+    "injury_risk": "High"
   },
   {
     "player_id": "jakeferguson_te",
@@ -2342,7 +2654,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 37,
     "fantasypros_ecr_bye": 7,
-    "aav": 8
+    "target_share": 0.195,
+    "team_total": 19.8,
+    "injury_risk": ""
   },
   {
     "player_id": "daltonkincaid_te",
@@ -2355,7 +2669,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": 45,
     "fantasypros_ecr_bye": 12,
-    "aav": 4
+    "target_share": 0.189,
+    "team_total": 19.4,
+    "injury_risk": "Low"
   },
   {
     "player_id": "devincoleman_te",
@@ -2368,7 +2684,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": 0.183,
+    "team_total": 19.5,
+    "injury_risk": "Med"
   },
   {
     "player_id": "kennethcoleman_te",
@@ -2381,7 +2699,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": 0.177,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "zamircoleman_te",
@@ -2394,7 +2714,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 1
+    "target_share": 0.171,
+    "team_total": 28.0,
+    "injury_risk": "Low"
   },
   {
     "player_id": "roschoncoleman_te",
@@ -2407,7 +2729,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": 0.165,
+    "team_total": 25.2,
+    "injury_risk": "High"
   },
   {
     "player_id": "tyjaecoleman_te",
@@ -2420,7 +2744,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": 0.158,
+    "team_total": 24.9,
+    "injury_risk": "Med"
   },
   {
     "player_id": "blakecoleman_te",
@@ -2433,7 +2759,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": 0.152,
+    "team_total": 21.8,
+    "injury_risk": "Med"
   },
   {
     "player_id": "chasecoleman_te",
@@ -2446,7 +2774,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.146,
+    "team_total": 20.6,
+    "injury_risk": "High"
   },
   {
     "player_id": "huntercoleman_te",
@@ -2459,7 +2789,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.14,
+    "team_total": 23.0,
+    "injury_risk": "Low"
   },
   {
     "player_id": "dontayvioncoleman_te",
@@ -2472,7 +2804,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.134,
+    "team_total": 19.8,
+    "injury_risk": "High"
   },
   {
     "player_id": "wandalecoleman_te",
@@ -2485,7 +2819,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.128,
+    "team_total": 24.3,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jalincoleman_te",
@@ -2498,7 +2834,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 0
+    "target_share": 0.121,
+    "team_total": 19.4,
+    "injury_risk": ""
   },
   {
     "player_id": "quentincoleman_te",
@@ -2511,7 +2849,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 0
+    "target_share": 0.115,
+    "team_total": 21.1,
+    "injury_risk": "Low"
   },
   {
     "player_id": "braeloncoleman_te",
@@ -2524,7 +2864,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 0
+    "target_share": 0.109,
+    "team_total": 26.3,
+    "injury_risk": "High"
   },
   {
     "player_id": "raycoleman_te",
@@ -2537,7 +2879,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 0
+    "target_share": 0.103,
+    "team_total": 25.9,
+    "injury_risk": "Med"
   },
   {
     "player_id": "antoniocoleman_te",
@@ -2550,7 +2894,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 0
+    "target_share": 0.097,
+    "team_total": 26.1,
+    "injury_risk": ""
   },
   {
     "player_id": "jeromecoleman_te",
@@ -2563,7 +2909,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 0
+    "target_share": 0.091,
+    "team_total": 19.8,
+    "injury_risk": "Low"
   },
   {
     "player_id": "jaylenfreeman_te",
@@ -2576,7 +2924,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 0
+    "target_share": 0.084,
+    "team_total": 26.7,
+    "injury_risk": ""
   },
   {
     "player_id": "marcusfreeman_te",
@@ -2589,7 +2939,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 0
+    "target_share": 0.078,
+    "team_total": 19.9,
+    "injury_risk": "Med"
   },
   {
     "player_id": "trevorfreeman_te",
@@ -2602,7 +2954,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 0
+    "target_share": 0.072,
+    "team_total": 20.1,
+    "injury_risk": ""
   },
   {
     "player_id": "deshaunfreeman_te",
@@ -2615,7 +2969,9 @@
     "fantasypros_MISC_FL": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 0
+    "target_share": 0.066,
+    "team_total": 20.5,
+    "injury_risk": "High"
   },
   {
     "player_id": "balkicker_k",
@@ -2626,7 +2982,9 @@
     "fantasypros_XPT": 40,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": null,
+    "team_total": 24.3,
+    "injury_risk": ""
   },
   {
     "player_id": "kckicker_k",
@@ -2637,7 +2995,9 @@
     "fantasypros_XPT": 39,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": null,
+    "team_total": 22.8,
+    "injury_risk": ""
   },
   {
     "player_id": "dalkicker_k",
@@ -2648,7 +3008,9 @@
     "fantasypros_XPT": 38,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.8,
+    "injury_risk": ""
   },
   {
     "player_id": "sfkicker_k",
@@ -2659,7 +3021,9 @@
     "fantasypros_XPT": 37,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 1
+    "target_share": null,
+    "team_total": 28.0,
+    "injury_risk": ""
   },
   {
     "player_id": "detkicker_k",
@@ -2670,7 +3034,9 @@
     "fantasypros_XPT": 36,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.9,
+    "injury_risk": ""
   },
   {
     "player_id": "bufkicker_k",
@@ -2681,7 +3047,9 @@
     "fantasypros_XPT": 35,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.4,
+    "injury_risk": ""
   },
   {
     "player_id": "phikicker_k",
@@ -2692,7 +3060,9 @@
     "fantasypros_XPT": 34,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "miakicker_k",
@@ -2703,7 +3073,9 @@
     "fantasypros_XPT": 33,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": null,
+    "team_total": 25.7,
+    "injury_risk": ""
   },
   {
     "player_id": "gbkicker_k",
@@ -2714,7 +3086,9 @@
     "fantasypros_XPT": 32,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 1
+    "target_share": null,
+    "team_total": 20.1,
+    "injury_risk": ""
   },
   {
     "player_id": "pitkicker_k",
@@ -2725,7 +3099,9 @@
     "fantasypros_XPT": 31,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "houkicker_k",
@@ -2736,7 +3112,9 @@
     "fantasypros_XPT": 30,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": null,
+    "team_total": 20.5,
+    "injury_risk": ""
   },
   {
     "player_id": "larkicker_k",
@@ -2747,7 +3125,9 @@
     "fantasypros_XPT": 29,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": null,
+    "team_total": 23.2,
+    "injury_risk": ""
   },
   {
     "player_id": "sfdst_dst",
@@ -2762,7 +3142,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": null,
+    "team_total": 28.0,
+    "injury_risk": ""
   },
   {
     "player_id": "daldst_dst",
@@ -2777,7 +3159,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.8,
+    "injury_risk": ""
   },
   {
     "player_id": "bufdst_dst",
@@ -2792,7 +3176,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 7,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.4,
+    "injury_risk": ""
   },
   {
     "player_id": "baldst_dst",
@@ -2807,7 +3193,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 8,
-    "aav": 1
+    "target_share": null,
+    "team_total": 24.3,
+    "injury_risk": ""
   },
   {
     "player_id": "nyjdst_dst",
@@ -2822,7 +3210,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 9,
-    "aav": 1
+    "target_share": null,
+    "team_total": 22.5,
+    "injury_risk": ""
   },
   {
     "player_id": "cledst_dst",
@@ -2837,7 +3227,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 10,
-    "aav": 1
+    "target_share": null,
+    "team_total": 26.1,
+    "injury_risk": ""
   },
   {
     "player_id": "pitdst_dst",
@@ -2852,7 +3244,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 11,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "phidst_dst",
@@ -2867,7 +3261,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 12,
-    "aav": 1
+    "target_share": null,
+    "team_total": 19.5,
+    "injury_risk": ""
   },
   {
     "player_id": "kcdst_dst",
@@ -2882,7 +3278,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 13,
-    "aav": 1
+    "target_share": null,
+    "team_total": 22.8,
+    "injury_risk": ""
   },
   {
     "player_id": "dendst_dst",
@@ -2897,7 +3295,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 14,
-    "aav": 1
+    "target_share": null,
+    "team_total": 26.7,
+    "injury_risk": ""
   },
   {
     "player_id": "houdst_dst",
@@ -2912,7 +3312,9 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 5,
-    "aav": 1
+    "target_share": null,
+    "team_total": 20.5,
+    "injury_risk": ""
   },
   {
     "player_id": "miadst_dst",
@@ -2927,6 +3329,8 @@
     "fantasypros_SAFETY": 1,
     "fantasypros_ecr_rank_ecr": null,
     "fantasypros_ecr_bye": 6,
-    "aav": 1
+    "target_share": null,
+    "team_total": 25.7,
+    "injury_risk": ""
   }
 ]

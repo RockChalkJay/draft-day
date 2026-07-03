@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 
 from src.ingestion.merge import merge_sources
-from src.ingestion.pipeline import ECR_RANK_COL, ensure_aav
+from src.ingestion.pipeline import _derive_context_stats, _injury_risk, _join_vegas
 
 
 def _fp_position_frame(position, rows):
@@ -29,30 +29,51 @@ def test_same_source_position_frames_must_be_concatenated_before_merge():
     assert "fantasypros_RECEIVING_YDS" in merged.columns
 
 
-def test_existing_aav_is_preserved():
-    df = pd.DataFrame([{"player_id": "p0", "position": "RB", "aav": 55, ECR_RANK_COL: 1}])
-    out = ensure_aav(df)
-    assert out["aav"].iloc[0] == 55  # untouched market feed
+def test_injury_risk_tiers_from_history():
+    df = pd.DataFrame([
+        {"player_id": "durable", "nflverse_injuries_weeks_out_or_doubtful": 0,
+         "nflverse_injuries_seasons_with_injury_report": 3},   # 0/season -> Low
+        {"player_id": "some", "nflverse_injuries_weeks_out_or_doubtful": 6,
+         "nflverse_injuries_seasons_with_injury_report": 3},    # 2/season -> Med
+        {"player_id": "fragile", "nflverse_injuries_weeks_out_or_doubtful": 12,
+         "nflverse_injuries_seasons_with_injury_report": 3},    # 4/season -> High
+        {"player_id": "rookie"},                                # no history -> blank
+    ])
+    risk = dict(zip(df["player_id"], _injury_risk(df)))
+    assert risk == {"durable": "Low", "some": "Med", "fragile": "High", "rookie": ""}
 
 
-def test_aav_synthesized_from_ecr_rank():
-    rows = [{"player_id": f"p{i}", "position": "RB", ECR_RANK_COL: i + 1} for i in range(60)]
-    out = ensure_aav(pd.DataFrame(rows))
-    assert "aav" in out.columns
-    # Monotonic in rank: the consensus #1 is worth more than a late pick.
-    assert out["aav"].iloc[0] > out["aav"].iloc[40]
-    assert out["aav"].iloc[0] > 1
+def test_vegas_joined_by_team():
+    df = pd.DataFrame([
+        {"player_id": "a", "player_name": "A", "team": "SF", "position": "RB"},
+        {"player_id": "b", "player_name": "B", "team": "CHI", "position": "WR"},
+    ])
+
+    class _FakeVegas:
+        def fetch(self, seasons=None):
+            return pd.DataFrame({"team": ["SF", "CHI"], "vegas_implied_team_total": [27.5, 19.0]})
+
+    import src.ingestion.pipeline as pipe
+    orig = pipe.VegasFetcher
+    pipe.VegasFetcher = _FakeVegas
+    try:
+        out = _join_vegas(df)
+    finally:
+        pipe.VegasFetcher = orig
+    assert out.set_index("player_id").loc["a", "vegas_implied_team_total"] == 27.5
+    assert out.set_index("player_id").loc["b", "vegas_implied_team_total"] == 19.0
 
 
-def test_kdst_get_zero_aav_when_synthesized():
-    rows = [{"player_id": "rb", "position": "RB", ECR_RANK_COL: 1},
-            {"player_id": "k", "position": "K", ECR_RANK_COL: 150},
-            {"player_id": "dst", "position": "DST", ECR_RANK_COL: 160}]
-    out = ensure_aav(pd.DataFrame(rows))
-    assert out.set_index("player_id").loc["k", "aav"] == 0
-    assert out.set_index("player_id").loc["dst", "aav"] == 0
-
-
-def test_missing_ecr_column_yields_zero_aav():
-    out = ensure_aav(pd.DataFrame([{"player_id": "p0", "position": "RB"}]))
-    assert out["aav"].iloc[0] == 0
+def test_derive_context_stats_flattens_source_columns():
+    df = pd.DataFrame([{
+        "player_id": "a", "position": "WR",
+        "nflverse_target_share": 0.24,
+        "vegas_implied_team_total": 25.5,
+        "nflverse_injuries_weeks_out_or_doubtful": 1,
+        "nflverse_injuries_seasons_with_injury_report": 2,
+    }])
+    out = _derive_context_stats(df)
+    row = out.iloc[0]
+    assert row["target_share"] == 0.24
+    assert row["team_total"] == 25.5
+    assert row["injury_risk"] in {"Low", "Med", "High"}

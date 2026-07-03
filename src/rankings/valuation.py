@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from src.rankings.inflation import calculate_market_heat
+from src.rankings.inflation import calculate_auction_inflation
 from src.rankings.league_state import LeagueState
 from src.rankings.pdm import calculate_pdm
 from src.rankings.replacement import (
@@ -22,36 +22,65 @@ from src.rankings.scoring import ScoringConfig, calculate_points
 from src.rankings.tcm import calculate_tcm
 from src.rankings.tiers import calculate_tiers_by_cliffs
 
-# K/DST are tracked (bid + ownership) but never priced -- they carry a market
-# AAV of ~$1 and were confirmed out of scope for suggestions/valuation.
+# K/DST are tracked (bid + ownership) but never priced -- confirmed out of scope
+# for suggestions/valuation, so they carry no Value/Price/Bargain ($0).
 PRICED_POSITIONS = ("QB", "RB", "WR", "TE")
 
 
-def calculate_final_worth(
+def calculate_value(
     df: pd.DataFrame,
-    heat: float,
-    drafted_player_ids: set[str],
-    aav_col: str = "aav",
+    budget: float,
+    total_slots: int,
     priced_positions: tuple[str, ...] = PRICED_POSITIONS,
 ) -> pd.Series:
-    """Value-ceiling worth: ``worth = 1 + (aav - 1) * heat``.
+    """Stable salary-cap **Value** (VBD -> dollars): what a player is worth to a
+    roster, independent of how the draft is unfolding.
 
-    ``aav`` is the steep value ceiling (top ~$66 tapering to $1 by ~rank 45), so
-    at draft start (``heat == 1``) worth equals that ceiling. As the room pays
-    over/under sticker, ``heat`` scales the premium up or down. The $1 base keeps
-    filler players at $1 regardless of heat. Priced only for undrafted skill
-    players with a real value (``aav >= 1``); K/DST, drafted, and worthless
-    players are $0.
+    This is the same method FantasyPros' salary-cap calculator runs on consensus
+    projections: reserve $1 per rostered slot, then spread the discretionary money
+    (``budget - total_slots``) across positive-VORP priced players by VORP share.
+    Sums to ``budget`` over the full drafted pool (the $1 filler/K/DST slots make
+    up the rest). K/DST and replacement-level (VORP<=0) players -> $0.
     """
-    if aav_col not in df.columns:
+    if "vorp" not in df.columns:
         return pd.Series(0, index=df.index, dtype=int)
 
-    aav = pd.to_numeric(df[aav_col], errors="coerce").fillna(0.0)
-    undrafted = ~df["player_id"].isin(drafted_player_ids)
-    priced = undrafted & df["position"].isin(priced_positions) & (aav >= 1.0)
+    vorp = pd.to_numeric(df["vorp"], errors="coerce").fillna(0.0)
+    priced = df["position"].isin(priced_positions) & (vorp > 0)
+    vorp_pos = vorp.where(priced, 0.0)
+    total_vorp = float(vorp_pos.sum())
 
-    worth = 1.0 + (aav - 1.0) * heat
-    return worth.where(priced, 0.0).round().clip(lower=0).astype(int)
+    value = pd.Series(0.0, index=df.index)
+    if total_vorp > 0:
+        discretionary = max(0.0, budget - total_slots)
+        value = 1.0 + vorp_pos / total_vorp * discretionary
+    return value.where(priced, 0.0).round().clip(lower=0).astype(int)
+
+
+def calculate_price(
+    df: pd.DataFrame,
+    inflation: float,
+    drafted_player_ids: set[str],
+    value_col: str = "value",
+    priced_positions: tuple[str, ...] = PRICED_POSITIONS,
+) -> pd.Series:
+    """Live **Price** (the headline ``worth``): ``1 + (value - 1) * inflation``.
+
+    At draft start (``inflation == 1``) Price equals Value; as the room over/under
+    pays, conserving inflation scales the premium so remaining Prices track the
+    money left. The $1 base keeps min-bid players at $1. Priced only for undrafted
+    skill players with real value (``value >= 1``); K/DST, drafted, and worthless
+    players are $0.
+    """
+    if value_col not in df.columns:
+        return pd.Series(0, index=df.index, dtype=int)
+
+    value = pd.to_numeric(df[value_col], errors="coerce").fillna(0.0)
+    undrafted = ~df["player_id"].isin(drafted_player_ids)
+    priced = undrafted & df["position"].isin(priced_positions) & (value >= 1.0)
+
+    price = 1.0 + (value - 1.0) * inflation
+    return price.where(priced, 0.0).round().clip(lower=0).astype(int)
 
 
 @dataclass
@@ -95,20 +124,31 @@ def apply_live_valuation(
     static_result: RankingsResult,
     league_state: LeagueState,
 ) -> RankingsResult:
-    """Live layer: worth = value-ceiling AAV scaled by market heat. TCM/PDM are
-    still computed as analytical signals (cliff / positional demand) for display,
-    but don't fold into worth. Call after every pick."""
+    """Live layer: **Value** (stable VBD->$), **Price** (=worth, Value scaled by
+    conserving inflation), and **Bargain** (Value - Price). TCM/PDM are still
+    computed as analytical signals but don't fold into worth. Call after each pick."""
     df = static_result.players.copy()
 
     df["tcm"] = calculate_tcm(df, league_state)
     pdm_map = calculate_pdm(df, league_state)
     df["pdm"] = df["position"].map(pdm_map).fillna(1.0)
-    heat = calculate_market_heat(df, league_state)
-    df["worth"] = calculate_final_worth(df, heat, league_state.drafted_player_ids)
+
+    budget = league_state.initial_cash()
+    total_slots = sum(len(t.roster) for t in league_state.teams)
+    df["value"] = calculate_value(df, budget, total_slots)
+    # A user-supplied auction-value export (data/auction_values.csv, surfaced as
+    # value_override by the pipeline) takes precedence over the computed Value.
+    if "value_override" in df.columns:
+        ov = pd.to_numeric(df["value_override"], errors="coerce")
+        df["value"] = ov.where(ov.notna() & (ov > 0), df["value"]).round().clip(lower=0).astype(int)
+    inflation = calculate_auction_inflation(df, league_state)
+    df["worth"] = calculate_price(df, inflation, league_state.drafted_player_ids)
+    # Bargain only meaningful for still-biddable players; drafted/unpriced -> 0.
+    df["bargain"] = (df["value"] - df["worth"]).where(df["worth"] > 0, 0).astype(int)
 
     return RankingsResult(
         players=df,
         replacement_levels=static_result.replacement_levels,
         pdm_map=pdm_map,
-        inflation=heat,
+        inflation=inflation,
     )

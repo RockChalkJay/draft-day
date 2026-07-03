@@ -137,7 +137,7 @@
   <h1>🏈 Draft Day</h1>
   <nav id="nav"></nav>
   <span id="loadStatus"></span>
-  <div class="header-bankroll" title="Market heat: is the room paying over or under player value ceilings? >1 = running hot (bids over sticker), <1 = value going through.">
+  <div class="header-bankroll" title="Market inflation: money left in the room vs value left on the board. >1 = prices climbing (Worth above Value); <1 = prices dropping, value on the board.">
     <span class="label">Market</span>
     <span class="value" id="inflation" style="color:var(--accent)">1.00×</span>
   </div>
@@ -323,11 +323,11 @@ let byId = new Map();
 let staticResult = null;   // cached POST /api/rankings/static response
 let pdmMap = {}, inflation = 1;
 let teams = [];
-let startingBankroll = 200;   // per-team starting budget, for market heat
+let startingBankroll = 200;   // per-team starting budget, for live inflation
 let draftStarted = false;
 let myTeamId = "t0";
 let nominatedId = null;
-let sortKey = "worth", sortDir = -1;
+let sortKey = "ecr", sortDir = 1;  // default: FantasyPros overall ranking
 let posFilter = null, searchQuery = "";
 let numTiers = 5;
 let scoringConfig = { preset: "ppr" };
@@ -348,9 +348,10 @@ function num(x){ return (x===null || x===undefined || Number.isNaN(x)) ? null : 
 function normalize(p){
   return {
     id: p.player_id, name: p.player_name, position: p.position, team: p.team,
-    bye: num(p.fantasypros_ecr_bye), fp_rank: num(p.fantasypros_ecr_rank_ecr),
-    ecr: num(p.fantasypros_ecr_rank_ecr),
-    aav: num(p.aav), tier: null, vorp: null, worth: null, tcm: null, pdm: null,
+    bye: num(p.fantasypros_ecr_bye), ecr: num(p.fantasypros_ecr_rank_ecr),
+    worth: null, value: null, bargain: null, tier: null,
+    target_share: num(p.target_share), team_total: num(p.team_total),
+    injury_risk: p.injury_risk ?? "",
     drafted: false, bid: null,
   };
 }
@@ -388,7 +389,7 @@ async function recomputeLive(){
   const liveById = new Map(live.players.map(p => [p.player_id, p]));
   for(const pl of players){
     const lp = liveById.get(pl.id);
-    if(lp){ pl.tier=num(lp.tier); pl.vorp=num(lp.vorp); pl.worth=num(lp.worth); pl.tcm=num(lp.tcm); pl.pdm=num(lp.pdm); }
+    if(lp){ pl.tier=num(lp.tier); pl.worth=num(lp.worth); pl.value=num(lp.value); pl.bargain=num(lp.bargain); }
   }
   pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1;
   setStatus("");
@@ -433,6 +434,17 @@ function findEligibleSlot(team, pos){
 function money(w){ return w==null ? "–" : "$"+w; }
 function f2(x){ return x==null ? "–" : Number(x).toFixed(2); }
 function ri(x){ return x==null ? "–" : Math.round(x); }
+function pct(x){ return x==null ? "–" : Math.round(x*100)+"%"; }
+function bargainCell(b){
+  if(b==null || b===0) return `<span style="color:var(--muted);">–</span>`;
+  const col = b>0 ? "var(--good)" : "var(--warn)";
+  return `<span style="color:${col};font-weight:600;" title="${b>0?"underpriced — target":"overpriced — reach"}">${b>0?"+":""}${b}</span>`;
+}
+function injuryCell(r){
+  if(!r) return `<span style="color:var(--muted);">–</span>`;
+  const col = r==="High" ? "var(--warn)" : r==="Med" ? "var(--accent)" : "var(--good)";
+  return `<span style="color:${col};font-size:12px;">${r}</span>`;
+}
 
 // ============================ Nav ============================
 const views = ["board","league","settings"];
@@ -564,10 +576,11 @@ async function undraftPlayer(playerId){
 
 // ============================ Board: table ============================
 const COLS = [
-  {key:"rank", label:"#"}, {key:"ecr", label:"ECR"}, {key:"fp_rank", label:"FP"},
+  {key:"rank", label:"#"}, {key:"ecr", label:"ECR"},
   {key:"name", label:"Player"}, {key:"position", label:"Pos"}, {key:"team", label:"Team"},
-  {key:"bye", label:"Bye"}, {key:"worth", label:"Worth"}, {key:"aav", label:"AAV"},
-  {key:"tier", label:"Tier"}, {key:"vorp", label:"VORP"}, {key:"tcm", label:"TCM"}, {key:"pdm", label:"PDM"},
+  {key:"bye", label:"Bye"}, {key:"worth", label:"Worth"}, {key:"value", label:"Value"},
+  {key:"bargain", label:"Bargain"}, {key:"injury_risk", label:"Inj"},
+  {key:"target_share", label:"Tgt%"}, {key:"team_total", label:"TmTot"}, {key:"tier", label:"Tier"},
 ];
 function renderBoardHeader(){
   const tr = document.getElementById("boardHeaderRow");
@@ -575,11 +588,14 @@ function renderBoardHeader(){
   COLS.forEach(c => {
     const th = document.createElement("th");
     th.textContent = c.label + (sortKey===c.key ? (sortDir===1?" ▲":" ▼") : " ↕");
-    if(c.key==="fp_rank") th.title = "FantasyPros expert consensus rank (ECR). Green ▲ = our algorithm likes this player more than FP. Red ▼ = FP likes them more.";
-    if(c.key==="rank") th.title = "Overall rank by live auction worth";
-    if(c.key==="ecr") th.title = "Raw FantasyPros expert consensus rank (ECR)";
-    if(c.key==="worth") th.title = "Value ceiling — the most you should pay, scaled by live market heat";
-    if(c.key==="aav") th.title = "Baseline value ceiling (steep: top tier carries the money, rest are $1 fliers)";
+    if(c.key==="rank") th.title = "Overall rank by live Worth (Price). Compare with ECR to spot divergence.";
+    if(c.key==="ecr") th.title = "FantasyPros expert consensus overall rank (ECR)";
+    if(c.key==="worth") th.title = "Price — what it'll take to win him right now (Value scaled by live market inflation)";
+    if(c.key==="value") th.title = "Value — stable salary-cap dollars from FantasyPros projections (what he's worth)";
+    if(c.key==="bargain") th.title = "Value − Price. Green = underpriced (target), red = overpriced (reach).";
+    if(c.key==="injury_risk") th.title = "Injury risk from multi-season injury history (weeks Out/Doubtful per season)";
+    if(c.key==="target_share") th.title = "Prior-season target share (nflverse)";
+    if(c.key==="team_total") th.title = "Team's Vegas implied points total — offensive environment";
     if(sortKey===c.key) th.classList.add("sorted");
     th.onclick = () => { if(sortKey===c.key) sortDir*=-1; else { sortKey=c.key; sortDir=-1; } renderBoard(); };
     tr.appendChild(th);
@@ -630,27 +646,20 @@ function renderBoardBody(){
     if(conflict) tr.classList.add("bye-conflict");
     tr.onclick = () => { nominatedId = p.id; renderAll(); };
     const myRank = rankMap.get(p.id);
-    let fpCell = "–";
-    if(p.fp_rank != null){
-      const delta = p.fp_rank - myRank;
-      const color = delta>=5 ? "var(--good)" : delta<=-5 ? "var(--warn)" : "var(--muted)";
-      const arrow = delta>=5 ? " ▲" : delta<=-5 ? " ▼" : "";
-      fpCell = `<span style="color:${color};font-size:12px;">${p.fp_rank}${arrow}</span>`;
-    }
     tr.innerHTML = `
       <td style="color:var(--muted);font-size:11px;">${myRank}</td>
       <td style="color:var(--muted);font-size:12px;">${p.ecr==null?"–":p.ecr}</td>
-      <td>${fpCell}</td>
       <td>${p.name}</td>
       <td><span class="pill">${p.position}</span></td>
       <td>${p.team||""}</td>
       <td class="bye">${p.bye==null?"–":p.bye}${conflict?" ⚠":""}</td>
       <td style="font-weight:600;">${money(p.worth)}</td>
-      <td style="color:var(--muted);">${money(p.aav)}</td>
-      <td>${p.tier==null?"–":p.tier}</td>
-      <td>${ri(p.vorp)}</td>
-      <td>${f2(p.tcm)}</td>
-      <td>${f2(p.pdm)}</td>`;
+      <td style="color:var(--muted);">${money(p.value)}</td>
+      <td>${bargainCell(p.bargain)}</td>
+      <td>${injuryCell(p.injury_risk)}</td>
+      <td>${pct(p.target_share)}</td>
+      <td>${p.team_total==null?"–":Number(p.team_total).toFixed(1)}</td>
+      <td>${p.tier==null?"–":p.tier}</td>`;
     tbody.appendChild(tr);
   });
 }

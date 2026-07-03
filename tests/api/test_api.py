@@ -64,7 +64,7 @@ def test_full_flow_static_then_live_produces_worth(players):
 
     by_pos = {}
     for p in body["players"]:
-        assert "worth" in p and "tcm" in p and "pdm" in p
+        assert "worth" in p and "value" in p and "bargain" in p
         by_pos.setdefault(p["position"], []).append(p["worth"])
     # K/DST are tracked but never priced.
     assert all(w == 0 for w in by_pos.get("K", []))
@@ -76,13 +76,11 @@ def test_full_flow_static_then_live_produces_worth(players):
 ROSTER = ["QB", "RB", "RB", "WR", "WR", "TE", "FLEX", "BENCH", "BENCH", "K", "DST"]
 
 
-def test_overpay_raises_heat_bargain_lowers(players):
+def test_overpay_deflates_and_opens_bargains(players):
     static = client.post(
         "/api/rankings/static",
         json={"players": players, "scoring_config": {"preset": "ppr"}, "num_teams": 12},
     ).json()
-    priced = [p for p in static["players"] if p.get("aav", 0) and p["position"] in ("QB", "RB", "WR", "TE")]
-    top = max(priced, key=lambda p: p["aav"])
 
     def live(t0_cash, drafted):
         teams = [{"team_id": "t0", "bankroll": t0_cash, "roster": [{"pos": p} for p in ROSTER]}]
@@ -92,11 +90,14 @@ def test_overpay_raises_heat_bargain_lowers(players):
                                  {"teams": teams, "drafted_player_ids": drafted, "starting_bankroll": 200.0}}).json()
 
     start = live(200.0, [])
-    # Momentum: the room paying over sticker heats the market; a bargain cools it.
-    over = live(200.0 - (top["aav"] + 40), [top["player_id"]])
-    under = live(200.0 - max(1, top["aav"] - 40), [top["player_id"]])
-    assert over["inflation"] > start["inflation"]
-    assert under["inflation"] < over["inflation"]
+    priced = [p for p in start["players"] if p.get("value", 0) and p["position"] in ("QB", "RB", "WR", "TE")]
+    top = max(priced, key=lambda p: p["value"])
+    # Conserving: overpaying drains the room, so remaining Prices fall (< 1.0)...
+    over = live(200.0 - (top["value"] + 40), [top["player_id"]])
+    assert over["inflation"] < start["inflation"]
+    # ...and with prices below value, still-priced players show positive bargains.
+    bargains = [p["bargain"] for p in over["players"] if p.get("worth", 0) > 0]
+    assert any(b > 0 for b in bargains)
 
 
 def test_scoring_override_changes_points(players):

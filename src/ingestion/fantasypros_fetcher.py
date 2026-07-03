@@ -69,17 +69,21 @@ class FantasyProsFetcher(Fetcher):
             for group, leaf in zip(group_labels, leaf_headers)
         ]
 
-    def fetch(self, position):
+    def fetch(self, position, week="draft"):
         """
         Fetches projections for a given position ('qb', 'rb', 'wr', 'te', 'k', 'dst').
         Returns a normalized DataFrame with player_name, team, position, source columns
         plus the raw FantasyPros stat columns for that position.
+
+        ``week="draft"`` requests full-season (draft) projections; without it the
+        page defaults to the upcoming week's per-game numbers, which is wrong for a
+        draft-value tool.
         """
         pos = position.lower()
         url = self.BASE_URL.format(position=pos)
 
         try:
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(url, params={"week": week}, timeout=10)
             response.raise_for_status()
         except Exception as e:
             print(f"Error fetching data for {position}: {e}")

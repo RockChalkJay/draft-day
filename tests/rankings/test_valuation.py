@@ -4,92 +4,142 @@ from src.rankings.league_state import LeagueState, RosterSlot, Team
 from src.rankings.scoring import PRESETS
 from src.rankings.valuation import (
     apply_live_valuation,
-    calculate_final_worth,
+    calculate_price,
     calculate_static_rankings,
+    calculate_value,
 )
 
 
-def _wf(aav, pos="RB"):
-    return pd.DataFrame([{"player_id": "p0", "position": pos, "aav": aav}])
+# ---- Value (stable salary-cap dollars) --------------------------------------
+
+def test_value_conserves_to_budget():
+    # Discretionary pool (budget - slots = 185) is split by VORP share, +$1 each.
+    df = pd.DataFrame([
+        {"player_id": "a", "position": "RB", "vorp": 100.0},
+        {"player_id": "b", "position": "WR", "vorp": 60.0},
+        {"player_id": "c", "position": "TE", "vorp": 40.0},
+    ])
+    v = calculate_value(df, budget=200, total_slots=15)
+    assert abs(int(v.sum()) - (3 + 185)) <= 2         # conserves (within rounding)
+    assert v.iloc[0] > v.iloc[1] > v.iloc[2]          # more VORP -> more value
 
 
-def test_worth_equals_ceiling_at_heat_one():
-    assert calculate_final_worth(_wf(40), 1.0, set()).iloc[0] == 40
+def test_k_dst_and_replacement_get_zero_value():
+    df = pd.DataFrame([
+        {"player_id": "k", "position": "K", "vorp": 50.0},
+        {"player_id": "d", "position": "DST", "vorp": 50.0},
+        {"player_id": "r", "position": "RB", "vorp": 0.0},   # replacement level
+        {"player_id": "a", "position": "RB", "vorp": 80.0},
+    ])
+    vv = dict(zip(df["player_id"], calculate_value(df, 200, 15)))
+    assert vv["k"] == 0 and vv["d"] == 0 and vv["r"] == 0 and vv["a"] > 0
 
 
-def test_worth_scales_with_heat():
-    # 1 + (40-1)*1.5 = 59.5 -> 60
-    assert calculate_final_worth(_wf(40), 1.5, set()).iloc[0] == 60
-
-
-def test_dollar_ceiling_stays_a_dollar_regardless_of_heat():
-    # 1 + (1-1)*heat = 1 (a min-bid filler player never scales)
-    assert calculate_final_worth(_wf(1), 3.0, set()).iloc[0] == 1
-
-
-def test_k_dst_not_priced():
-    assert calculate_final_worth(_wf(3, "K"), 1.0, set()).iloc[0] == 0
-    assert calculate_final_worth(_wf(3, "DST"), 1.0, set()).iloc[0] == 0
-
-
-def test_drafted_player_gets_zero():
-    assert calculate_final_worth(_wf(40), 1.0, {"p0"}).iloc[0] == 0
-
-
-def test_below_market_players_are_zero():
-    # aav < 1 (no real market value) -> not a draft target -> $0.
-    assert calculate_final_worth(_wf(0), 2.0, set()).iloc[0] == 0
-
-
-def test_missing_aav_column_is_zero():
+def test_missing_vorp_gives_zero_value():
     df = pd.DataFrame([{"player_id": "p0", "position": "RB"}])
-    assert calculate_final_worth(df, 1.5, set()).iloc[0] == 0
+    assert calculate_value(df, 200, 15).iloc[0] == 0
 
 
-def test_end_to_end_static_then_live():
+# ---- Price (Value scaled by live inflation) ---------------------------------
+
+def _pf(value, pos="RB"):
+    return pd.DataFrame([{"player_id": "p0", "position": pos, "value": value}])
+
+
+def test_price_equals_value_at_inflation_one():
+    assert calculate_price(_pf(40), 1.0, set()).iloc[0] == 40
+
+
+def test_price_deflates_below_one():
+    # 1 + (40-1)*0.5 = 20.5 -> 20
+    assert calculate_price(_pf(40), 0.5, set()).iloc[0] == 20
+
+
+def test_dollar_value_stays_a_dollar_regardless_of_inflation():
+    assert calculate_price(_pf(1), 1.8, set()).iloc[0] == 1
+
+
+def test_price_k_dst_zero():
+    assert calculate_price(_pf(30, "K"), 1.0, set()).iloc[0] == 0
+    assert calculate_price(_pf(30, "DST"), 1.0, set()).iloc[0] == 0
+
+
+def test_price_drafted_zero():
+    assert calculate_price(_pf(40), 1.0, {"p0"}).iloc[0] == 0
+
+
+def test_price_missing_value_zero():
+    df = pd.DataFrame([{"player_id": "p0", "position": "RB"}])
+    assert calculate_price(df, 1.0, set()).iloc[0] == 0
+
+
+# ---- End to end -------------------------------------------------------------
+
+def _synthetic_board():
     rows = []
     for i in range(20):
         rows.append({"player_id": f"rb{i}", "player_name": f"RB{i}", "position": "RB",
                      "fantasypros_RUSHING_YDS": 1600 - i * 70, "fantasypros_RUSHING_TDS": 14 - i * 0.5,
                      "fantasypros_RECEIVING_REC": 50 - i, "fantasypros_RECEIVING_YDS": 400 - i * 12,
-                     "fantasypros_RECEIVING_TDS": 3, "aav": max(1, 55 - i * 3)})
+                     "fantasypros_RECEIVING_TDS": 3})
     for i in range(18):
         rows.append({"player_id": f"wr{i}", "player_name": f"WR{i}", "position": "WR",
                      "fantasypros_RECEIVING_REC": 110 - i * 4, "fantasypros_RECEIVING_YDS": 1500 - i * 70,
-                     "fantasypros_RECEIVING_TDS": 11 - i * 0.4, "aav": max(1, 58 - i * 3)})
+                     "fantasypros_RECEIVING_TDS": 11 - i * 0.4})
     for i in range(14):
         rows.append({"player_id": f"qb{i}", "player_name": f"QB{i}", "position": "QB",
                      "fantasypros_PASSING_YDS": 4800 - i * 160, "fantasypros_PASSING_TDS": 38 - i,
-                     "fantasypros_PASSING_INTS": 9, "aav": max(1, 18 - i)})
-    df = pd.DataFrame(rows)
+                     "fantasypros_PASSING_INTS": 9})
+    return pd.DataFrame(rows)
 
-    static = calculate_static_rankings(df, PRESETS["ppr"], num_teams=12, num_tiers=5)
+
+def test_end_to_end_static_then_live():
+    static = calculate_static_rankings(_synthetic_board(), PRESETS["ppr"], num_teams=12, num_tiers=5)
     assert {"points", "tier", "vorp"}.issubset(static.players.columns)
-    assert static.pdm_map is None  # not computed yet in the static stage
+    assert static.pdm_map is None
 
+    roster = ["RB", "RB", "WR", "WR", "QB", "TE", "FLEX"] + ["BENCH"] * 8
     ls = LeagueState(
-        teams=[Team(f"t{i}", 200.0, [RosterSlot("RB"), RosterSlot("WR"), RosterSlot("QB"), RosterSlot("FLEX")])
-               for i in range(12)],
-        drafted_player_ids=set(),
+        teams=[Team(f"t{i}", 200.0, [RosterSlot(p) for p in roster]) for i in range(12)],
+        drafted_player_ids=set(), starting_bankroll=200.0,
     )
     live = apply_live_valuation(static, ls)
-    cols = live.players.columns
-    assert {"tcm", "pdm", "worth"}.issubset(cols)
+    assert {"value", "worth", "bargain", "tcm", "pdm"}.issubset(live.players.columns)
     assert live.pdm_map is not None and live.inflation is not None
 
-    # Sanity: worth is non-negative and the priciest AAV commands the most worth.
-    assert (live.players["worth"] >= 0).all()
-    rb = live.players[live.players["position"] == "RB"].sort_values("aav", ascending=False)
+    priced = live.players[live.players["value"] > 0]
+    # At draft start inflation is ~1.0, so Price == Value and Bargain == 0.
+    assert round(live.inflation, 3) == 1.0 or abs(live.inflation - 1.0) < 0.05
+    assert (priced["worth"] == priced["value"]).all()
+    assert (priced["bargain"] == 0).all()
+    # Value is budget-conserving: total never exceeds the cash in the room.
+    assert live.players["value"].sum() <= ls.total_remaining_cash()
+    # The top-VORP RB is the priciest RB.
+    rb = live.players[live.players["position"] == "RB"].sort_values("vorp", ascending=False)
     assert rb["worth"].iloc[0] >= rb["worth"].iloc[-1]
 
-    # Value-ceiling (Option B): worth concentrates on the top and does NOT sum to
-    # the full budget -- only that the priciest ceiling doesn't exceed the pool.
-    assert live.players["worth"].sum() <= ls.total_remaining_cash()
-    assert live.players["worth"].max() <= ls.starting_bankroll
+
+def test_overpay_deflates_and_opens_bargains():
+    static = calculate_static_rankings(_synthetic_board(), PRESETS["ppr"], num_teams=12)
+    roster = ["RB", "RB", "WR", "WR", "QB", "TE", "FLEX"] + ["BENCH"] * 8
+
+    def live(t0_cash, drafted):
+        teams = [Team("t0", t0_cash, [RosterSlot(p) for p in roster])]
+        teams += [Team(f"t{i}", 200.0, [RosterSlot(p) for p in roster]) for i in range(1, 12)]
+        return apply_live_valuation(static, LeagueState(teams=teams, drafted_player_ids=set(drafted),
+                                                        starting_bankroll=200.0))
+
+    start = live(200.0, [])
+    top = start.players.sort_values("value", ascending=False).iloc[0]
+    # A team pays $60 over the top player's value -> money drains -> board deflates.
+    after = live(200.0 - (int(top["value"]) + 60), [top["player_id"]])
+    assert after.inflation < start.inflation
+    # With prices down, still-priced players show positive bargains.
+    ap = after.players[after.players["worth"] > 0]
+    assert (ap["bargain"] >= 0).all() and (ap["bargain"] > 0).any()
 
 
 def test_static_result_reusable_across_picks():
-    # The same static result drives two different live snapshots without mutation.
     rows = [{"player_id": f"rb{i}", "player_name": f"RB{i}", "position": "RB",
              "fantasypros_RUSHING_YDS": 1500 - i * 100, "fantasypros_RUSHING_TDS": 12 - i,
              "fantasypros_RECEIVING_REC": 40, "fantasypros_RECEIVING_YDS": 300,
@@ -98,11 +148,8 @@ def test_static_result_reusable_across_picks():
 
     ls1 = LeagueState(teams=[Team("t0", 200.0, [RosterSlot("RB")])], drafted_player_ids=set())
     ls2 = LeagueState(teams=[Team("t0", 100.0, [RosterSlot("RB")])], drafted_player_ids={"rb0"})
-
     live1 = apply_live_valuation(static, ls1)
     live2 = apply_live_valuation(static, ls2)
 
-    # Static frame untouched (no tcm/worth leaked back onto it).
-    assert "worth" not in static.players.columns
-    # Different states give different rb0 drafted status reflected in worth presence.
+    assert "worth" not in static.players.columns  # static frame untouched
     assert len(live1.players) == len(live2.players)

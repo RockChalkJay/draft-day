@@ -1,47 +1,52 @@
-"""Piece 5: live market-heat signal.
+"""Piece 5: live auction inflation.
 
-``worth`` is a steep value ceiling anchored to AAV (see valuation.py). This
-module supplies the live adjustment: is the room paying above or below those
-ceilings? It compares money actually spent to the AAV of the players bought:
+``worth`` (the Price) is a player's stable ``value`` scaled by this live factor.
+Inflation is budget-conserving: it compares the money still in the room to the
+value still on the board.
 
-    heat = (total_spent - num_drafted) / Σ(aav - 1 over drafted players)
+    inflation = (remaining_cash - remaining_slots) / Σ(value - 1 over expected picks)
 
-i.e. dollars-of-premium paid divided by dollars-of-premium expected. At draft
-start it's 1.0 (nothing bought). If the room is paying over sticker (a hot
-draft), heat rises and the remaining ceilings scale up with it; if bargains are
-going through, heat drops. Unlike a budget-conserving model this makes no
-assumption that every roster slot gets filled -- it only looks at what was
-actually spent versus bought.
+Reserving $1 per remaining slot separates the mandatory min-bids from the
+discretionary money. At draft start it's 1.0 (cash and value are both whole). An
+early overpay drains cash faster than value leaves the board, so the ratio drops
+below 1 and every remaining Price falls with it -- the economically-correct
+direction, since the dollars a rival overspent are dollars no longer chasing the
+rest of the pool. Bargains push it back above 1.
 """
 
 import pandas as pd
 
 from src.rankings.league_state import LeagueState
 
-HEAT_MIN, HEAT_MAX = 0.5, 2.0
+INFL_MIN, INFL_MAX = 0.5, 1.8
 
 
-def calculate_market_heat(
+def calculate_auction_inflation(
     df: pd.DataFrame,
     league_state: LeagueState,
-    aav_col: str = "aav",
+    value_col: str = "value",
 ) -> float:
-    """Return the market-heat multiplier (1.0 == paying sticker), clamped to a
-    sane band so a single early over/underpay can't swing the board wildly."""
-    num_drafted = len(league_state.drafted_player_ids)
-    if num_drafted == 0 or aav_col not in df.columns:
+    """Return the conserving inflation multiplier (1.0 == on-value), clamped to a
+    sane band so a single early over/underpay can't swing the whole board.
+
+    The denominator sums the value premium (``value - 1``) over the top ``slots``
+    undrafted players -- the ones actually expected to be drafted -- so deep $0/$1
+    filler never dilutes it.
+    """
+    if value_col not in df.columns:
         return 1.0
 
-    initial_cash = league_state.initial_cash()
-    if initial_cash <= 0:
-        return 1.0
-    total_spent = initial_cash - league_state.total_remaining_cash()
-
-    drafted = df[df["player_id"].isin(league_state.drafted_player_ids)]
-    aav = pd.to_numeric(drafted[aav_col], errors="coerce").fillna(0.0)
-    premium_expected = (aav - 1.0).clip(lower=0).sum()
-    if premium_expected <= 0:
+    undrafted = df[~df["player_id"].isin(league_state.drafted_player_ids)]
+    slots = sum(league_state.empty_slots_by_pos().values())
+    if undrafted.empty or slots <= 0:
         return 1.0
 
-    heat = (total_spent - num_drafted) / premium_expected
-    return float(min(HEAT_MAX, max(HEAT_MIN, heat)))
+    value = pd.to_numeric(undrafted[value_col], errors="coerce").fillna(0.0)
+    expected_picks = value.sort_values(ascending=False).head(slots)
+    remaining_premium = (expected_picks - 1.0).clip(lower=0).sum()
+    if remaining_premium <= 0:
+        return 1.0
+
+    discretionary = league_state.total_remaining_cash() - slots
+    inflation = discretionary / remaining_premium
+    return float(min(INFL_MAX, max(INFL_MIN, inflation)))
