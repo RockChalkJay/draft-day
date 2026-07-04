@@ -888,15 +888,21 @@ document.getElementById("sleeperFetchBtn").onclick = async () => {
     document.getElementById("scInt").value = scoringConfig.passing.int;
     document.getElementById("scoringJsonText").value = JSON.stringify(scoringConfig, null, 2);
 
-    // Roster from Sleeper's roster_positions (FLEX variants and IDP-ish tags folded in).
+    // Roster from Sleeper's roster_positions. Tags with no dedicated slot type
+    // here (SUPER_FLEX, IDP slots, ...) are folded into BENCH: the valuation
+    // math keys on total slot count (budget - slots discretionary money, $1
+    // reserves), so silently dropping them would skew every price on the board.
     const count = pos => positions.filter(p => p === pos).length;
+    const KNOWN = new Set(["QB","RB","WR","TE","K","DEF","BN","FLEX","WRRB_FLEX","REC_FLEX","WRRB_WRT"]);
+    const unmapped = positions.filter(p => !KNOWN.has(p)).length;
     const flexCount = count("FLEX") + count("WRRB_FLEX") + count("REC_FLEX") + count("WRRB_WRT");
-    const benchCount = count("BN");
+    const benchCount = count("BN") + unmapped;
     rosterConfig = {
       qb_starters: count("QB"), rb_starters: count("RB"), wr_starters: count("WR"),
       te_starters: count("TE"), flex_spots: flexCount,
       k_starters: count("K"), dst_starters: count("DEF"), bench_spots: benchCount,
     };
+    if(unmapped) toast(`${unmapped} roster slot(s) (e.g. SUPER_FLEX/IDP) mapped to BENCH — slot count preserved for pricing.`);
     document.getElementById("rcQB").value = rosterConfig.qb_starters;
     document.getElementById("rcRB").value = rosterConfig.rb_starters;
     document.getElementById("rcWR").value = rosterConfig.wr_starters;
