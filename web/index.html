@@ -344,7 +344,8 @@ async function apiPost(path, body){
   if(!r.ok) throw new Error(path+" → "+r.status);
   return r.json();
 }
-function setStatus(t){ document.getElementById("loadStatus").textContent = t || ""; }
+let statusBase = "";  // persistent line (data source) shown whenever no transient status is active
+function setStatus(t){ document.getElementById("loadStatus").textContent = t || statusBase; }
 function toast(msg){ const el=document.getElementById("toast"); el.textContent=msg; el.style.display="block"; setTimeout(()=>el.style.display="none", 3200); }
 
 // ============================ Normalization ============================
@@ -906,6 +907,13 @@ async function init(){
     players = rawPlayers.map(normalize);
     reindex();
     await recomputeStatic();   // preview values before a draft is formally started
+    // Always show where the board's data came from — drafting off the bundled
+    // demo sample (or a stale cache) without realizing it is the silent failure
+    // mode that matters most on draft day.
+    statusBase = `${data.count} players · ${data.source}`;
+    const el = document.getElementById("loadStatus");
+    if(data.source === "sample"){ el.style.color = "var(--warn)"; el.title = "Offline demo data — not real projections. Check your network and reload, or GET /api/players?refresh=true."; }
+    setStatus("");
   } catch(e){
     setStatus("");
     toast("Failed to load: " + e.message);
