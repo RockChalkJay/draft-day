@@ -76,18 +76,9 @@ roster config); **Worth**, **Bargain**, `inflation`, TCM and PDM are **live**
 (recomputed after every pick). Kickers and defenses are tracked for ownership
 and price paid only — never assigned a Value/Worth or surfaced as a suggestion.
 
-An optional `data/auction_values.csv` overrides the computed Value with your
-own figures if you have them — matched by player name, applied automatically
-when present (skill positions only; K/DST stay $0 by design). Because a sheet
-is calibrated to *its* assumed league, the overridden values are then
-**renormalized to your league's budget** (a single monotone rescale of the
-value premiums, preserving the sheet's relative prices) — without this, the
-market math opens broken: inflation starts away from 1.0 and every Bargain
-opens red before a single bid. So the displayed Value may differ from the
-sheet's printed number when your league's teams/budget/roster differ from the
-sheet's assumptions — that difference is the point. A second optional import,
-`data/rankings_tiers.csv`, locks ECR/tiers/bye/ADP to a printed FantasyPros
-sheet the same way. See **Data Setup** below for how to create both.
+Value is always computed, never hand-entered: there is no file to create or
+sheet to import. See **Data Setup** below for exactly what's fetched and from
+where.
 
 ## Installation
 
@@ -114,26 +105,21 @@ uvicorn src.api.app:app --port 8000
 ```
 
 On first load the app fetches the player pool, computes rankings, and shows the
-Board — no manual setup required. See **Data Setup** below for how that data is
-resolved automatically, and for the optional manual imports that lock the
-board to a specific FantasyPros sheet before a real draft.
+Board — nothing to configure, nothing to upload. See **Data Setup** below for
+exactly what's fetched and from where.
 
 ## Data Setup
 
-Draft Day needs one thing to run: a table of players with projections, ranks,
-ADP, and byes. Two ways to get it, and they layer on top of each other —
-automatic needs zero setup, manual imports let you pin the board to an exact
-sheet so nothing shifts under you mid-draft.
-
-### Automatic (default — nothing to do)
+Every field on the board comes from a free, keyless, no-login data source,
+fetched automatically. There is no manual import, no CSV to create, no PDF to
+print, no account to log into — none of that exists in this app.
 
 Every request for the player pool resolves data in this order:
 
 1. **Cache** — `data/players_raw.parquet`, if younger than
    `DRAFTDAY_CACHE_TTL_HOURS` (default `24`).
-2. **Live fetch** — pulls FantasyPros projections/ECR/ADP, FFC ADP, Sleeper
-   player IDs, and nflverse usage/injury/Vegas data, merges them into one
-   table, and writes a fresh cache.
+2. **Live fetch** — pulls from every source below, merges them into one table,
+   and writes a fresh cache.
 3. **Stale cache** — if the live fetch fails (no network, a source down) but
    an old cache exists, real-but-old data is served rather than falling back
    to fake data.
@@ -151,72 +137,22 @@ DRAFTDAY_OFFLINE=1 uvicorn src.api.app:app --port 8000   # skip the network enti
 Force a fresh pull mid-session (bypasses the cache, rewrites it):
 `GET /api/players?refresh=true`.
 
-### Manual: season-specific sheet imports (optional, recommended before a real draft)
+### Data sources (all free, no key, no login)
 
-Two gitignored CSVs override parts of the automatically-fetched data —
-personal, dated data the repo doesn't track, so they need to be (re)created
-each season. Both match by normalized player name (DSTs by team abbreviation)
-and apply automatically whenever the file is present; no restart needed if
-you write them while the app is already up — just refresh the page or the
-`/api/players` call.
+| Source | What it provides | Auth |
+|---|---|---|
+| FantasyPros | Projections, ECR, expert tier, positional rank, bye | None |
+| ESPN | Consensus ADP, auction value, ownership%/start% | None |
+| FFC (Fantasy Football Calculator) | ADP (fallback if ESPN's is thin) | None |
+| Sleeper | Player IDs, current injury status | None |
+| nflverse | Prior-season target share/usage, injury history, Vegas-implied team totals | None |
 
-**1. Auction values → `data/auction_values.csv`** (columns: `player`, `value`)
-overrides the computed `Value` column. Two ways to populate it:
-- By hand — any CSV with `player,value` columns (also accepts
-  `name`/`player_name` and `salary`/`auction`/`aav`).
-- From FantasyPros' free "Cheat Sheet: Positional Rankings" PDF (Auction
-  Values → Download PDF):
-
-  ```bash
-  python -m src.ingestion.fantasypros_auction_pdf path/to/cheat_sheet.pdf
-  ```
-
-  Values are automatically rescaled to your league's actual budget (see *How
-  Value/Worth/Bargain are computed* above for why) — the printed sheet number
-  and the board's Value can legitimately differ.
-
-**2. Rankings & tiers → `data/rankings_tiers.csv`** overrides ECR, bye weeks,
-expert tiers, and ADP/±ADP. Print a FantasyPros cheat-sheet rankings page to
-PDF (fantasypros.com/nfl/rankings/ppr-cheatsheets.php → Print → Save as PDF),
-then:
-
-```bash
-python -m src.ingestion.fantasypros_rankings_pdf path/to/rankings.pdf
-```
-
-Both importers validate before writing (e.g. the rankings importer refuses to
-write a file with gaps in the overall rank rather than save a silently-partial
-sheet) and print how many players they covered.
-
-To point either override at a nonstandard file location, set
-`DRAFTDAY_AUCTION_VALUES_PATH` / `DRAFTDAY_RANKINGS_PATH` before starting the
-app.
-
-### Optional: FantasyPros login for the full ADP table
-
-FantasyPros' consensus ADP page is registration-fenced: anonymous visitors see
-only a ~5-row teaser, but any **free** FantasyPros account unlocks the full
-table. The login form itself is captcha-protected, so instead of a
-username/password config the app reuses your browser's logged-in session:
-
-1. Sign in (or create a free account) at fantasypros.com in your browser.
-2. Open DevTools (⌘⌥I) → **Network** tab, then reload any fantasypros.com page.
-3. Click the first request → **Request Headers** → copy the entire value of
-   the `Cookie` header.
-4. Export it before starting the app:
-
-   ```bash
-   export DRAFTDAY_FP_COOKIE='paste the whole cookie value here'
-   uvicorn src.api.app:app --port 8000
-   ```
-
-   (Then force a refresh with `GET /api/players?refresh=true` if you already
-   had a cached pull.)
-
-The cookie expires like any web session — if ADP coverage drops back to
-nothing on a later live pull, re-copy it. Without the cookie the app still
-gets ADP from the rankings-sheet import (printed while logged in, it carries
-ECR-vs-ADP for every player), then FFC's free API as the last fallback.
+FantasyPros' pages used here (projections, ECR/rankings) are public and
+unauthenticated; only its separate ADP page and salary-cap calculator are
+account-gated, which is why neither is used — ESPN's public player endpoint
+(no league, no login) supplies live ADP and auction value instead. See *Notes
+& known scope* for why FantasyPros stays in the mix for projections/ECR rather
+than being the sole source of truth.
 
 ## Usage
 
@@ -245,9 +181,9 @@ The app has three full-screen views (top nav) plus a one-time **Start Draft** mo
   - `Player` (team rides in the cell); `Pos` / `Pos#` — position and
     positional rank (WR3).
   - `Value` (stable salary-cap baseline) and `Worth` (live price) side by side.
-  - `ADP` — where the market actually drafts him (rankings-sheet import →
-    FantasyPros ADP page → FFC, first available), and `±ADP` = ADP − ECR
-    (green ≥ +10: experts rank him well ahead of the market — target).
+  - `ADP` — where the market actually drafts him (ESPN's live consensus ADP →
+    FFC, first available), and `±ADP` = ADP − ECR (green ≥ +10: experts rank
+    him well ahead of the market — target).
   - `Bargain` (Value − Worth, green = target / red = reach).
   - `Tier` (colored badge, **per-position** — each position's best cluster is
     tier 1; a 🚨 marker means a live tier cliff — points drop >10% within two
@@ -323,21 +259,27 @@ src/
   rankings/      the six-piece valuation engine (+ league_state, valuation)
   api/           FastAPI app, request/response models, serialization
 web/             single-page frontend (served by the API at /)
-data/            sample_players.json (committed, offline fallback); everything
-                 else gitignored: players_raw.parquet (live cache),
-                 auction_values.csv / rankings_tiers.csv (manual sheet imports
-                 — see Data Setup)
+data/            sample_players.json (committed, offline fallback);
+                 players_raw.parquet (live-fetch cache, gitignored)
 tests/           ingestion/, rankings/, api/  —  synthetic data, no network
 ```
 
 ## Notes & known scope
 
-- **Value** is computed (VBD → dollars from FantasyPros projections), not
-  scraped from FantasyPros' own salary-cap calculator: that tool's per-player
-  output only renders after login, in a JS app, and customizing league settings
-  (teams/budget/roster) is gated behind FantasyPros Premium — so it can't be
-  scraped for free, and its login is reCAPTCHA-protected. Computing Value from
-  the same projections/methodology sidesteps both.
+- **Value** is computed (VBD → dollars), not sourced from any one site's own
+  auction calculator: FantasyPros' salary-cap calculator only renders
+  per-player output after a Premium login, in a JS app, so it can't be scraped
+  for free; ESPN's auction value is real market data but is calibrated to
+  ESPN's own typical league settings, not necessarily yours. Computing Value
+  from projections + your league's actual teams/budget/roster sidesteps both,
+  and ESPN's auction value is instead surfaced as its own comparison signal —
+  see the ADP/±ADP columns.
+- **FantasyPros isn't the sole source of truth.** Projections, ECR, and expert
+  tier come from FantasyPros' free (unauthenticated) pages, but ADP/auction
+  value/ownership come from ESPN's public player endpoint, and ADP falls back
+  to FFC if ESPN's is thin. If any one of these sources goes down or changes
+  its page, the pipeline degrades (missing columns, not a crash) rather than
+  depending on a single provider.
 - `inflation` is a single global multiplier (not per-position) and clamped to
   [0.5, 1.8] so one early over/underpay can't swing the whole board. Per-position
   inflation (an RB run pricing up remaining RBs specifically) is a possible
@@ -350,9 +292,8 @@ tests/           ingestion/, rankings/, api/  —  synthetic data, no network
   (free, no key). Rookies and players with no NFL history have blank values —
   there's no projection-adjustment for a rookie's expected role.
 - K/DST price at `$0` by design; they're tracked for ownership and bid only.
-- FantasyPros' ADP page (`/nfl/adp/ppr-overall.php`) is registration-fenced to
-  a ~5-row teaser for anonymous visitors; see *Optional: FantasyPros login for
-  the full ADP table* under Data Setup for the `DRAFTDAY_FP_COOKIE` setup that
-  unlocks the full table.
+- ESPN's endpoints are undocumented (no official public API contract), so a
+  future ESPN-side change could break the fetcher; it fails soft (empty
+  frame) rather than crashing the pipeline, falling back to FFC for ADP.
 - FantasyPros projections are pulled with `week=draft` (full-season totals);
   without it the page defaults to next week's per-game numbers.

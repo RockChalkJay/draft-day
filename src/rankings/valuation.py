@@ -86,39 +86,6 @@ def calculate_price(
     return price.where(priced, 0.0).round().clip(lower=0).astype(int)
 
 
-def renormalize_value_to_budget(
-    df: pd.DataFrame,
-    budget: float,
-    total_slots: int,
-    priced_positions: tuple[str, ...] = PRICED_POSITIONS,
-) -> pd.Series:
-    """Rescale the ``value`` column so it satisfies the budget identity
-    ``Σ(value - 1) over the expected drafted pool == budget - total_slots``.
-
-    Needed when an external auction-value sheet overrides the computed Value:
-    sheet values are calibrated to *their* assumed league (teams/budget/roster),
-    not yours, so raw they break the conservation property that makes inflation
-    open at exactly 1.0 and Bargain open at 0. Rescaling preserves the sheet's
-    relative prices while fitting them to the money actually in your room.
-
-    The expected drafted pool is the ``total_slots`` highest-value rows -- the
-    same window ``calculate_auction_inflation`` prices against, so the two stay
-    consistent by construction. Scaling is monotone (premium ``value - 1`` is
-    multiplied by one positive factor), so board order never changes.
-    """
-    value = pd.to_numeric(df["value"], errors="coerce").fillna(0.0)
-    priced = df["position"].isin(priced_positions) & (value >= 1.0)
-
-    target = budget - total_slots
-    window = value.sort_values(ascending=False).head(total_slots)
-    current = float((window - 1.0).clip(lower=0).sum())
-    if target <= 0 or current <= 0:
-        return df["value"]
-
-    scaled = 1.0 + (value - 1.0) * (target / current)
-    return scaled.where(priced, 0.0).round().clip(lower=0).astype(int)
-
-
 @dataclass
 class RankingsResult:
     players: pd.DataFrame
@@ -150,14 +117,11 @@ def calculate_static_rankings(
     ]
     df = pd.concat(tiered_parts, ignore_index=True)
 
-    # Expert tiers take precedence over the computed cliff tiers when present:
-    # a rankings-sheet import (tier_override, from data/rankings_tiers.csv)
-    # wins over the live-fetched FantasyPros tier, which wins over the computed
-    # fallback.
-    for source_col in ("fantasypros_ecr_tier", "tier_override"):
-        if source_col in df.columns:
-            expert = pd.to_numeric(df[source_col], errors="coerce")
-            df["tier"] = expert.where(expert.notna() & (expert >= 1), df["tier"])
+    # The live-fetched FantasyPros expert tier takes precedence over the
+    # computed cliff tiers when present (automatic -- no manual sheet import).
+    if "fantasypros_ecr_tier" in df.columns:
+        expert = pd.to_numeric(df["fantasypros_ecr_tier"], errors="coerce")
+        df["tier"] = expert.where(expert.notna() & (expert >= 1), df["tier"])
     df["tier"] = pd.to_numeric(df["tier"], errors="coerce").fillna(1)
     # `tier` is per-position throughout the app: dense-rank within position so
     # each position's best cluster is tier 1. Identity for computed cliff tiers
@@ -189,18 +153,6 @@ def apply_live_valuation(
     budget = league_state.initial_cash()
     total_slots = sum(len(t.roster) for t in league_state.teams)
     df["value"] = calculate_value(df, budget, total_slots)
-    # A user-supplied auction-value export (data/auction_values.csv, surfaced as
-    # value_override by the pipeline) takes precedence over the computed Value --
-    # for priced positions only, so a sheet's $1-2 K/DST rows can't give
-    # never-priced positions a value that leaks into inflation's denominator.
-    # Sheet values are calibrated to the sheet's assumed league, so the blended
-    # column is then renormalized to *this* league's budget; otherwise inflation
-    # opens away from 1.0 and every Bargain starts red before a single bid.
-    if "value_override" in df.columns:
-        ov = pd.to_numeric(df["value_override"], errors="coerce")
-        usable = ov.notna() & (ov > 0) & df["position"].isin(PRICED_POSITIONS)
-        df["value"] = ov.where(usable, df["value"]).round().clip(lower=0).astype(int)
-        df["value"] = renormalize_value_to_budget(df, budget, total_slots)
     inflation = calculate_auction_inflation(df, league_state)
     # Predicted price composes the reactive conserving factor with the
     # anticipatory draft-phase decay: prices sag below sheet value as rosters
