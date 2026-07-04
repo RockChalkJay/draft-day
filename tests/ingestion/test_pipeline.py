@@ -2,7 +2,12 @@ import pandas as pd
 import pytest
 
 from src.ingestion.merge import merge_sources
-from src.ingestion.pipeline import _derive_context_stats, _injury_risk, _join_vegas
+from src.ingestion.pipeline import (
+    _apply_value_override,
+    _derive_context_stats,
+    _injury_risk,
+    _join_vegas,
+)
 
 
 def _fp_position_frame(position, rows):
@@ -77,3 +82,46 @@ def test_derive_context_stats_flattens_source_columns():
     assert row["target_share"] == 0.24
     assert row["team_total"] == 25.5
     assert row["injury_risk"] in {"Low", "Med", "High"}
+
+
+def test_apply_value_override_matches_by_normalized_name(tmp_path, monkeypatch):
+    override_csv = tmp_path / "auction_values.csv"
+    override_csv.write_text("player,value\nPatrick Mahomes II,6\nJa'Marr Chase,60\n")
+
+    import src.ingestion.pipeline as pipe
+    monkeypatch.setattr(pipe, "OVERRIDE_PATH", str(override_csv))
+
+    df = pd.DataFrame([
+        {"player_name": "Patrick Mahomes II", "position": "QB"},  # exact match
+        {"player_name": "Ja'Marr Chase", "position": "WR"},       # punctuation match
+        {"player_name": "Some Rookie", "position": "RB"},         # no match -> NaN
+    ])
+
+    out = _apply_value_override(df)
+
+    assert out.set_index("player_name")["value_override"]["Patrick Mahomes II"] == 6
+    assert out.set_index("player_name")["value_override"]["Ja'Marr Chase"] == 60
+    assert pd.isna(out.set_index("player_name")["value_override"]["Some Rookie"])
+
+
+def test_apply_value_override_is_noop_when_file_missing(monkeypatch):
+    import src.ingestion.pipeline as pipe
+    monkeypatch.setattr(pipe, "OVERRIDE_PATH", "/nonexistent/auction_values.csv")
+
+    df = pd.DataFrame([{"player_name": "Patrick Mahomes II", "position": "QB"}])
+    out = _apply_value_override(df)
+
+    assert "value_override" not in out.columns
+
+
+def test_apply_value_override_accepts_alternate_column_names(tmp_path, monkeypatch):
+    override_csv = tmp_path / "auction_values.csv"
+    override_csv.write_text("name,salary\nJosh Allen,29\n")
+
+    import src.ingestion.pipeline as pipe
+    monkeypatch.setattr(pipe, "OVERRIDE_PATH", str(override_csv))
+
+    df = pd.DataFrame([{"player_name": "Josh Allen", "position": "QB"}])
+    out = _apply_value_override(df)
+
+    assert out.set_index("player_name")["value_override"]["Josh Allen"] == 29

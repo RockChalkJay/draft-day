@@ -139,6 +139,57 @@ def test_overpay_deflates_and_opens_bargains():
     assert (ap["bargain"] >= 0).all() and (ap["bargain"] > 0).any()
 
 
+def test_value_override_renormalized_so_draft_opens_at_par():
+    # Override values come from an external sheet calibrated to *its* assumed
+    # league. Raw, they break the budget identity: inflation would open away
+    # from 1.0 and every Bargain would open red before a single bid. After
+    # renormalization the draft must open at par regardless of the sheet's scale.
+    static = calculate_static_rankings(_synthetic_board(), PRESETS["ppr"], num_teams=12)
+    # A sheet on a wildly different scale (e.g. a $100-budget league's values),
+    # covering only some players -- the rest keep computed values.
+    static.players["value_override"] = pd.NA
+    rb_ids = static.players["position"] == "RB"
+    static.players.loc[rb_ids, "value_override"] = (
+        static.players.loc[rb_ids, "vorp"].rank(ascending=False).map(lambda r: max(0, 35 - 3 * r))
+    )
+
+    roster = ["RB", "RB", "WR", "WR", "QB", "TE", "FLEX"] + ["BENCH"] * 8
+    ls = LeagueState(
+        teams=[Team(f"t{i}", 200.0, [RosterSlot(p) for p in roster]) for i in range(12)],
+        drafted_player_ids=set(), starting_bankroll=200.0,
+    )
+    live = apply_live_valuation(static, ls)
+
+    assert abs(live.inflation - 1.0) < 0.05
+    priced = live.players[live.players["worth"] > 0]
+    assert (priced["bargain"].abs() <= 1).all()  # par, within $1 int rounding
+    # The sheet's own relative order is preserved by the (monotone) rescale.
+    # (Only within the overridden subset: players the sheet doesn't cover keep
+    # computed values on their own scale, so cross-source order isn't defined.)
+    overridden = live.players[pd.to_numeric(live.players["value_override"], errors="coerce") > 0]
+    overridden = overridden.sort_values("value_override", ascending=False)
+    assert overridden["value"].is_monotonic_decreasing
+
+
+def test_value_override_ignored_for_k_dst():
+    # Sheets price K/DST at $1-2; this app never prices them, and letting a
+    # sheet value through would leak into inflation's denominator.
+    static = calculate_static_rankings(_synthetic_board(), PRESETS["ppr"], num_teams=12)
+    k_row = pd.DataFrame([{"player_id": "k0", "player_name": "K0", "position": "K",
+                           "points": 140.0, "tier": 1, "vorp": 0.0}])
+    static.players = pd.concat([static.players, k_row], ignore_index=True)
+    static.players["value_override"] = pd.NA
+    static.players.loc[static.players["player_id"] == "k0", "value_override"] = 2
+
+    ls = LeagueState(
+        teams=[Team("t0", 200.0, [RosterSlot(p) for p in ("RB", "K", "BENCH")])],
+        drafted_player_ids=set(), starting_bankroll=200.0,
+    )
+    live = apply_live_valuation(static, ls)
+    k = live.players[live.players["player_id"] == "k0"].iloc[0]
+    assert k["value"] == 0 and k["worth"] == 0
+
+
 def test_static_result_reusable_across_picks():
     rows = [{"player_id": f"rb{i}", "player_name": f"RB{i}", "position": "RB",
              "fantasypros_RUSHING_YDS": 1500 - i * 100, "fantasypros_RUSHING_TDS": 12 - i,

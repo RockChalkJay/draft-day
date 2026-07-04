@@ -29,7 +29,11 @@ _REPO_ROOT = os.path.abspath(os.path.join(_THIS_DIR, "..", ".."))
 DATA_DIR = os.path.join(_REPO_ROOT, "data")
 CACHE_PATH = os.path.join(DATA_DIR, "players_raw.parquet")
 SAMPLE_PATH = os.path.join(DATA_DIR, "sample_players.json")
-OVERRIDE_PATH = os.path.join(DATA_DIR, "auction_values.csv")
+# Overridable via env var so tests can run hermetically regardless of whether
+# a real data/auction_values.csv exists on the machine running them.
+OVERRIDE_PATH = os.environ.get(
+    "DRAFTDAY_AUCTION_VALUES_PATH", os.path.join(DATA_DIR, "auction_values.csv")
+)
 
 POSITIONS = ("qb", "rb", "wr", "te", "k", "dst")
 
