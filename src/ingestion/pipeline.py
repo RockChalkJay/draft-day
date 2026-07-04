@@ -34,6 +34,10 @@ SAMPLE_PATH = os.path.join(DATA_DIR, "sample_players.json")
 OVERRIDE_PATH = os.environ.get(
     "DRAFTDAY_AUCTION_VALUES_PATH", os.path.join(DATA_DIR, "auction_values.csv")
 )
+# Same, for the rankings/tiers sheet import (fantasypros_rankings_pdf.py output).
+RANKINGS_PATH = os.environ.get(
+    "DRAFTDAY_RANKINGS_PATH", os.path.join(DATA_DIR, "rankings_tiers.csv")
+)
 
 POSITIONS = ("qb", "rb", "wr", "te", "k", "dst")
 
@@ -133,6 +137,49 @@ def _apply_value_override(df: pd.DataFrame) -> pd.DataFrame:
     }
     df = df.copy()
     df["value_override"] = df["player_name"].map(lambda n: vmap.get(normalize_name(str(n))))
+    return df
+
+
+def _apply_rankings_override(df: pd.DataFrame) -> pd.DataFrame:
+    """If ``data/rankings_tiers.csv`` exists (a rankings-sheet import from
+    ``fantasypros_rankings_pdf.py``), override the board's ECR rank and bye with
+    the sheet's, and add ``tier_override`` (the sheet's expert tier, honored by
+    the rankings engine over computed cliff tiers) and ``ecr_vs_adp`` (experts
+    vs. market delta). Skill players match by normalized name; DST rows match by
+    team abbreviation, since sources disagree on DST naming."""
+    if df.empty or not os.path.exists(RANKINGS_PATH):
+        return df
+    try:
+        rk = pd.read_csv(RANKINGS_PATH)
+    except Exception:
+        return df
+    if not {"player", "position", "rank"}.issubset(rk.columns) or "player_name" not in df.columns:
+        return df
+    from src.ingestion.id_mapping import normalize_name
+
+    rk = rk.copy()
+    rk_is_dst = rk["position"].astype(str).str.upper() == "DST"
+    rk["_key"] = rk["player"].map(lambda n: normalize_name(str(n)))
+    rk.loc[rk_is_dst, "_key"] = "dst:" + rk.loc[rk_is_dst, "team"].astype(str)
+    rk = rk.drop_duplicates("_key").set_index("_key")
+
+    df = df.copy()
+    df_is_dst = df["position"].astype(str).str.upper() == "DST"
+    keys = df["player_name"].map(lambda n: normalize_name(str(n)))
+    keys = keys.where(~df_is_dst, "dst:" + df["team"].astype(str))
+
+    def sheet_col(name):
+        if name not in rk.columns:
+            return pd.Series(np.nan, index=df.index)
+        return pd.to_numeric(keys.map(rk[name]), errors="coerce")
+
+    for target, source in (("fantasypros_ecr_rank_ecr", "rank"), ("fantasypros_ecr_bye", "bye")):
+        vals = sheet_col(source)
+        if target not in df.columns:
+            df[target] = np.nan
+        df[target] = vals.where(vals.notna(), df[target])
+    df["tier_override"] = sheet_col("tier")
+    df["ecr_vs_adp"] = sheet_col("ecr_vs_adp")
     return df
 
 
@@ -265,10 +312,11 @@ def load_player_table_with_source(
     Order of preference: offline sample (if DRAFTDAY_OFFLINE), then the parquet
     cache (unless ``refresh``), then a live fetch, then the bundled sample.
     ``source`` is one of "cache", "live", "sample", or "empty". Any optional
-    ``auction_values.csv`` override is applied last, regardless of source.
+    ``auction_values.csv`` / ``rankings_tiers.csv`` overrides are applied last,
+    regardless of source.
     """
     df, source = _resolve_table(refresh, scoring_format, use_sample_on_failure)
-    return _apply_value_override(df), source
+    return _apply_rankings_override(_apply_value_override(df)), source
 
 
 def build_player_table(

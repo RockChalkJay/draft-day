@@ -150,6 +150,22 @@ def calculate_static_rankings(
     ]
     df = pd.concat(tiered_parts, ignore_index=True)
 
+    # Expert tiers take precedence over the computed cliff tiers when present:
+    # a rankings-sheet import (tier_override, from data/rankings_tiers.csv)
+    # wins over the live-fetched FantasyPros tier, which wins over the computed
+    # fallback.
+    for source_col in ("fantasypros_ecr_tier", "tier_override"):
+        if source_col in df.columns:
+            expert = pd.to_numeric(df[source_col], errors="coerce")
+            df["tier"] = expert.where(expert.notna() & (expert >= 1), df["tier"])
+    df["tier"] = pd.to_numeric(df["tier"], errors="coerce").fillna(1)
+    # `tier` is per-position throughout the app: dense-rank within position so
+    # each position's best cluster is tier 1. Identity for computed cliff tiers
+    # (already 1..k per position); expert sheet tiers are *overall* tiers (a
+    # TE's best cluster may sit in overall tier 5), so this re-anchors them to
+    # the per-position scale the board, PDM, and a drafting manager think in.
+    df["tier"] = df.groupby("position")["tier"].rank(method="dense").astype(int)
+
     config = replacement_config or ReplacementConfig()
     replacement_levels = calculate_replacement_levels(df, num_teams, config)
     df["vorp"] = calculate_vorp(df, replacement_levels)

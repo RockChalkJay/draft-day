@@ -127,6 +127,45 @@ def test_apply_value_override_accepts_alternate_column_names(tmp_path, monkeypat
     assert out.set_index("player_name")["value_override"]["Josh Allen"] == 29
 
 
+def test_apply_rankings_override_updates_ecr_bye_and_adds_tier(tmp_path, monkeypatch):
+    rankings_csv = tmp_path / "rankings_tiers.csv"
+    rankings_csv.write_text(
+        "rank,player,team,position,pos_rank,tier,bye,ecr_vs_adp\n"
+        "1,Ja'Marr Chase,CIN,WR,1,1,6,2\n"
+        "160,Houston Texans,HOU,DST,1,10,8,39\n"
+    )
+    import src.ingestion.pipeline as pipe
+    monkeypatch.setattr(pipe, "RANKINGS_PATH", str(rankings_csv))
+
+    df = pd.DataFrame([
+        {"player_name": "Ja'Marr Chase", "team": "CIN", "position": "WR",
+         "fantasypros_ecr_rank_ecr": 5.0, "fantasypros_ecr_bye": 9.0},   # stale values
+        {"player_name": "HOU D/ST", "team": "HOU", "position": "DST",
+         "fantasypros_ecr_rank_ecr": 200.0},                             # DST: name differs, team matches
+        {"player_name": "Unknown Rookie", "team": "SF", "position": "RB",
+         "fantasypros_ecr_rank_ecr": 300.0},                             # not on sheet: untouched
+    ])
+    out = pipe._apply_rankings_override(df).set_index("player_name")
+
+    chase = out.loc["Ja'Marr Chase"]
+    assert chase["fantasypros_ecr_rank_ecr"] == 1 and chase["fantasypros_ecr_bye"] == 6
+    assert chase["tier_override"] == 1 and chase["ecr_vs_adp"] == 2
+    assert out.loc["HOU D/ST", "fantasypros_ecr_rank_ecr"] == 160
+    assert out.loc["HOU D/ST", "tier_override"] == 10
+    assert out.loc["Unknown Rookie", "fantasypros_ecr_rank_ecr"] == 300
+    assert pd.isna(out.loc["Unknown Rookie", "tier_override"])
+
+
+def test_apply_rankings_override_noop_when_file_missing(monkeypatch):
+    import src.ingestion.pipeline as pipe
+    monkeypatch.setattr(pipe, "RANKINGS_PATH", "/nonexistent/rankings_tiers.csv")
+
+    df = pd.DataFrame([{"player_name": "Ja'Marr Chase", "team": "CIN", "position": "WR"}])
+    out = pipe._apply_rankings_override(df)
+
+    assert "tier_override" not in out.columns
+
+
 # ---- Cache TTL: a stale board is the draft-day failure mode ------------------
 
 def _cache_env(tmp_path, monkeypatch, age_hours, live_result):

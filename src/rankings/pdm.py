@@ -22,6 +22,9 @@ def _scarcity_multiplier(needed: float, avail_elite: int) -> float:
 
 
 def _elite_counts(df: pd.DataFrame, league_state: LeagueState) -> dict[str, int]:
+    # "Elite" = the position's top two tiers. `tier` is per-position everywhere
+    # (calculate_static_rankings dense-ranks within position, re-anchoring even
+    # expert overall tiers), so tier <= 2 means the same thing at every position.
     undrafted = df[~df["player_id"].isin(league_state.drafted_player_ids)]
     counts = {}
     for pos in PDM_POSITIONS:

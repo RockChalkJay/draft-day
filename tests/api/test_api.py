@@ -3,10 +3,11 @@ import os
 # Force offline mode before the app/pipeline import any network paths, so
 # GET /api/players serves the bundled sample instead of attempting live fetches.
 os.environ["DRAFTDAY_OFFLINE"] = "1"
-# Point the auction-value override at a path that doesn't exist, so these tests
-# exercise computed Value regardless of whether a real data/auction_values.csv
-# happens to exist on the machine running them.
+# Point the auction-value and rankings overrides at paths that don't exist, so
+# these tests exercise computed Value/tiers regardless of whether real override
+# CSVs happen to exist on the machine running them.
 os.environ["DRAFTDAY_AUCTION_VALUES_PATH"] = "/nonexistent/auction_values.csv"
+os.environ["DRAFTDAY_RANKINGS_PATH"] = "/nonexistent/rankings_tiers.csv"
 
 import pytest
 from fastapi.testclient import TestClient

@@ -224,6 +224,29 @@ def test_worth_sags_as_rosters_fill_even_at_par():
     assert survivor["worth"] < open_row["worth"]
 
 
+def test_expert_tiers_adopted_and_reanchored_per_position():
+    # Sheet tiers are *overall* tiers: a position's best players may sit in
+    # overall tier 3+. The board's tier is per-position, so adopted expert
+    # tiers are dense-ranked within each position (best cluster -> tier 1).
+    df = _synthetic_board()
+    df["tier_override"] = pd.NA
+    qbs = df["position"] == "QB"
+    # Put all QBs in overall tiers 4/5 (top half 4, bottom half 5).
+    df.loc[qbs, "tier_override"] = [4 if i < 7 else 5 for i in range(qbs.sum())]
+
+    static = calculate_static_rankings(df, PRESETS["ppr"], num_teams=12, num_tiers=5)
+    out_qbs = static.players[static.players["position"] == "QB"]
+
+    assert set(out_qbs["tier"]) == {1, 2}  # re-anchored, and the 4/5 split kept
+    # The override's grouping decides tiers (not the computed cliffs): the
+    # top-7-points QBs are exactly the tier-1 group.
+    top7 = set(out_qbs.sort_values("points", ascending=False).head(7)["player_id"])
+    assert set(out_qbs[out_qbs["tier"] == 1]["player_id"]) == top7
+    # Positions without an override keep computed cliff tiers starting at 1.
+    rbs = static.players[static.players["position"] == "RB"]
+    assert rbs["tier"].min() == 1 and rbs["tier"].max() <= 5
+
+
 def test_static_result_reusable_across_picks():
     rows = [{"player_id": f"rb{i}", "player_name": f"RB{i}", "position": "RB",
              "fantasypros_RUSHING_YDS": 1500 - i * 100, "fantasypros_RUSHING_TDS": 12 - i,
