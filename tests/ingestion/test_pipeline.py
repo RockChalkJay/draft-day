@@ -125,3 +125,65 @@ def test_apply_value_override_accepts_alternate_column_names(tmp_path, monkeypat
     out = _apply_value_override(df)
 
     assert out.set_index("player_name")["value_override"]["Josh Allen"] == 29
+
+
+# ---- Cache TTL: a stale board is the draft-day failure mode ------------------
+
+def _cache_env(tmp_path, monkeypatch, age_hours, live_result):
+    """Point the pipeline at a temp parquet cache with a chosen age, and stub
+    the live fetch. Returns the list live-fetch calls are recorded into."""
+    import os
+    import time
+
+    import src.ingestion.pipeline as pipe
+
+    cache_file = tmp_path / "players_raw.parquet"
+    pd.DataFrame([{"player_name": "Cached Player", "team": "SF", "position": "RB"}]).to_parquet(cache_file)
+    mtime = time.time() - age_hours * 3600
+    os.utime(cache_file, (mtime, mtime))
+    monkeypatch.setattr(pipe, "CACHE_PATH", str(cache_file))
+    monkeypatch.delenv("DRAFTDAY_OFFLINE", raising=False)
+
+    calls = []
+
+    def fake_fetch_live(scoring_format="ppr"):
+        calls.append(scoring_format)
+        if isinstance(live_result, Exception):
+            raise live_result
+        return live_result
+
+    monkeypatch.setattr(pipe, "fetch_live", fake_fetch_live)
+    return calls
+
+
+def test_fresh_cache_served_without_live_fetch(tmp_path, monkeypatch):
+    import src.ingestion.pipeline as pipe
+
+    calls = _cache_env(tmp_path, monkeypatch, age_hours=1, live_result=RuntimeError("no net"))
+    df, source = pipe._resolve_table(refresh=False, scoring_format="ppr", use_sample_on_failure=True)
+
+    assert source == "cache"
+    assert df.iloc[0]["player_name"] == "Cached Player"
+    assert calls == []  # fresh cache means no network attempt at all
+
+
+def test_stale_cache_triggers_live_refetch(tmp_path, monkeypatch):
+    import src.ingestion.pipeline as pipe
+
+    live = pd.DataFrame([{"player_name": "Fresh Player", "team": "CHI", "position": "WR"}])
+    _cache_env(tmp_path, monkeypatch, age_hours=pipe.CACHE_TTL_HOURS + 5, live_result=live)
+    df, source = pipe._resolve_table(refresh=False, scoring_format="ppr", use_sample_on_failure=True)
+
+    assert source == "live"
+    assert df.iloc[0]["player_name"] == "Fresh Player"
+
+
+def test_stale_cache_still_beats_sample_when_live_fails(tmp_path, monkeypatch):
+    import src.ingestion.pipeline as pipe
+
+    _cache_env(tmp_path, monkeypatch, age_hours=pipe.CACHE_TTL_HOURS + 5,
+               live_result=RuntimeError("no net"))
+    df, source = pipe._resolve_table(refresh=False, scoring_format="ppr", use_sample_on_failure=True)
+
+    assert source == "cache"  # stale real data > bundled demo sample
+    assert df.iloc[0]["player_name"] == "Cached Player"

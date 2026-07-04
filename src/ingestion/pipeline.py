@@ -37,6 +37,13 @@ OVERRIDE_PATH = os.environ.get(
 
 POSITIONS = ("qb", "rb", "wr", "te", "k", "dst")
 
+# How long a cached live pull stays authoritative. Draft-prep data (projections,
+# ECR, byes) shifts daily in season-prep and completely between seasons, so a
+# stale cache silently serving last year's board is the failure mode to avoid.
+# After the TTL the cache demotes to a fallback: a live re-fetch is attempted
+# first, and the stale cache is served only if that fails.
+CACHE_TTL_HOURS = float(os.environ.get("DRAFTDAY_CACHE_TTL_HOURS", "24"))
+
 
 def load_sample() -> pd.DataFrame:
     """The bundled offline dataset (raw merged-table shape)."""
@@ -194,6 +201,23 @@ def fetch_live(scoring_format: str = "ppr") -> pd.DataFrame:
     return merged
 
 
+def _cache_is_fresh() -> bool:
+    try:
+        age_hours = (datetime.datetime.now().timestamp() - os.path.getmtime(CACHE_PATH)) / 3600
+        return age_hours < CACHE_TTL_HOURS
+    except OSError:
+        return False
+
+
+def _read_cache() -> pd.DataFrame | None:
+    if not os.path.exists(CACHE_PATH):
+        return None
+    try:
+        return pd.read_parquet(CACHE_PATH)
+    except Exception:
+        return None  # corrupt cache -> treat as absent
+
+
 def _resolve_table(
     refresh: bool,
     scoring_format: str,
@@ -205,11 +229,10 @@ def _resolve_table(
     if os.environ.get("DRAFTDAY_OFFLINE", "").lower() in ("1", "true", "yes"):
         return load_sample(), "sample"
 
-    if not refresh and os.path.exists(CACHE_PATH):
-        try:
-            return pd.read_parquet(CACHE_PATH), "cache"
-        except Exception:
-            pass  # corrupt cache -> fall through to a fresh build
+    if not refresh and _cache_is_fresh():
+        cached = _read_cache()
+        if cached is not None:
+            return cached, "cache"
 
     try:
         live = fetch_live(scoring_format=scoring_format)
@@ -219,6 +242,13 @@ def _resolve_table(
     if not live.empty:
         _write_cache(live)
         return live, "live"
+
+    # Live failed: a stale cache is still a real merged table -- far better than
+    # the bundled sample -- so it outranks the sample as a fallback.
+    if not refresh:
+        cached = _read_cache()
+        if cached is not None:
+            return cached, "cache"
 
     if use_sample_on_failure:
         return load_sample(), "sample"
