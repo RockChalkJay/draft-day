@@ -615,14 +615,26 @@ async function undraftPlayer(playerId){
 }
 
 // ============================ Board: table ============================
+// Rank | ECR | Player | Pos | Pos# | Value | Worth | ADP | ±ADP | Bargain |
+// Tier | Bye | Inj | Tgt% | TmTot | Sleeper. Team rides inside the Player cell.
 const COLS = [
-  {key:"rank", label:"#"}, {key:"ecr", label:"ECR"},
-  {key:"name", label:"Player"}, {key:"position", label:"Pos"}, {key:"pos_rank", label:"Pos#"}, {key:"team", label:"Team"},
-  {key:"bye", label:"Bye"}, {key:"worth", label:"Worth"}, {key:"value", label:"Value"},
+  {key:"rank", label:"Rank"}, {key:"ecr", label:"ECR"}, {key:"name", label:"Player"},
+  {key:"position", label:"Pos"}, {key:"pos_rank", label:"Pos#"},
+  {key:"value", label:"Value"}, {key:"worth", label:"Worth"},
   {key:"adp", label:"ADP"}, {key:"ecr_vs_adp", label:"±ADP"},
-  {key:"bargain", label:"Bargain"}, {key:"injury_risk", label:"Inj"},
-  {key:"target_share", label:"Tgt%"}, {key:"team_total", label:"TmTot"}, {key:"tier", label:"Tier"},
+  {key:"bargain", label:"Bargain"}, {key:"tier", label:"Tier"}, {key:"bye", label:"Bye"},
+  {key:"injury_risk", label:"Inj"}, {key:"target_share", label:"Tgt%"}, {key:"team_total", label:"TmTot"},
+  {key:"sleeper", label:"Sleeper"},
 ];
+// A "sleeper" = the experts rank him well ahead of where the market drafts him
+// (±ADP strongly positive) at a late-round price — the computed version of an
+// editorial sleepers list, derived from FantasyPros ECR/ADP for every player.
+const SLEEPER_MIN_DELTA = 15, SLEEPER_MIN_ADP = 60;
+function isSleeper(p){ return p.ecr_vs_adp!=null && p.adp!=null && p.ecr_vs_adp >= SLEEPER_MIN_DELTA && p.adp >= SLEEPER_MIN_ADP; }
+function sleeperCell(p){
+  if(!isSleeper(p)) return `<span style="color:var(--muted);">–</span>`;
+  return `<span title="Sleeper: experts rank him ${p.ecr_vs_adp} spots ahead of market ADP (${Number(p.adp).toFixed(0)}) — late-round value the room may miss.">💤</span>`;
+}
 function renderBoardHeader(){
   const tr = document.getElementById("boardHeaderRow");
   tr.innerHTML = "";
@@ -630,6 +642,7 @@ function renderBoardHeader(){
     const th = document.createElement("th");
     th.textContent = c.label + (sortKey===c.key ? (sortDir===1?" ▲":" ▼") : " ↕");
     if(c.key==="rank") th.title = "Overall rank by live Worth (Price). Compare with ECR to spot divergence.";
+    if(c.key==="sleeper") th.title = `💤 = experts rank him ≥${SLEEPER_MIN_DELTA} spots ahead of market ADP at a late-round price (ADP ${SLEEPER_MIN_ADP}+) — computed sleepers list. Sort to see the biggest gaps.`;
     if(c.key==="pos_rank") th.title = "Positional rank (e.g. 3 on a WR row = WR3)";
     if(c.key==="adp") th.title = "Average Draft Position — where the market actually drafts him (rankings sheet, FantasyPros ADP, or FFC)";
     if(c.key==="ecr") th.title = "FantasyPros expert consensus overall rank (ECR)";
@@ -661,6 +674,7 @@ function renderPosFilter(){
 }
 function sortVal(p, key, rankMap){
   if(key==="rank") return rankMap.get(p.id) ?? Infinity;
+  if(key==="sleeper") return isSleeper(p) ? p.ecr_vs_adp : null;  // biggest gaps first
   return p[key];
 }
 function ecrDivergence(p, rankMap, ecrRankMap){
@@ -705,20 +719,20 @@ function renderBoardBody(){
     tr.innerHTML = `
       <td style="color:var(--muted);font-size:11px;">${myRank}</td>
       <td style="color:var(--muted);font-size:12px;">${p.ecr==null?"–":p.ecr} ${ecrDivergence(p, rankMap, ecrRankMap)}</td>
-      <td>${p.name}</td>
+      <td>${p.name} <span style="color:var(--muted);font-size:11px;">${p.team||""}</span></td>
       <td><span class="pill">${p.position}</span></td>
       <td style="color:var(--muted);font-size:12px;">${p.pos_rank==null?"–":p.position+Math.round(p.pos_rank)}</td>
-      <td>${p.team||""}</td>
-      <td class="bye">${p.bye==null?"–":p.bye}${conflict?" ⚠":""}</td>
-      <td style="font-weight:600;">${money(p.worth)}</td>
       <td style="color:var(--muted);">${money(p.value)}</td>
+      <td style="font-weight:600;">${money(p.worth)}</td>
       <td style="color:var(--muted);font-size:12px;">${p.adp==null?"–":Number(p.adp).toFixed(0)}</td>
       <td>${adpCell(p.ecr_vs_adp)}</td>
       <td>${bargainCell(p.bargain)}</td>
+      <td>${tierCell(p)}</td>
+      <td class="bye">${p.bye==null?"–":p.bye}${conflict?" ⚠":""}</td>
       <td>${injuryCell(p.injury_risk)}</td>
       <td>${pct(p.target_share)}</td>
       <td>${p.team_total==null?"–":Number(p.team_total).toFixed(1)}</td>
-      <td>${tierCell(p)}</td>`;
+      <td>${sleeperCell(p)}</td>`;
     tbody.appendChild(tr);
   });
 }
