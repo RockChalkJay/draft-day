@@ -15,6 +15,7 @@ import os
 import numpy as np
 import pandas as pd
 
+from src.ingestion.fantasypros_adp_fetcher import FantasyProsADPFetcher
 from src.ingestion.fantasypros_ecr_fetcher import FantasyProsECRFetcher
 from src.ingestion.fantasypros_fetcher import FantasyProsFetcher
 from src.ingestion.ffc_fetcher import FFCFetcher
@@ -180,6 +181,41 @@ def _apply_rankings_override(df: pd.DataFrame) -> pd.DataFrame:
         df[target] = vals.where(vals.notna(), df[target])
     df["tier_override"] = sheet_col("tier")
     df["ecr_vs_adp"] = sheet_col("ecr_vs_adp")
+    df["pos_rank_override"] = sheet_col("pos_rank")
+    return df
+
+
+def _derive_draft_market_fields(df: pd.DataFrame) -> pd.DataFrame:
+    """Resolve the board's ADP / ±ADP / positional-rank display fields from
+    whichever sources are present, best first:
+
+      pos_rank:   rankings-sheet import -> ecrData's "WR1" string -> ADP page
+      adp:        rankings sheet (ecr + its printed delta) -> FantasyPros ADP
+                  page (needs DRAFTDAY_FP_COOKIE) -> FFC's free ADP API
+      ecr_vs_adp: rankings sheet -> derived as adp - ecr (positive = experts
+                  rank him ahead of where the market drafts him)
+
+    Runs after the CSV overrides so a locked sheet always wins."""
+    if df.empty:
+        return df
+    df = df.copy()
+
+    ecr = _num(df, "fantasypros_ecr_rank_ecr")
+    sheet_delta = _num(df, "ecr_vs_adp")
+
+    adp = (sheet_delta + ecr).where(sheet_delta.notna() & ecr.notna())
+    adp = adp.fillna(_num(df, "fantasypros_adp_adp")).fillna(_num(df, "ffc_adp"))
+    df["adp"] = adp
+    df["ecr_vs_adp"] = sheet_delta.fillna((adp - ecr).round())
+
+    pos_rank = _num(df, "pos_rank_override")
+    if "fantasypros_ecr_pos_rank" in df.columns:
+        from_ecr = pd.to_numeric(
+            df["fantasypros_ecr_pos_rank"].astype(str).str.extract(r"(\d+)$")[0],
+            errors="coerce",
+        )
+        pos_rank = pos_rank.fillna(from_ecr)
+    df["pos_rank"] = pos_rank.fillna(_num(df, "fantasypros_adp_pos_rank"))
     return df
 
 
@@ -219,6 +255,7 @@ def fetch_live(scoring_format: str = "ppr") -> pd.DataFrame:
         frames.append(pd.concat(fp_frames, ignore_index=True))
 
     frames.append(FantasyProsECRFetcher().fetch(scoring_format=scoring_format))
+    frames.append(FantasyProsADPFetcher().fetch(scoring_format=scoring_format))
     frames.append(FFCFetcher().fetch(scoring_format=scoring_format))
     frames.append(SleeperFetcher().fetch())
 
@@ -316,7 +353,8 @@ def load_player_table_with_source(
     regardless of source.
     """
     df, source = _resolve_table(refresh, scoring_format, use_sample_on_failure)
-    return _apply_rankings_override(_apply_value_override(df)), source
+    df = _apply_rankings_override(_apply_value_override(df))
+    return _derive_draft_market_fields(df), source
 
 
 def build_player_table(

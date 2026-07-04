@@ -327,6 +327,7 @@ let players = [];          // normalized UI objects + live valuations
 let byId = new Map();
 let staticResult = null;   // cached POST /api/rankings/static response
 let pdmMap = {}, inflation = 1, marketHeat = 1;
+let maxTierByPos = {};  // per-position badge color scale (tiers are per-position)
 let teams = [];
 let startingBankroll = 200;   // per-team starting budget, for live inflation
 let draftStarted = false;
@@ -355,6 +356,7 @@ function normalize(p){
   return {
     id: p.player_id, name: p.player_name, position: p.position, team: p.team,
     bye: num(p.fantasypros_ecr_bye), ecr: num(p.fantasypros_ecr_rank_ecr),
+    ecr_vs_adp: num(p.ecr_vs_adp), adp: num(p.adp), pos_rank: num(p.pos_rank),
     worth: null, value: null, bargain: null, tier: null,
     target_share: num(p.target_share), team_total: num(p.team_total),
     injury_risk: p.injury_risk ?? "",
@@ -398,6 +400,8 @@ async function recomputeLive(){
     if(lp){ pl.tier=num(lp.tier); pl.worth=num(lp.worth); pl.value=num(lp.value); pl.bargain=num(lp.bargain); pl.tcm=num(lp.tcm); }
   }
   pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1; marketHeat = live.market_heat ?? 1;
+  maxTierByPos = {};
+  players.forEach(p => { if(p.tier) maxTierByPos[p.position] = Math.max(maxTierByPos[p.position] || 1, p.tier); });
   setStatus("");
   renderAll();
 }
@@ -460,15 +464,24 @@ function injuryCell(r){
 function tierCell(p){
   const t = p.tier;
   if(t==null) return `<span style="color:var(--muted);">–</span>`;
-  // Tier 1 (best) -> good, scaling down through accent to warn for the last tier.
-  const frac = numTiers>1 ? (t-1)/(numTiers-1) : 0;
+  // Tiers are per-position (each position's best cluster is tier 1), so both
+  // the color scale and the tooltip are anchored to that position's tier count.
+  const maxT = maxTierByPos[p.position] || Math.max(numTiers, t);
+  const frac = maxT>1 ? (t-1)/(maxT-1) : 0;
   const col = frac<=0.34 ? "var(--good)" : frac<=0.67 ? "var(--accent)" : "var(--warn)";
   // Live tier-cliff marker: points drop >10% within two undrafted spots below
   // him at his position — grab-him-now urgency the static tier can't show.
   const cliff = p.tcm!=null && p.tcm >= 1.1
     ? `<span title="Tier cliff: big projected-points drop right below him at ${p.position} — last chance at this level." style="margin-left:4px;">🚨</span>`
     : "";
-  return `<span class="tier-badge" style="background:${col};" title="Tier ${t} of ${numTiers}">${t}</span>${cliff}`;
+  return `<span class="tier-badge" style="background:${col};" title="${p.position} tier ${t} of ${maxT}">${t}</span>${cliff}`;
+}
+function adpCell(d){
+  if(d==null) return `<span style="color:var(--muted);">–</span>`;
+  const txt = (d>0?"+":"") + d;
+  if(d >= 10) return `<span style="color:var(--good);font-weight:600;" title="Experts rank him ${d} spots above market ADP — the room may underprice him.">${txt}</span>`;
+  if(d <= -10) return `<span style="color:var(--warn);" title="Market ADP is ${-d} spots above expert rank — the room may overpay.">${txt}</span>`;
+  return `<span style="color:var(--muted);">${txt}</span>`;
 }
 
 // ============================ Nav ============================
@@ -604,8 +617,9 @@ async function undraftPlayer(playerId){
 // ============================ Board: table ============================
 const COLS = [
   {key:"rank", label:"#"}, {key:"ecr", label:"ECR"},
-  {key:"name", label:"Player"}, {key:"position", label:"Pos"}, {key:"team", label:"Team"},
+  {key:"name", label:"Player"}, {key:"position", label:"Pos"}, {key:"pos_rank", label:"Pos#"}, {key:"team", label:"Team"},
   {key:"bye", label:"Bye"}, {key:"worth", label:"Worth"}, {key:"value", label:"Value"},
+  {key:"adp", label:"ADP"}, {key:"ecr_vs_adp", label:"±ADP"},
   {key:"bargain", label:"Bargain"}, {key:"injury_risk", label:"Inj"},
   {key:"target_share", label:"Tgt%"}, {key:"team_total", label:"TmTot"}, {key:"tier", label:"Tier"},
 ];
@@ -616,10 +630,13 @@ function renderBoardHeader(){
     const th = document.createElement("th");
     th.textContent = c.label + (sortKey===c.key ? (sortDir===1?" ▲":" ▼") : " ↕");
     if(c.key==="rank") th.title = "Overall rank by live Worth (Price). Compare with ECR to spot divergence.";
+    if(c.key==="pos_rank") th.title = "Positional rank (e.g. 3 on a WR row = WR3)";
+    if(c.key==="adp") th.title = "Average Draft Position — where the market actually drafts him (rankings sheet, FantasyPros ADP, or FFC)";
     if(c.key==="ecr") th.title = "FantasyPros expert consensus overall rank (ECR)";
     if(c.key==="worth") th.title = "Price — what it'll take to win him right now (Value scaled by live market inflation)";
     if(c.key==="value") th.title = "Value — stable salary-cap dollars from FantasyPros projections (what he's worth)";
     if(c.key==="bargain") th.title = "Value − Price. Green = underpriced (target), red = overpriced (reach).";
+    if(c.key==="ecr_vs_adp") th.title = "Expert rank vs market ADP (from an imported rankings sheet). Positive = experts higher than the market — nomination bargain candidates.";
     if(c.key==="injury_risk") th.title = "Injury risk from multi-season injury history (weeks Out/Doubtful per season)";
     if(c.key==="target_share") th.title = "Prior-season target share (nflverse)";
     if(c.key==="team_total") th.title = "Team's Vegas implied points total — offensive environment";
@@ -690,10 +707,13 @@ function renderBoardBody(){
       <td style="color:var(--muted);font-size:12px;">${p.ecr==null?"–":p.ecr} ${ecrDivergence(p, rankMap, ecrRankMap)}</td>
       <td>${p.name}</td>
       <td><span class="pill">${p.position}</span></td>
+      <td style="color:var(--muted);font-size:12px;">${p.pos_rank==null?"–":p.position+Math.round(p.pos_rank)}</td>
       <td>${p.team||""}</td>
       <td class="bye">${p.bye==null?"–":p.bye}${conflict?" ⚠":""}</td>
       <td style="font-weight:600;">${money(p.worth)}</td>
       <td style="color:var(--muted);">${money(p.value)}</td>
+      <td style="color:var(--muted);font-size:12px;">${p.adp==null?"–":Number(p.adp).toFixed(0)}</td>
+      <td>${adpCell(p.ecr_vs_adp)}</td>
       <td>${bargainCell(p.bargain)}</td>
       <td>${injuryCell(p.injury_risk)}</td>
       <td>${pct(p.target_share)}</td>

@@ -166,6 +166,43 @@ def test_apply_rankings_override_noop_when_file_missing(monkeypatch):
     assert "tier_override" not in out.columns
 
 
+def test_derive_draft_market_fields_prefers_sheet_then_fp_adp_then_ffc():
+    from src.ingestion.pipeline import _derive_draft_market_fields
+
+    df = pd.DataFrame([
+        # Sheet delta present: adp = ecr + delta = 1 + 2 = 3, delta kept as-is.
+        {"player_name": "A", "fantasypros_ecr_rank_ecr": 1.0, "ecr_vs_adp": 2.0,
+         "fantasypros_adp_adp": 99.0, "ffc_adp": 88.0},
+        # No sheet delta: FantasyPros ADP page wins over FFC; delta derived.
+        {"player_name": "B", "fantasypros_ecr_rank_ecr": 10.0, "ecr_vs_adp": None,
+         "fantasypros_adp_adp": 14.0, "ffc_adp": 20.0},
+        # Neither sheet nor FP page: FFC fallback.
+        {"player_name": "C", "fantasypros_ecr_rank_ecr": 30.0, "ecr_vs_adp": None,
+         "fantasypros_adp_adp": None, "ffc_adp": 25.0},
+    ])
+    out = _derive_draft_market_fields(df).set_index("player_name")
+
+    assert out.loc["A", "adp"] == 3 and out.loc["A", "ecr_vs_adp"] == 2
+    assert out.loc["B", "adp"] == 14 and out.loc["B", "ecr_vs_adp"] == 4
+    assert out.loc["C", "adp"] == 25 and out.loc["C", "ecr_vs_adp"] == -5
+
+
+def test_derive_draft_market_fields_pos_rank_sources():
+    from src.ingestion.pipeline import _derive_draft_market_fields
+
+    df = pd.DataFrame([
+        {"player_name": "A", "pos_rank_override": 3.0, "fantasypros_ecr_pos_rank": "WR9"},
+        {"player_name": "B", "pos_rank_override": None, "fantasypros_ecr_pos_rank": "RB12"},
+        {"player_name": "C", "pos_rank_override": None, "fantasypros_ecr_pos_rank": None,
+         "fantasypros_adp_pos_rank": 7.0},
+    ])
+    out = _derive_draft_market_fields(df).set_index("player_name")
+
+    assert out.loc["A", "pos_rank"] == 3    # sheet wins
+    assert out.loc["B", "pos_rank"] == 12   # parsed from ecrData's "RB12"
+    assert out.loc["C", "pos_rank"] == 7    # ADP-page fallback
+
+
 # ---- Cache TTL: a stale board is the draft-day failure mode ------------------
 
 def _cache_env(tmp_path, monkeypatch, age_hours, live_result):
