@@ -145,9 +145,14 @@ The app has three full-screen views (top nav) plus a one-time **Start Draft** mo
   - `Inj` (injury-risk tier), `Tgt%` (prior-season target share), `TmTot`
     (Vegas-implied team scoring total), `Tier`.
   - A search box filters by player or team name.
-- **Market** (header) — live inflation multiplier: >1 means Worth has climbed
-  above Value (prices running hot), <1 means Worth has fallen below Value
-  (bargains on the board).
+- **My Max Bid** (header) — bankroll minus $1 for each other open slot: the
+  most you can actually put on one player. Recorded picks are validated against
+  each team's max bid (and a $1 minimum), matching real auction-room rules.
+- **Market** (header) — the effective price level Worth is computed at
+  (`inflation × phase`): >1 means Worth has climbed above Value (prices running
+  hot), <1 means Worth has fallen below Value (bargains on the board). Hover to
+  see the two components — cash-vs-board inflation and draft-phase decay —
+  separately.
 - **My Roster** (top-right) — your slots, byes, and prices paid. The ↩ button
   undoes a pick (returns the bid, frees the slot, reruns valuation).
 

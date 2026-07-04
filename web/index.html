@@ -145,6 +145,10 @@
     <span class="label">My Bankroll</span>
     <span class="value" id="myBankroll">$0</span>
   </div>
+  <div class="header-bankroll" title="The most you can bid on one player right now: bankroll minus $1 for each other open roster slot.">
+    <span class="label">My Max Bid</span>
+    <span class="value" id="myMaxBid">$0</span>
+  </div>
   <button class="btn start-draft" id="startDraftBtn">Start Draft</button>
 </header>
 
@@ -399,6 +403,12 @@ async function recomputeLive(){
 // ============================ Helpers ============================
 function myTeam(){ return teams.find(t => t.id === myTeamId); }
 function undraftedPlayers(){ return players.filter(p => !p.drafted); }
+// Standard auction rule: a team must keep $1 for every other open slot, so the
+// most it can put on one player is bankroll - (open slots - 1).
+function maxBid(team){
+  const open = team.roster.filter(s => !s.playerId).length;
+  return Math.max(0, team.bankroll - Math.max(0, open - 1));
+}
 function suggestable(){ return undraftedPlayers().filter(p => SUGGESTION_POSITIONS.includes(p.position)); }
 function myStarterPositions(){
   const t = myTeam(); if(!t) return {};
@@ -527,7 +537,7 @@ function renderNominateBar(){
 
   const teamField = document.createElement("div"); teamField.className="field";
   teamField.innerHTML = `<label>Winning team</label><select id="teamSelect">` +
-    teams.map(t=>`<option value="${t.id}">${t.name} ($${t.bankroll})</option>`).join("") + `</select>`;
+    teams.map(t=>`<option value="${t.id}">${t.name} ($${t.bankroll} · max $${maxBid(t)})</option>`).join("") + `</select>`;
 
   const recordBtn = document.createElement("button");
   recordBtn.className = "btn"; recordBtn.textContent = "Record Pick";
@@ -551,7 +561,9 @@ async function recordPick(){
   const teamId = document.getElementById("teamSelect").value;
   const team = teams.find(t=>t.id===teamId);
   const player = byId.get(nominatedId);
-  if(bid > team.bankroll){ toast(`${team.name} only has $${team.bankroll} remaining.`); return; }
+  if(bid < 1){ toast("Minimum bid is $1."); return; }
+  const max = maxBid(team);
+  if(bid > max){ toast(`${team.name} can bid at most $${max} — they must keep $1 for each other open slot.`); return; }
   const slot = findEligibleSlot(team, player.position);
   if(!slot){ toast(`Pick blocked: ${team.name} has no eligible open slot (position + BENCH full).`); return; }
   slot.playerId = player.id;
@@ -718,6 +730,7 @@ function renderLeague(){
 function renderBoard(){ renderBoardHeader(); renderPosFilter(); renderBoardBody(); }
 function renderAll(){
   document.getElementById("myBankroll").textContent = myTeam() ? `$${myTeam().bankroll}` : "$0";
+  document.getElementById("myMaxBid").textContent = myTeam() ? `$${maxBid(myTeam())}` : "$0";
   const infEl = document.getElementById("inflation");
   const market = inflation * marketHeat;  // effective price level Worth is computed at
   infEl.textContent = market.toFixed(2) + "×";
