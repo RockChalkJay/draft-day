@@ -10,7 +10,10 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from src.rankings.inflation import calculate_auction_inflation
+from src.rankings.inflation import (
+    calculate_auction_inflation,
+    calculate_draft_phase_decay,
+)
 from src.rankings.league_state import LeagueState
 from src.rankings.pdm import calculate_pdm
 from src.rankings.replacement import (
@@ -121,7 +124,8 @@ class RankingsResult:
     players: pd.DataFrame
     replacement_levels: dict[str, float]
     pdm_map: dict[str, float] | None = None
-    inflation: float | None = None
+    inflation: float | None = None  # conserving factor (money in room vs board)
+    market_heat: float | None = None  # anticipatory draft-phase decay factor
 
 
 def calculate_static_rankings(
@@ -182,7 +186,11 @@ def apply_live_valuation(
         df["value"] = ov.where(usable, df["value"]).round().clip(lower=0).astype(int)
         df["value"] = renormalize_value_to_budget(df, budget, total_slots)
     inflation = calculate_auction_inflation(df, league_state)
-    df["worth"] = calculate_price(df, inflation, league_state.drafted_player_ids)
+    # Predicted price composes the reactive conserving factor with the
+    # anticipatory draft-phase decay: prices sag below sheet value as rosters
+    # fill even when nobody has over/underpaid yet.
+    market_heat = calculate_draft_phase_decay(league_state)
+    df["worth"] = calculate_price(df, inflation * market_heat, league_state.drafted_player_ids)
     # Bargain only meaningful for still-biddable players; drafted/unpriced -> 0.
     df["bargain"] = (df["value"] - df["worth"]).where(df["worth"] > 0, 0).astype(int)
 
@@ -191,4 +199,5 @@ def apply_live_valuation(
         replacement_levels=static_result.replacement_levels,
         pdm_map=pdm_map,
         inflation=inflation,
+        market_heat=market_heat,
     )

@@ -1,6 +1,10 @@
 import pandas as pd
 
-from src.rankings.inflation import calculate_auction_inflation
+from src.rankings.inflation import (
+    PHASE_DECAY,
+    calculate_auction_inflation,
+    calculate_draft_phase_decay,
+)
 from src.rankings.league_state import LeagueState, RosterSlot, Team
 
 
@@ -54,3 +58,25 @@ def test_no_value_premium_returns_one():
 def test_missing_value_column_returns_one():
     df = pd.DataFrame([{"player_id": "p0", "position": "RB"}])
     assert calculate_auction_inflation(df, _state(100, 4)) == 1.0
+
+
+# ---- Draft-phase decay: prices sag as rosters fill ---------------------------
+
+def _phase_state(filled, total):
+    roster = [RosterSlot("BENCH", player_id=f"p{i}" if i < filled else None) for i in range(total)]
+    return LeagueState(teams=[Team("t0", 200.0, roster)])
+
+
+def test_phase_decay_is_one_at_draft_open():
+    # No slots filled -> no decay, so every opening-at-par property is untouched.
+    assert calculate_draft_phase_decay(_phase_state(0, 10)) == 1.0
+
+
+def test_phase_decay_quadratic_in_progress():
+    # Quadratic: mild through mid-draft, steep at the end.
+    assert calculate_draft_phase_decay(_phase_state(5, 10)) == 1.0 - PHASE_DECAY * 0.25
+    assert calculate_draft_phase_decay(_phase_state(10, 10)) == 1.0 - PHASE_DECAY
+
+
+def test_phase_decay_handles_empty_league():
+    assert calculate_draft_phase_decay(LeagueState(teams=[])) == 1.0

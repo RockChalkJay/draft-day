@@ -30,16 +30,26 @@ actual signal:
   left in the room:
 
   ```
-  worth = 1 + (value − 1) × inflation
+  worth = 1 + (value − 1) × inflation × phase
   inflation = (remaining_cash − remaining_slots) / Σ(value − 1 over expected picks)
+  phase     = 1 − 0.2 × t²,  t = fraction of league roster slots filled
   ```
 
-  At draft start `inflation == 1`, so Worth equals Value. As the room spends
-  faster or slower than the board's value depletes, Worth scales with it — an
-  early run of overpays drains cash faster than value leaves the board, so
-  `inflation` drops and every remaining Worth falls with it (the dollars a rival
-  overspent are dollars no longer chasing everyone else); a run of bargains
-  pushes it back up.
+  At draft start `inflation == 1` and `phase == 1`, so Worth equals Value. Two
+  forces then move it:
+
+  - *Reactive* — as the room spends faster or slower than the board's value
+    depletes, `inflation` scales Worth with it: an early run of overpays drains
+    cash faster than value leaves the board, so every remaining Worth falls
+    (the dollars a rival overspent are dollars no longer chasing everyone
+    else); a run of bargains pushes it back up.
+  - *Anticipatory* — realized auction prices reliably sag below sheet value as
+    the draft progresses (rosters fill, the pool of bidders who still need a
+    given player shrinks, and rooms finish with money unspent), so `phase`
+    prices that in ahead of time: quadratic decay, near-par through the
+    early/mid draft, steepening to −20% as the last slots fill. A disciplined
+    room that keeps paying par accumulates surplus cash, pushing `inflation`
+    above 1 and offsetting the decay — the factors are designed to compose.
 - **Bargain** = `Value − Worth`. Positive (green) means the live price has
   fallen below what he's actually worth — a target. Negative (red) means the
   room is paying more than he's worth — let him go. This is the most

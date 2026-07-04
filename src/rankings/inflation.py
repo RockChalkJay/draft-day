@@ -20,6 +20,34 @@ from src.rankings.league_state import LeagueState
 
 INFL_MIN, INFL_MAX = 0.5, 1.8
 
+# Draft-phase price decay: realized auction prices sag below sheet value as the
+# draft progresses -- rosters fill, the pool of bidders who still need (and can
+# afford) any given player shrinks, and rooms reliably finish with money unspent.
+# Conserving inflation alone can't anticipate that (it assumes every remaining
+# dollar chases the board); this factor prices it in ahead of time. Quadratic in
+# draft progress: near-par through the early/mid draft, steepening into the
+# endgame collapse. At full decay prices sit PHASE_DECAY below the conserving
+# level (default 20%).
+PHASE_DECAY = 0.2
+
+
+def calculate_draft_phase_decay(league_state: LeagueState) -> float:
+    """Return the anticipatory phase multiplier ``1 - PHASE_DECAY * t**2``,
+    where ``t`` is the fraction of league roster slots already filled.
+
+    1.0 at draft open (composes cleanly with conserving inflation and keeps
+    every opening-at-par property); ``1 - PHASE_DECAY`` when the last slot
+    fills. A disciplined room that keeps paying par accumulates surplus cash,
+    which pushes conserving inflation above 1 and offsets this decay -- the two
+    factors are designed to be multiplied.
+    """
+    total_slots = sum(len(t.roster) for t in league_state.teams)
+    if total_slots <= 0:
+        return 1.0
+    empty = sum(league_state.empty_slots_by_pos().values())
+    t = 1.0 - empty / total_slots
+    return 1.0 - PHASE_DECAY * t * t
+
 
 def calculate_auction_inflation(
     df: pd.DataFrame,

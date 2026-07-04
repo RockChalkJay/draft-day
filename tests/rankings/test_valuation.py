@@ -190,6 +190,40 @@ def test_value_override_ignored_for_k_dst():
     assert k["value"] == 0 and k["worth"] == 0
 
 
+def test_worth_sags_as_rosters_fill_even_at_par():
+    # The observed real-room dynamic: draft prices drop from their open-of-draft
+    # level over time. Simulate a late-mid draft (75% of slots filled) where
+    # every pick went at exactly its value -- no over/underpay signal for the
+    # conserving factor -- so filled slots alone must pull remaining Worth below
+    # its open-of-draft level via the phase decay.
+    static = calculate_static_rankings(_synthetic_board(), PRESETS["ppr"], num_teams=4)
+    roster = ["RB", "RB", "WR", "WR", "QB", "TE"]  # 4 teams x 6 slots = 24
+
+    def fresh_teams():
+        return [Team(f"t{i}", 200.0, [RosterSlot(p) for p in roster]) for i in range(4)]
+
+    open_state = LeagueState(teams=fresh_teams(), drafted_player_ids=set(),
+                             starting_bankroll=200.0)
+    at_open = apply_live_valuation(static, open_state)
+
+    # Draft the top 18 players by value at par, round-robin across the teams.
+    board = at_open.players.sort_values("value", ascending=False).head(18)
+    teams = fresh_teams()
+    for n, (_, player) in enumerate(board.iterrows()):
+        team = teams[n % 4]
+        team.bankroll -= player["value"]
+        next(s for s in team.roster if s.player_id is None).player_id = player["player_id"]
+    mid_state = LeagueState(teams=teams, drafted_player_ids=set(board["player_id"]),
+                            starting_bankroll=200.0)
+    mid = apply_live_valuation(static, mid_state)
+
+    assert abs(mid.market_heat - (1.0 - 0.2 * 0.75**2)) < 1e-9  # t = 18/24
+    # The best still-undrafted player's price fell from its open-of-draft level.
+    survivor = mid.players[mid.players["worth"] > 0].sort_values("value", ascending=False).iloc[0]
+    open_row = at_open.players[at_open.players["player_id"] == survivor["player_id"]].iloc[0]
+    assert survivor["worth"] < open_row["worth"]
+
+
 def test_static_result_reusable_across_picks():
     rows = [{"player_id": f"rb{i}", "player_name": f"RB{i}", "position": "RB",
              "fantasypros_RUSHING_YDS": 1500 - i * 100, "fantasypros_RUSHING_TDS": 12 - i,

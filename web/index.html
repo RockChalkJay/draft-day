@@ -321,7 +321,7 @@ let rawPlayers = [];      // from GET /api/players (raw merged columns)
 let players = [];          // normalized UI objects + live valuations
 let byId = new Map();
 let staticResult = null;   // cached POST /api/rankings/static response
-let pdmMap = {}, inflation = 1;
+let pdmMap = {}, inflation = 1, marketHeat = 1;
 let teams = [];
 let startingBankroll = 200;   // per-team starting budget, for live inflation
 let draftStarted = false;
@@ -391,7 +391,7 @@ async function recomputeLive(){
     const lp = liveById.get(pl.id);
     if(lp){ pl.tier=num(lp.tier); pl.worth=num(lp.worth); pl.value=num(lp.value); pl.bargain=num(lp.bargain); }
   }
-  pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1;
+  pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1; marketHeat = live.market_heat ?? 1;
   setStatus("");
   renderAll();
 }
@@ -719,8 +719,10 @@ function renderBoard(){ renderBoardHeader(); renderPosFilter(); renderBoardBody(
 function renderAll(){
   document.getElementById("myBankroll").textContent = myTeam() ? `$${myTeam().bankroll}` : "$0";
   const infEl = document.getElementById("inflation");
-  infEl.textContent = inflation.toFixed(2) + "×";
-  infEl.style.color = inflation > 1.03 ? "var(--warn)" : inflation < 0.97 ? "var(--good)" : "var(--accent)";
+  const market = inflation * marketHeat;  // effective price level Worth is computed at
+  infEl.textContent = market.toFixed(2) + "×";
+  infEl.style.color = market > 1.03 ? "var(--warn)" : market < 0.97 ? "var(--good)" : "var(--accent)";
+  infEl.title = `Cash-vs-board inflation ${inflation.toFixed(2)}× · draft-phase decay ${marketHeat.toFixed(2)}× (prices sag as rosters fill)`;
   renderBoard(); renderTopOverall(); renderBestStrip(); renderNeedStrip();
   renderNominateBar(); renderMyTeam(); renderLeague();
 }

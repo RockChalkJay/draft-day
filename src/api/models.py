@@ -75,4 +75,5 @@ class LiveRequest(BaseModel):
 class LiveResult(BaseModel):
     players: list[dict[str, Any]]
     pdm_map: dict[str, float]
-    inflation: float
+    inflation: float  # conserving factor (money in room vs value on board)
+    market_heat: float = 1.0  # anticipatory draft-phase decay; worth uses inflation * market_heat
