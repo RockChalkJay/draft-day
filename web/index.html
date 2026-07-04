@@ -83,6 +83,7 @@
   tbody tr.bye-conflict td.bye { color:var(--warn); font-weight:700; }
   tbody tr.bye-conflict { box-shadow: inset 3px 0 0 var(--warn); }
   .pill { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; background:var(--panel2); color:var(--muted); }
+  .tier-badge { display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 6px; border-radius:999px; font-size:12px; font-weight:700; color:#0f1115; }
 
   #myRosterSection { width:340px; flex-shrink:0; background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 14px; align-self:stretch; }
   .roster-header { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:6px; }
@@ -394,7 +395,7 @@ async function recomputeLive(){
   const liveById = new Map(live.players.map(p => [p.player_id, p]));
   for(const pl of players){
     const lp = liveById.get(pl.id);
-    if(lp){ pl.tier=num(lp.tier); pl.worth=num(lp.worth); pl.value=num(lp.value); pl.bargain=num(lp.bargain); }
+    if(lp){ pl.tier=num(lp.tier); pl.worth=num(lp.worth); pl.value=num(lp.value); pl.bargain=num(lp.bargain); pl.tcm=num(lp.tcm); }
   }
   pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1; marketHeat = live.market_heat ?? 1;
   setStatus("");
@@ -455,6 +456,19 @@ function injuryCell(r){
   if(!r) return `<span style="color:var(--muted);">–</span>`;
   const col = r==="High" ? "var(--warn)" : r==="Med" ? "var(--accent)" : "var(--good)";
   return `<span style="color:${col};font-size:12px;">${r}</span>`;
+}
+function tierCell(p){
+  const t = p.tier;
+  if(t==null) return `<span style="color:var(--muted);">–</span>`;
+  // Tier 1 (best) -> good, scaling down through accent to warn for the last tier.
+  const frac = numTiers>1 ? (t-1)/(numTiers-1) : 0;
+  const col = frac<=0.34 ? "var(--good)" : frac<=0.67 ? "var(--accent)" : "var(--warn)";
+  // Live tier-cliff marker: points drop >10% within two undrafted spots below
+  // him at his position — grab-him-now urgency the static tier can't show.
+  const cliff = p.tcm!=null && p.tcm >= 1.1
+    ? `<span title="Tier cliff: big projected-points drop right below him at ${p.position} — last chance at this level." style="margin-left:4px;">🚨</span>`
+    : "";
+  return `<span class="tier-badge" style="background:${col};" title="Tier ${t} of ${numTiers}">${t}</span>${cliff}`;
 }
 
 // ============================ Nav ============================
@@ -632,11 +646,23 @@ function sortVal(p, key, rankMap){
   if(key==="rank") return rankMap.get(p.id) ?? Infinity;
   return p[key];
 }
+function ecrDivergence(p, rankMap, ecrRankMap){
+  // Both ranks computed over undrafted players only, so the comparison stays
+  // apples-to-apples as the board thins (a static overall ECR would drift).
+  const mine = rankMap.get(p.id), fp = ecrRankMap.get(p.id);
+  if(mine==null || fp==null) return "";
+  const diff = fp - mine;  // positive: our algo ranks him better than FP
+  if(diff >= 3) return `<span style="color:var(--good);" title="Our algo ranks him ${diff} spots higher than FantasyPros — potential value the room may not see.">▲</span>`;
+  if(diff <= -3) return `<span style="color:var(--warn);" title="FantasyPros ranks him ${-diff} spots higher than our algo — the room may pay more than we think he's worth.">▼</span>`;
+  return "";
+}
 function renderBoardBody(){
   const tbody = document.getElementById("boardBody");
   tbody.innerHTML = "";
   const rankMap = new Map();
   undraftedPlayers().slice().sort((a,b)=>(b.worth??-1)-(a.worth??-1)).forEach((p,i)=>rankMap.set(p.id,i+1));
+  const ecrRankMap = new Map();
+  undraftedPlayers().filter(p=>p.ecr!=null).sort((a,b)=>a.ecr-b.ecr).forEach((p,i)=>ecrRankMap.set(p.id,i+1));
 
   let rows = undraftedPlayers().filter(p =>
     (!posFilter || p.position===posFilter) &&
@@ -661,7 +687,7 @@ function renderBoardBody(){
     const myRank = rankMap.get(p.id);
     tr.innerHTML = `
       <td style="color:var(--muted);font-size:11px;">${myRank}</td>
-      <td style="color:var(--muted);font-size:12px;">${p.ecr==null?"–":p.ecr}</td>
+      <td style="color:var(--muted);font-size:12px;">${p.ecr==null?"–":p.ecr} ${ecrDivergence(p, rankMap, ecrRankMap)}</td>
       <td>${p.name}</td>
       <td><span class="pill">${p.position}</span></td>
       <td>${p.team||""}</td>
@@ -672,7 +698,7 @@ function renderBoardBody(){
       <td>${injuryCell(p.injury_risk)}</td>
       <td>${pct(p.target_share)}</td>
       <td>${p.team_total==null?"–":Number(p.team_total).toFixed(1)}</td>
-      <td>${p.tier==null?"–":p.tier}</td>`;
+      <td>${tierCell(p)}</td>`;
     tbody.appendChild(tr);
   });
 }
