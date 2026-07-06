@@ -107,6 +107,46 @@ def test_derive_draft_market_fields_pos_rank_from_ecr():
     assert pd.isna(out.loc["B", "pos_rank"])
 
 
+def test_derive_draft_market_fields_live_auction_value_from_espn():
+    from src.ingestion.pipeline import _derive_draft_market_fields
+
+    df = pd.DataFrame([
+        {"player_name": "A", "espn_auction_value": 55.0},
+        {"player_name": "B", "espn_auction_value": None},
+    ])
+    out = _derive_draft_market_fields(df).set_index("player_name")
+
+    assert out.loc["A", "live_auction_value"] == 55.0
+    assert pd.isna(out.loc["B", "live_auction_value"])
+
+
+def test_espn_fetcher_output_survives_merge_with_correct_prefix():
+    # Regression test for the bug that hid ESPN's ADP entirely: EspnFetcher
+    # must emit bare column names (no self-prefix), or merge_sources' own
+    # source-prefixing double-prefixes them (espn_espn_adp) and every
+    # downstream lookup (_derive_draft_market_fields's "espn_adp") silently
+    # misses. This goes through the real merge_sources, unlike the
+    # hand-built-DataFrame tests above, so it actually exercises that seam.
+    from src.ingestion.espn_fetcher import EspnFetcher
+    from src.ingestion.merge import merge_sources
+    from src.ingestion.pipeline import _derive_draft_market_fields
+
+    espn_df = pd.DataFrame([{
+        "player_name": "Bijan Robinson", "team": "ATL", "position": "RB",
+        "source": EspnFetcher.source_name,
+        "adp": 2.2, "auction_value": 60.0, "overall_rank": 1.0,
+        "pct_owned": 99.8, "pct_started": 99.3,
+    }])
+
+    merged = merge_sources([espn_df])
+
+    assert "espn_adp" in merged.columns and "espn_auction_value" in merged.columns
+    assert "espn_espn_adp" not in merged.columns
+
+    out = _derive_draft_market_fields(merged).iloc[0]
+    assert out["adp"] == 2.2 and out["live_auction_value"] == 60.0
+
+
 # ---- Cache TTL: a stale board is the draft-day failure mode ------------------
 
 def _cache_env(tmp_path, monkeypatch, age_hours, live_result):

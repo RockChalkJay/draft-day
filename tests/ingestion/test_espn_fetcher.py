@@ -54,8 +54,10 @@ def test_fetch_maps_positions_teams_and_ownership_fields():
     assert len(df) == 3  # the unmapped-position row is dropped
     lamb = df.set_index("player_name").loc["CeeDee Lamb"]
     assert lamb["team"] == "DAL" and lamb["position"] == "WR"
-    assert lamb["espn_adp"] == 6.2 and lamb["espn_auction_value"] == 38.5
-    assert lamb["espn_pct_owned"] == 99.9 and lamb["espn_pct_started"] == 99.1
+    # Bare column names (no self-prefix) -- merge_sources adds the single
+    # "espn_" prefix itself; a fetcher-side prefix would double up and vanish.
+    assert lamb["adp"] == 6.2 and lamb["auction_value"] == 38.5
+    assert lamb["pct_owned"] == 99.9 and lamb["pct_started"] == 99.1
 
     daniels = df.set_index("player_name").loc["Jayden Daniels"]
     assert daniels["team"] == "WAS"  # WSH remapped
@@ -73,8 +75,8 @@ def test_fetch_uses_rank_auction_value_when_no_live_ownership_average():
 
     df = EspnFetcher(session=session).fetch(scoring_format="ppr", year=2026)
 
-    assert df.iloc[0]["espn_auction_value"] == 12
-    assert df.iloc[0]["espn_overall_rank"] == 40
+    assert df.iloc[0]["auction_value"] == 12
+    assert df.iloc[0]["overall_rank"] == 40
 
 
 def test_fetch_returns_empty_on_request_failure():

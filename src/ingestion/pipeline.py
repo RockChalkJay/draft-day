@@ -104,15 +104,21 @@ def _derive_context_stats(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _derive_draft_market_fields(df: pd.DataFrame) -> pd.DataFrame:
-    """Resolve the board's ADP / ±ADP / positional-rank display fields, all from
-    automatic live sources -- no user-supplied file is ever involved:
+    """Resolve the board's ADP / ±ADP / positional-rank / live-auction display
+    fields, all from automatic live sources -- no user-supplied file is ever
+    involved:
 
-      adp:        ESPN's live consensus ADP (real ESPN drafts, no login needed)
-                  -> FFC's free ADP API, whichever is present
-      ecr_vs_adp: derived as adp - ecr (positive = experts rank him ahead of
-                  where the market actually drafts him)
-      pos_rank:   FantasyPros ECR page's own positional rank (e.g. "WR1"),
-                  the only automatic source that publishes one
+      adp:               ESPN's live consensus ADP (real ESPN drafts, no
+                         login needed) -> FFC's free ADP API, whichever is
+                         present
+      ecr_vs_adp:        derived as adp - ecr (positive = experts rank him
+                         ahead of where the market actually drafts him)
+      pos_rank:          FantasyPros ECR page's own positional rank (e.g.
+                         "WR1"), the only automatic source that publishes one
+      live_auction_value: ESPN's live crowd-sourced auction value -- a
+                         comparison signal shown alongside computed Value,
+                         never blended into it (it's calibrated to ESPN's own
+                         typical league settings, not this league's)
     """
     if df.empty:
         return df
@@ -122,6 +128,7 @@ def _derive_draft_market_fields(df: pd.DataFrame) -> pd.DataFrame:
     adp = _num(df, "espn_adp").fillna(_num(df, "ffc_adp"))
     df["adp"] = adp
     df["ecr_vs_adp"] = (adp - ecr).round()
+    df["live_auction_value"] = _num(df, "espn_auction_value")
 
     if "fantasypros_ecr_pos_rank" in df.columns:
         df["pos_rank"] = pd.to_numeric(

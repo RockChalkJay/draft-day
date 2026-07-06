@@ -178,9 +178,15 @@ The app has three full-screen views (top nav) plus a one-time **Start Draft** mo
   - `ECR` — FantasyPros expert consensus overall rank, with a divergence arrow
     (▲ our algo ranks him ≥3 spots higher than FP among undrafted players —
     potential value; ▼ FP ranks him higher — the room may overpay).
-  - `Player` (team rides in the cell); `Pos` / `Pos#` — position and
-    positional rank (WR3).
-  - `Value` (stable salary-cap baseline) and `Worth` (live price) side by side.
+  - `Player`, `Team`; `Pos` / `Pos#` — position and positional rank (WR3).
+  - `Worth` (live price), `Value` (stable salary-cap baseline), and
+    `ESPN Value` (ESPN's live crowd-sourced auction value — what real ESPN
+    drafters are actually paying, averaged across many live ESPN leagues)
+    side by side — the computed price, the computed value, and the real
+    market's own number, for direct comparison. ESPN Value is calibrated to
+    ESPN's typical league settings, not necessarily yours, so it can
+    legitimately differ
+    from Value/Worth; it's shown, never blended in.
   - `ADP` — where the market actually drafts him (ESPN's live consensus ADP →
     FFC, first available), and `±ADP` = ADP − ECR (green ≥ +10: experts rank
     him well ahead of the market — target).

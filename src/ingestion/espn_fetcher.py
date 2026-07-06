@@ -95,11 +95,16 @@ class EspnFetcher(Fetcher):
                 "team": team_map.get(p.get("proTeamId"), "FA"),
                 "position": pos,
                 "source": self.source_name,
-                "espn_adp": ownership.get("averageDraftPosition"),
-                "espn_auction_value": ownership.get("auctionValueAverage") or ranks.get("auctionValue"),
-                "espn_overall_rank": ranks.get("rank"),  # ESPN's own overall rank, not positional
-                "espn_pct_owned": ownership.get("percentOwned"),
-                "espn_pct_started": ownership.get("percentStarted"),
+                # Bare names: merge_sources prefixes every source's columns
+                # with its source name (espn_), so these must NOT be
+                # pre-prefixed here or the result double-prefixes
+                # (espn_espn_adp) and silently vanishes from every downstream
+                # lookup, same convention FFC/nflverse/Sleeper follow.
+                "adp": ownership.get("averageDraftPosition"),
+                "auction_value": ownership.get("auctionValueAverage") or ranks.get("auctionValue"),
+                "overall_rank": ranks.get("rank"),  # ESPN's own overall rank, not positional
+                "pct_owned": ownership.get("percentOwned"),
+                "pct_started": ownership.get("percentStarted"),
             })
         df = pd.DataFrame(rows)
         return df.dropna(subset=["player_name"]) if not df.empty else df
