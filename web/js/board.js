@@ -183,7 +183,7 @@ function renderBoardBody(){
       <td style="font-weight:600;">${money(p.worth)}</td>
       <td style="color:var(--muted);">${money(p.value)}</td>
       <td style="color:var(--muted);">${money(p.live_auction_value==null?null:Math.round(p.live_auction_value))}</td>
-      <td style="color:var(--muted);font-size:12px;">${p.adp==null?"–":Number(p.adp).toFixed(0)}</td>
+      <td style="color:var(--muted);font-size:12px;">${p.adp==null?"–":Number(p.adp).toFixed(1)}</td>
       <td>${adpCell(p.ecr_vs_adp)}</td>
       <td>${bargainCell(p.bargain)}</td>
       <td>${tierCell(p)}</td>
