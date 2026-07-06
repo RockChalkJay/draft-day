@@ -357,6 +357,7 @@ function normalize(p){
     id: p.player_id, name: p.player_name, position: p.position, team: p.team,
     bye: num(p.fantasypros_ecr_bye), ecr: num(p.fantasypros_ecr_rank_ecr),
     ecr_vs_adp: num(p.ecr_vs_adp), adp: num(p.adp), pos_rank: num(p.pos_rank),
+    live_auction_value: num(p.live_auction_value),
     worth: null, value: null, bargain: null, tier: null,
     target_share: num(p.target_share), team_total: num(p.team_total),
     injury_risk: p.injury_risk ?? "",
@@ -615,12 +616,14 @@ async function undraftPlayer(playerId){
 }
 
 // ============================ Board: table ============================
-// Rank | ECR | Player | Pos | Pos# | Value | Worth | ADP | ±ADP | Bargain |
-// Tier | Bye | Inj | Tgt% | TmTot | Sleeper. Team rides inside the Player cell.
+// Rank | ECR | Player | Team | Pos | Pos# | Worth | Value | ESPN Value | ADP |
+// ±ADP | Bargain | Tier | Bye | Inj | Tgt% | TmTot | Sleeper.
+// Worth/Value/ESPN Value sit together: live price, computed
+// scarcity-based value, and the real market's own live auction consensus.
 const COLS = [
   {key:"rank", label:"Rank"}, {key:"ecr", label:"ECR"}, {key:"name", label:"Player"},
-  {key:"position", label:"Pos"}, {key:"pos_rank", label:"Pos#"},
-  {key:"value", label:"Value"}, {key:"worth", label:"Worth"},
+  {key:"team", label:"Team"}, {key:"position", label:"Pos"}, {key:"pos_rank", label:"Pos#"},
+  {key:"worth", label:"Worth"}, {key:"value", label:"Value"}, {key:"live_auction_value", label:"ESPN Value"},
   {key:"adp", label:"ADP"}, {key:"ecr_vs_adp", label:"±ADP"},
   {key:"bargain", label:"Bargain"}, {key:"tier", label:"Tier"}, {key:"bye", label:"Bye"},
   {key:"injury_risk", label:"Inj"}, {key:"target_share", label:"Tgt%"}, {key:"team_total", label:"TmTot"},
@@ -635,24 +638,37 @@ function sleeperCell(p){
   if(!isSleeper(p)) return `<span style="color:var(--muted);">–</span>`;
   return `<span title="Sleeper: experts rank him ${p.ecr_vs_adp} spots ahead of market ADP (${Number(p.adp).toFixed(0)}) — late-round value the room may miss.">💤</span>`;
 }
+// One entry per COLS key so every column header gets a hover tooltip;
+// anything added to COLS without an entry here just shows no tooltip rather
+// than silently being skipped from a growing if-chain (the bug that let four
+// columns go untitled before this was a lookup).
+const COLUMN_TOOLTIPS = {
+  rank: "Overall rank by live Worth (Price). Compare with ECR to spot divergence.",
+  ecr: "FantasyPros expert consensus overall rank (ECR)",
+  name: "Player name",
+  team: "NFL team",
+  position: "Position: QB, RB, WR, TE, K, or DST",
+  pos_rank: "Positional rank (e.g. 3 on a WR row = WR3)",
+  worth: "Price — what it'll take to win him right now (Value scaled by live market inflation)",
+  value: "Value — stable salary-cap dollars from FantasyPros projections (what he's worth)",
+  live_auction_value: "ESPN Value — ESPN's live auction value: the average of what real ESPN drafters are actually paying, across many live ESPN auction leagues. Calibrated to ESPN's typical league, not necessarily yours — a comparison number, not blended into Value/Worth.",
+  adp: "Average Draft Position — where the market actually drafts him (ESPN's live consensus, or FFC as fallback)",
+  ecr_vs_adp: "Expert rank (ECR) vs market ADP. Positive = experts rank him higher than the market drafts him — potential value.",
+  bargain: "Value − Price. Green = underpriced (target), red = overpriced (reach).",
+  tier: "Tier — colored badge, per-position (each position's best cluster is tier 1). 🚨 = a live tier cliff is opening up right below him.",
+  bye: "Bye week — flagged with ⚠ if it collides with a starter you already roster at this position",
+  injury_risk: "Injury risk from multi-season injury history (weeks Out/Doubtful per season)",
+  target_share: "Prior-season target share (nflverse)",
+  team_total: "Team's Vegas implied points total — offensive environment",
+  sleeper: `💤 = experts rank him ≥${SLEEPER_MIN_DELTA} spots ahead of market ADP at a late-round price (ADP ${SLEEPER_MIN_ADP}+) — computed sleepers list. Sort to see the biggest gaps.`,
+};
 function renderBoardHeader(){
   const tr = document.getElementById("boardHeaderRow");
   tr.innerHTML = "";
   COLS.forEach(c => {
     const th = document.createElement("th");
     th.textContent = c.label + (sortKey===c.key ? (sortDir===1?" ▲":" ▼") : " ↕");
-    if(c.key==="rank") th.title = "Overall rank by live Worth (Price). Compare with ECR to spot divergence.";
-    if(c.key==="sleeper") th.title = `💤 = experts rank him ≥${SLEEPER_MIN_DELTA} spots ahead of market ADP at a late-round price (ADP ${SLEEPER_MIN_ADP}+) — computed sleepers list. Sort to see the biggest gaps.`;
-    if(c.key==="pos_rank") th.title = "Positional rank (e.g. 3 on a WR row = WR3)";
-    if(c.key==="adp") th.title = "Average Draft Position — where the market actually drafts him (rankings sheet, FantasyPros ADP, or FFC)";
-    if(c.key==="ecr") th.title = "FantasyPros expert consensus overall rank (ECR)";
-    if(c.key==="worth") th.title = "Price — what it'll take to win him right now (Value scaled by live market inflation)";
-    if(c.key==="value") th.title = "Value — stable salary-cap dollars from FantasyPros projections (what he's worth)";
-    if(c.key==="bargain") th.title = "Value − Price. Green = underpriced (target), red = overpriced (reach).";
-    if(c.key==="ecr_vs_adp") th.title = "Expert rank vs market ADP (from an imported rankings sheet). Positive = experts higher than the market — nomination bargain candidates.";
-    if(c.key==="injury_risk") th.title = "Injury risk from multi-season injury history (weeks Out/Doubtful per season)";
-    if(c.key==="target_share") th.title = "Prior-season target share (nflverse)";
-    if(c.key==="team_total") th.title = "Team's Vegas implied points total — offensive environment";
+    if(COLUMN_TOOLTIPS[c.key]) th.title = COLUMN_TOOLTIPS[c.key];
     if(sortKey===c.key) th.classList.add("sorted");
     th.onclick = () => { if(sortKey===c.key) sortDir*=-1; else { sortKey=c.key; sortDir=-1; } renderBoard(); };
     tr.appendChild(th);
@@ -719,11 +735,13 @@ function renderBoardBody(){
     tr.innerHTML = `
       <td style="color:var(--muted);font-size:11px;">${myRank}</td>
       <td style="color:var(--muted);font-size:12px;">${p.ecr==null?"–":p.ecr} ${ecrDivergence(p, rankMap, ecrRankMap)}</td>
-      <td>${p.name} <span style="color:var(--muted);font-size:11px;">${p.team||""}</span></td>
+      <td>${p.name}</td>
+      <td style="color:var(--muted);">${p.team||"–"}</td>
       <td><span class="pill">${p.position}</span></td>
       <td style="color:var(--muted);font-size:12px;">${p.pos_rank==null?"–":p.position+Math.round(p.pos_rank)}</td>
-      <td style="color:var(--muted);">${money(p.value)}</td>
       <td style="font-weight:600;">${money(p.worth)}</td>
+      <td style="color:var(--muted);">${money(p.value)}</td>
+      <td style="color:var(--muted);">${money(p.live_auction_value==null?null:Math.round(p.live_auction_value))}</td>
       <td style="color:var(--muted);font-size:12px;">${p.adp==null?"–":Number(p.adp).toFixed(0)}</td>
       <td>${adpCell(p.ecr_vs_adp)}</td>
       <td>${bargainCell(p.bargain)}</td>

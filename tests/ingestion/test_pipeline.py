@@ -2,12 +2,7 @@ import pandas as pd
 import pytest
 
 from src.ingestion.merge import merge_sources
-from src.ingestion.pipeline import (
-    _apply_value_override,
-    _derive_context_stats,
-    _injury_risk,
-    _join_vegas,
-)
+from src.ingestion.pipeline import _derive_context_stats, _injury_risk, _join_vegas
 
 
 def _fp_position_frame(position, rows):
@@ -84,123 +79,72 @@ def test_derive_context_stats_flattens_source_columns():
     assert row["injury_risk"] in {"Low", "Med", "High"}
 
 
-def test_apply_value_override_matches_by_normalized_name(tmp_path, monkeypatch):
-    override_csv = tmp_path / "auction_values.csv"
-    override_csv.write_text("player,value\nPatrick Mahomes II,6\nJa'Marr Chase,60\n")
-
-    import src.ingestion.pipeline as pipe
-    monkeypatch.setattr(pipe, "OVERRIDE_PATH", str(override_csv))
-
-    df = pd.DataFrame([
-        {"player_name": "Patrick Mahomes II", "position": "QB"},  # exact match
-        {"player_name": "Ja'Marr Chase", "position": "WR"},       # punctuation match
-        {"player_name": "Some Rookie", "position": "RB"},         # no match -> NaN
-    ])
-
-    out = _apply_value_override(df)
-
-    assert out.set_index("player_name")["value_override"]["Patrick Mahomes II"] == 6
-    assert out.set_index("player_name")["value_override"]["Ja'Marr Chase"] == 60
-    assert pd.isna(out.set_index("player_name")["value_override"]["Some Rookie"])
-
-
-def test_apply_value_override_is_noop_when_file_missing(monkeypatch):
-    import src.ingestion.pipeline as pipe
-    monkeypatch.setattr(pipe, "OVERRIDE_PATH", "/nonexistent/auction_values.csv")
-
-    df = pd.DataFrame([{"player_name": "Patrick Mahomes II", "position": "QB"}])
-    out = _apply_value_override(df)
-
-    assert "value_override" not in out.columns
-
-
-def test_apply_value_override_accepts_alternate_column_names(tmp_path, monkeypatch):
-    override_csv = tmp_path / "auction_values.csv"
-    override_csv.write_text("name,salary\nJosh Allen,29\n")
-
-    import src.ingestion.pipeline as pipe
-    monkeypatch.setattr(pipe, "OVERRIDE_PATH", str(override_csv))
-
-    df = pd.DataFrame([{"player_name": "Josh Allen", "position": "QB"}])
-    out = _apply_value_override(df)
-
-    assert out.set_index("player_name")["value_override"]["Josh Allen"] == 29
-
-
-def test_apply_rankings_override_updates_ecr_bye_and_adds_tier(tmp_path, monkeypatch):
-    rankings_csv = tmp_path / "rankings_tiers.csv"
-    rankings_csv.write_text(
-        "rank,player,team,position,pos_rank,tier,bye,ecr_vs_adp\n"
-        "1,Ja'Marr Chase,CIN,WR,1,1,6,2\n"
-        "160,Houston Texans,HOU,DST,1,10,8,39\n"
-    )
-    import src.ingestion.pipeline as pipe
-    monkeypatch.setattr(pipe, "RANKINGS_PATH", str(rankings_csv))
-
-    df = pd.DataFrame([
-        {"player_name": "Ja'Marr Chase", "team": "CIN", "position": "WR",
-         "fantasypros_ecr_rank_ecr": 5.0, "fantasypros_ecr_bye": 9.0},   # stale values
-        {"player_name": "HOU D/ST", "team": "HOU", "position": "DST",
-         "fantasypros_ecr_rank_ecr": 200.0},                             # DST: name differs, team matches
-        {"player_name": "Unknown Rookie", "team": "SF", "position": "RB",
-         "fantasypros_ecr_rank_ecr": 300.0},                             # not on sheet: untouched
-    ])
-    out = pipe._apply_rankings_override(df).set_index("player_name")
-
-    chase = out.loc["Ja'Marr Chase"]
-    assert chase["fantasypros_ecr_rank_ecr"] == 1 and chase["fantasypros_ecr_bye"] == 6
-    assert chase["tier_override"] == 1 and chase["ecr_vs_adp"] == 2
-    assert out.loc["HOU D/ST", "fantasypros_ecr_rank_ecr"] == 160
-    assert out.loc["HOU D/ST", "tier_override"] == 10
-    assert out.loc["Unknown Rookie", "fantasypros_ecr_rank_ecr"] == 300
-    assert pd.isna(out.loc["Unknown Rookie", "tier_override"])
-
-
-def test_apply_rankings_override_noop_when_file_missing(monkeypatch):
-    import src.ingestion.pipeline as pipe
-    monkeypatch.setattr(pipe, "RANKINGS_PATH", "/nonexistent/rankings_tiers.csv")
-
-    df = pd.DataFrame([{"player_name": "Ja'Marr Chase", "team": "CIN", "position": "WR"}])
-    out = pipe._apply_rankings_override(df)
-
-    assert "tier_override" not in out.columns
-
-
-def test_derive_draft_market_fields_prefers_sheet_then_fp_adp_then_ffc():
+def test_derive_draft_market_fields_prefers_espn_then_ffc():
     from src.ingestion.pipeline import _derive_draft_market_fields
 
     df = pd.DataFrame([
-        # Sheet delta present: adp = ecr + delta = 1 + 2 = 3, delta kept as-is.
-        {"player_name": "A", "fantasypros_ecr_rank_ecr": 1.0, "ecr_vs_adp": 2.0,
-         "fantasypros_adp_adp": 99.0, "ffc_adp": 88.0},
-        # No sheet delta: FantasyPros ADP page wins over FFC; delta derived.
-        {"player_name": "B", "fantasypros_ecr_rank_ecr": 10.0, "ecr_vs_adp": None,
-         "fantasypros_adp_adp": 14.0, "ffc_adp": 20.0},
-        # Neither sheet nor FP page: FFC fallback.
-        {"player_name": "C", "fantasypros_ecr_rank_ecr": 30.0, "ecr_vs_adp": None,
-         "fantasypros_adp_adp": None, "ffc_adp": 25.0},
+        # ESPN ADP present: wins over FFC; delta derived from ECR.
+        {"player_name": "A", "fantasypros_ecr_rank_ecr": 1.0, "espn_adp": 3.0, "ffc_adp": 88.0},
+        # No ESPN ADP: FFC fallback.
+        {"player_name": "B", "fantasypros_ecr_rank_ecr": 30.0, "espn_adp": None, "ffc_adp": 25.0},
     ])
     out = _derive_draft_market_fields(df).set_index("player_name")
 
     assert out.loc["A", "adp"] == 3 and out.loc["A", "ecr_vs_adp"] == 2
-    assert out.loc["B", "adp"] == 14 and out.loc["B", "ecr_vs_adp"] == 4
-    assert out.loc["C", "adp"] == 25 and out.loc["C", "ecr_vs_adp"] == -5
+    assert out.loc["B", "adp"] == 25 and out.loc["B", "ecr_vs_adp"] == -5
 
 
-def test_derive_draft_market_fields_pos_rank_sources():
+def test_derive_draft_market_fields_pos_rank_from_ecr():
     from src.ingestion.pipeline import _derive_draft_market_fields
 
     df = pd.DataFrame([
-        {"player_name": "A", "pos_rank_override": 3.0, "fantasypros_ecr_pos_rank": "WR9"},
-        {"player_name": "B", "pos_rank_override": None, "fantasypros_ecr_pos_rank": "RB12"},
-        {"player_name": "C", "pos_rank_override": None, "fantasypros_ecr_pos_rank": None,
-         "fantasypros_adp_pos_rank": 7.0},
+        {"player_name": "A", "fantasypros_ecr_pos_rank": "WR9"},
+        {"player_name": "B", "fantasypros_ecr_pos_rank": None},
     ])
     out = _derive_draft_market_fields(df).set_index("player_name")
 
-    assert out.loc["A", "pos_rank"] == 3    # sheet wins
-    assert out.loc["B", "pos_rank"] == 12   # parsed from ecrData's "RB12"
-    assert out.loc["C", "pos_rank"] == 7    # ADP-page fallback
+    assert out.loc["A", "pos_rank"] == 9
+    assert pd.isna(out.loc["B", "pos_rank"])
+
+
+def test_derive_draft_market_fields_live_auction_value_from_espn():
+    from src.ingestion.pipeline import _derive_draft_market_fields
+
+    df = pd.DataFrame([
+        {"player_name": "A", "espn_auction_value": 55.0},
+        {"player_name": "B", "espn_auction_value": None},
+    ])
+    out = _derive_draft_market_fields(df).set_index("player_name")
+
+    assert out.loc["A", "live_auction_value"] == 55.0
+    assert pd.isna(out.loc["B", "live_auction_value"])
+
+
+def test_espn_fetcher_output_survives_merge_with_correct_prefix():
+    # Regression test for the bug that hid ESPN's ADP entirely: EspnFetcher
+    # must emit bare column names (no self-prefix), or merge_sources' own
+    # source-prefixing double-prefixes them (espn_espn_adp) and every
+    # downstream lookup (_derive_draft_market_fields's "espn_adp") silently
+    # misses. This goes through the real merge_sources, unlike the
+    # hand-built-DataFrame tests above, so it actually exercises that seam.
+    from src.ingestion.espn_fetcher import EspnFetcher
+    from src.ingestion.merge import merge_sources
+    from src.ingestion.pipeline import _derive_draft_market_fields
+
+    espn_df = pd.DataFrame([{
+        "player_name": "Bijan Robinson", "team": "ATL", "position": "RB",
+        "source": EspnFetcher.source_name,
+        "adp": 2.2, "auction_value": 60.0, "overall_rank": 1.0,
+        "pct_owned": 99.8, "pct_started": 99.3,
+    }])
+
+    merged = merge_sources([espn_df])
+
+    assert "espn_adp" in merged.columns and "espn_auction_value" in merged.columns
+    assert "espn_espn_adp" not in merged.columns
+
+    out = _derive_draft_market_fields(merged).iloc[0]
+    assert out["adp"] == 2.2 and out["live_auction_value"] == 60.0
 
 
 # ---- Cache TTL: a stale board is the draft-day failure mode ------------------

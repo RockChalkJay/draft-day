@@ -15,7 +15,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from src.ingestion.fantasypros_adp_fetcher import FantasyProsADPFetcher
+from src.ingestion.espn_fetcher import EspnFetcher
 from src.ingestion.fantasypros_ecr_fetcher import FantasyProsECRFetcher
 from src.ingestion.fantasypros_fetcher import FantasyProsFetcher
 from src.ingestion.ffc_fetcher import FFCFetcher
@@ -30,15 +30,6 @@ _REPO_ROOT = os.path.abspath(os.path.join(_THIS_DIR, "..", ".."))
 DATA_DIR = os.path.join(_REPO_ROOT, "data")
 CACHE_PATH = os.path.join(DATA_DIR, "players_raw.parquet")
 SAMPLE_PATH = os.path.join(DATA_DIR, "sample_players.json")
-# Overridable via env var so tests can run hermetically regardless of whether
-# a real data/auction_values.csv exists on the machine running them.
-OVERRIDE_PATH = os.environ.get(
-    "DRAFTDAY_AUCTION_VALUES_PATH", os.path.join(DATA_DIR, "auction_values.csv")
-)
-# Same, for the rankings/tiers sheet import (fantasypros_rankings_pdf.py output).
-RANKINGS_PATH = os.environ.get(
-    "DRAFTDAY_RANKINGS_PATH", os.path.join(DATA_DIR, "rankings_tiers.csv")
-)
 
 POSITIONS = ("qb", "rb", "wr", "te", "k", "dst")
 
@@ -112,110 +103,40 @@ def _derive_context_stats(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def _apply_value_override(df: pd.DataFrame) -> pd.DataFrame:
-    """If ``data/auction_values.csv`` exists (a user's Draft Wizard export), add a
-    ``value_override`` column matched by normalized player name. The rankings
-    engine uses it in place of the computed Value. Columns: player + value (also
-    accepts name/player_name and salary/auction/aav)."""
-    if df.empty or not os.path.exists(OVERRIDE_PATH):
-        return df
-    try:
-        ov = pd.read_csv(OVERRIDE_PATH)
-    except Exception:
-        return df
-    from src.ingestion.id_mapping import normalize_name
-
-    cols = {c.lower(): c for c in ov.columns}
-    name_col = cols.get("player") or cols.get("player_name") or cols.get("name")
-    val_col = cols.get("value") or cols.get("salary") or cols.get("auction") or cols.get("aav")
-    if not name_col or not val_col or "player_name" not in df.columns:
-        return df
-
-    vmap = {
-        normalize_name(str(n)): v
-        for n, v in zip(ov[name_col], pd.to_numeric(ov[val_col], errors="coerce"))
-        if pd.notna(v)
-    }
-    df = df.copy()
-    df["value_override"] = df["player_name"].map(lambda n: vmap.get(normalize_name(str(n))))
-    return df
-
-
-def _apply_rankings_override(df: pd.DataFrame) -> pd.DataFrame:
-    """If ``data/rankings_tiers.csv`` exists (a rankings-sheet import from
-    ``fantasypros_rankings_pdf.py``), override the board's ECR rank and bye with
-    the sheet's, and add ``tier_override`` (the sheet's expert tier, honored by
-    the rankings engine over computed cliff tiers) and ``ecr_vs_adp`` (experts
-    vs. market delta). Skill players match by normalized name; DST rows match by
-    team abbreviation, since sources disagree on DST naming."""
-    if df.empty or not os.path.exists(RANKINGS_PATH):
-        return df
-    try:
-        rk = pd.read_csv(RANKINGS_PATH)
-    except Exception:
-        return df
-    if not {"player", "position", "rank"}.issubset(rk.columns) or "player_name" not in df.columns:
-        return df
-    from src.ingestion.id_mapping import normalize_name
-
-    rk = rk.copy()
-    rk_is_dst = rk["position"].astype(str).str.upper() == "DST"
-    rk["_key"] = rk["player"].map(lambda n: normalize_name(str(n)))
-    rk.loc[rk_is_dst, "_key"] = "dst:" + rk.loc[rk_is_dst, "team"].astype(str)
-    rk = rk.drop_duplicates("_key").set_index("_key")
-
-    df = df.copy()
-    df_is_dst = df["position"].astype(str).str.upper() == "DST"
-    keys = df["player_name"].map(lambda n: normalize_name(str(n)))
-    keys = keys.where(~df_is_dst, "dst:" + df["team"].astype(str))
-
-    def sheet_col(name):
-        if name not in rk.columns:
-            return pd.Series(np.nan, index=df.index)
-        return pd.to_numeric(keys.map(rk[name]), errors="coerce")
-
-    for target, source in (("fantasypros_ecr_rank_ecr", "rank"), ("fantasypros_ecr_bye", "bye")):
-        vals = sheet_col(source)
-        if target not in df.columns:
-            df[target] = np.nan
-        df[target] = vals.where(vals.notna(), df[target])
-    df["tier_override"] = sheet_col("tier")
-    df["ecr_vs_adp"] = sheet_col("ecr_vs_adp")
-    df["pos_rank_override"] = sheet_col("pos_rank")
-    return df
-
-
 def _derive_draft_market_fields(df: pd.DataFrame) -> pd.DataFrame:
-    """Resolve the board's ADP / ±ADP / positional-rank display fields from
-    whichever sources are present, best first:
+    """Resolve the board's ADP / ±ADP / positional-rank / live-auction display
+    fields, all from automatic live sources -- no user-supplied file is ever
+    involved:
 
-      pos_rank:   rankings-sheet import -> ecrData's "WR1" string -> ADP page
-      adp:        rankings sheet (ecr + its printed delta) -> FantasyPros ADP
-                  page (needs DRAFTDAY_FP_COOKIE) -> FFC's free ADP API
-      ecr_vs_adp: rankings sheet -> derived as adp - ecr (positive = experts
-                  rank him ahead of where the market drafts him)
-
-    Runs after the CSV overrides so a locked sheet always wins."""
+      adp:               ESPN's live consensus ADP (real ESPN drafts, no
+                         login needed) -> FFC's free ADP API, whichever is
+                         present
+      ecr_vs_adp:        derived as adp - ecr (positive = experts rank him
+                         ahead of where the market actually drafts him)
+      pos_rank:          FantasyPros ECR page's own positional rank (e.g.
+                         "WR1"), the only automatic source that publishes one
+      live_auction_value: ESPN's live crowd-sourced auction value -- a
+                         comparison signal shown alongside computed Value,
+                         never blended into it (it's calibrated to ESPN's own
+                         typical league settings, not this league's)
+    """
     if df.empty:
         return df
     df = df.copy()
 
     ecr = _num(df, "fantasypros_ecr_rank_ecr")
-    sheet_delta = _num(df, "ecr_vs_adp")
-
-    adp = (sheet_delta + ecr).where(sheet_delta.notna() & ecr.notna())
-    adp = adp.fillna(_num(df, "fantasypros_adp_adp")).fillna(_num(df, "ffc_adp"))
+    adp = _num(df, "espn_adp").fillna(_num(df, "ffc_adp"))
     df["adp"] = adp
-    df["ecr_vs_adp"] = sheet_delta.fillna((adp - ecr).round())
+    df["ecr_vs_adp"] = (adp - ecr).round()
+    df["live_auction_value"] = _num(df, "espn_auction_value")
 
-    pos_rank = _num(df, "pos_rank_override")
     if "fantasypros_ecr_pos_rank" in df.columns:
-        from_ecr = pd.to_numeric(
+        df["pos_rank"] = pd.to_numeric(
             df["fantasypros_ecr_pos_rank"].astype(str).str.extract(r"(\d+)$")[0],
             errors="coerce",
         )
-        pos_rank = pos_rank.fillna(from_ecr)
-    df["pos_rank"] = pos_rank.fillna(_num(df, "fantasypros_adp_pos_rank"))
+    else:
+        df["pos_rank"] = np.nan
     return df
 
 
@@ -255,7 +176,7 @@ def fetch_live(scoring_format: str = "ppr") -> pd.DataFrame:
         frames.append(pd.concat(fp_frames, ignore_index=True))
 
     frames.append(FantasyProsECRFetcher().fetch(scoring_format=scoring_format))
-    frames.append(FantasyProsADPFetcher().fetch(scoring_format=scoring_format))
+    frames.append(EspnFetcher().fetch(scoring_format=scoring_format))
     frames.append(FFCFetcher().fetch(scoring_format=scoring_format))
     frames.append(SleeperFetcher().fetch())
 
@@ -348,12 +269,10 @@ def load_player_table_with_source(
 
     Order of preference: offline sample (if DRAFTDAY_OFFLINE), then the parquet
     cache (unless ``refresh``), then a live fetch, then the bundled sample.
-    ``source`` is one of "cache", "live", "sample", or "empty". Any optional
-    ``auction_values.csv`` / ``rankings_tiers.csv`` overrides are applied last,
-    regardless of source.
+    ``source`` is one of "cache", "live", "sample", or "empty". Every field is
+    sourced automatically -- there is no user-supplied override file.
     """
     df, source = _resolve_table(refresh, scoring_format, use_sample_on_failure)
-    df = _apply_rankings_override(_apply_value_override(df))
     return _derive_draft_market_fields(df), source
 
 
