@@ -264,7 +264,13 @@ src/
   ingestion/     external data sources + merge + pipeline orchestrator
   rankings/      the six-piece valuation engine (+ league_state, valuation)
   api/           FastAPI app, request/response models, serialization
-web/             single-page frontend (served by the API at /)
+web/             single-page frontend (served by the API at /); index.html is
+                 markup only -- css/styles.css plus a dependency-ordered set
+                 of plain js/*.js files (config -> state -> format -> api ->
+                 helpers -> normalize -> cells -> compute -> board -> league
+                 -> nav -> render -> modal -> settings -> sleeper -> main).
+                 No build step: classic <script src> tags sharing one global
+                 scope, loaded in the order index.html lists them.
 data/            sample_players.json (committed, offline fallback);
                  players_raw.parquet (live-fetch cache, gitignored)
 tests/           ingestion/, rankings/, api/  —  synthetic data, no network
