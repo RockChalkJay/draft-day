@@ -32,7 +32,7 @@ async function recomputeLive(){
     const lp = liveById.get(pl.id);
     if(lp){ pl.tier=num(lp.tier); pl.worth=num(lp.worth); pl.value=num(lp.value); pl.bargain=num(lp.bargain); pl.tcm=num(lp.tcm); }
   }
-  pdmMap = live.pdm_map || {}; inflation = live.inflation ?? 1; marketHeat = live.market_heat ?? 1;
+  inflation = live.inflation ?? 1; marketHeat = live.market_heat ?? 1;
   maxTierByPos = {};
   players.forEach(p => { if(p.tier) maxTierByPos[p.position] = Math.max(maxTierByPos[p.position] || 1, p.tier); });
   setStatus("");

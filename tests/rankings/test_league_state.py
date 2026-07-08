@@ -36,9 +36,3 @@ def test_league_state_empty_slots_by_pos_aggregates_across_teams():
     )
     agg = ls.empty_slots_by_pos()
     assert agg == {"RB": 2, "WR": 4, "FLEX": 2, "BENCH": 2}
-
-
-def test_league_state_is_drafted():
-    ls = LeagueState(teams=[], drafted_player_ids={"a", "b"})
-    assert ls.is_drafted("a")
-    assert not ls.is_drafted("z")

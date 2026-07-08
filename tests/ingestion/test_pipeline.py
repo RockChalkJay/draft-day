@@ -120,31 +120,35 @@ def test_derive_draft_market_fields_live_auction_value_from_espn():
     assert pd.isna(out.loc["B", "live_auction_value"])
 
 
-def test_espn_fetcher_output_survives_merge_with_correct_prefix():
-    # Regression test for the bug that hid ESPN's ADP entirely: EspnFetcher
-    # must emit bare column names (no self-prefix), or merge_sources' own
-    # source-prefixing double-prefixes them (espn_espn_adp) and every
-    # downstream lookup (_derive_draft_market_fields's "espn_adp") silently
-    # misses. This goes through the real merge_sources, unlike the
-    # hand-built-DataFrame tests above, so it actually exercises that seam.
+def test_espn_enrichment_joins_market_fields_onto_core_universe():
+    # ESPN is an enrichment source, not a universe source: its columns join
+    # onto players who already exist in the FantasyPros-defined core, and
+    # ESPN-only players (no projections) never become board rows. This
+    # exercises the real _left_join_by_player + derive seam -- the same path
+    # where a fetcher-side column prefix once silently hid ESPN's ADP
+    # (espn_espn_adp), so the fetcher must keep emitting bare names.
     from src.ingestion.espn_fetcher import EspnFetcher
-    from src.ingestion.merge import merge_sources
-    from src.ingestion.pipeline import _derive_draft_market_fields
+    from src.ingestion.pipeline import _derive_draft_market_fields, _left_join_by_player
 
-    espn_df = pd.DataFrame([{
-        "player_name": "Bijan Robinson", "team": "ATL", "position": "RB",
-        "source": EspnFetcher.source_name,
-        "adp": 2.2, "auction_value": 60.0, "overall_rank": 1.0,
-        "pct_owned": 99.8, "pct_started": 99.3,
+    core = pd.DataFrame([{
+        "player_id": "bijanrobinson_rb", "player_name": "Bijan Robinson",
+        "team": "ATL", "position": "RB", "fantasypros_ecr_rank_ecr": 2.0,
     }])
+    espn_df = pd.DataFrame([
+        {"player_name": "Bijan Robinson", "team": "ATL", "position": "RB",
+         "source": EspnFetcher.source_name, "adp": 2.2, "auction_value": 60.0},
+        {"player_name": "Practice Squad Guy", "team": "ATL", "position": "RB",
+         "source": EspnFetcher.source_name, "adp": 400.0, "auction_value": 0.0},
+    ])
 
-    merged = merge_sources([espn_df])
+    enriched = _left_join_by_player(core, espn_df, ["adp", "auction_value"], "espn_")
 
-    assert "espn_adp" in merged.columns and "espn_auction_value" in merged.columns
-    assert "espn_espn_adp" not in merged.columns
+    assert len(enriched) == 1  # enrichment never adds rows
+    assert "espn_espn_adp" not in enriched.columns
 
-    out = _derive_draft_market_fields(merged).iloc[0]
+    out = _derive_draft_market_fields(enriched).iloc[0]
     assert out["adp"] == 2.2 and out["live_auction_value"] == 60.0
+    assert out["ecr_vs_adp"] == 0  # round(2.2 - 2.0)
 
 
 # ---- Cache TTL: a stale board is the draft-day failure mode ------------------

@@ -54,8 +54,8 @@ def test_fetch_maps_positions_teams_and_ownership_fields():
     assert len(df) == 3  # the unmapped-position row is dropped
     lamb = df.set_index("player_name").loc["CeeDee Lamb"]
     assert lamb["team"] == "DAL" and lamb["position"] == "WR"
-    # Bare column names (no self-prefix) -- merge_sources adds the single
-    # "espn_" prefix itself; a fetcher-side prefix would double up and vanish.
+    # Bare column names (no self-prefix) -- the pipeline's enrichment join adds
+    # the "espn_" prefix; a fetcher-side prefix would double up and vanish.
     assert lamb["adp"] == 6.2 and lamb["auction_value"] == 38.5
     assert lamb["pct_owned"] == 99.9 and lamb["pct_started"] == 99.1
 

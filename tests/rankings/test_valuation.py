@@ -104,7 +104,7 @@ def test_end_to_end_static_then_live():
         drafted_player_ids=set(), starting_bankroll=200.0,
     )
     live = apply_live_valuation(static, ls)
-    assert {"value", "worth", "bargain", "tcm", "pdm"}.issubset(live.players.columns)
+    assert {"value", "worth", "bargain", "tcm"}.issubset(live.players.columns)
     assert live.pdm_map is not None and live.inflation is not None
 
     priced = live.players[live.players["value"] > 0]

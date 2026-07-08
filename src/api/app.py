@@ -1,4 +1,4 @@
-"""Stateless rankings API (architecture Option A) + static frontend host.
+"""Stateless rankings API + static frontend host.
 
 Three endpoints, no server-side session state:
   GET  /api/players          -> raw merged player table (cache/live/sample)

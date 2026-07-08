@@ -160,10 +160,3 @@ class FantasyProsFetcher(Fetcher):
             df = df.drop(columns=["Player"])
 
         return df
-
-
-if __name__ == "__main__":
-    fetcher = FantasyProsFetcher()
-    print("Fetching QBs...")
-    qb_df = fetcher.fetch("qb")
-    print(qb_df.head())

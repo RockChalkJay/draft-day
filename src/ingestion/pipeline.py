@@ -1,11 +1,13 @@
 """Orchestration: build the one wide merged player table the rankings engine
 consumes.
 
-Wires the per-source player-level fetchers through ``merge_sources``, joins the
-team-level Vegas source by ``team``, derives the board's context stats (target
-share, injury risk, team total), and caches the result to parquet. When live
-fetching is unavailable (no network, a source down) it falls back to the bundled
-offline sample so the app is always demoable.
+FantasyPros (projections + ECR) defines the player universe via
+``merge_sources``; ESPN/FFC/nflverse enrich it column-wise by canonical player
+id, and the team-level Vegas source joins by ``team``. Display fields (ADP,
+±ADP, injury risk, ...) are derived last, and the result is cached to parquet
+with a TTL. When live fetching is unavailable (no network, a source down) it
+falls back to a stale cache, then the bundled offline sample, so the app is
+always demoable.
 """
 
 import datetime
@@ -22,7 +24,6 @@ from src.ingestion.ffc_fetcher import FFCFetcher
 from src.ingestion.injury_history_fetcher import InjuryHistoryFetcher
 from src.ingestion.merge import merge_sources
 from src.ingestion.nflverse_fetcher import NflverseFetcher
-from src.ingestion.sleeper_fetcher import SleeperFetcher
 from src.ingestion.vegas_fetcher import VegasFetcher
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -160,9 +161,16 @@ def _left_join_by_player(df: pd.DataFrame, other: pd.DataFrame, cols: list[str],
 
 
 def fetch_live(scoring_format: str = "ppr") -> pd.DataFrame:
-    """Build the core player table from the ECR/projection/ADP sources, then
-    enrich it with nflverse usage, injury history, and Vegas team totals. Each
-    fetch is failure-tolerant, so a partial outage degrades gracefully."""
+    """Build the player table: FantasyPros (projections + ECR) defines the
+    player universe, every other source enriches it.
+
+    Universe-vs-enrichment is the core design rule here: only FantasyPros
+    frames go through ``merge_sources`` (adding rows); ESPN/FFC/nflverse data
+    is left-joined by canonical player id onto that universe (adding columns
+    only). Sources like ESPN carry thousands of players with no projections --
+    merged as rows they'd flood the board with unrankable junk entries, but as
+    enrichment their extra players simply don't match. Each fetch is
+    failure-tolerant, so a partial outage degrades to missing columns."""
     frames = []
 
     # FantasyPros projections come back one frame per position, all tagged with
@@ -176,17 +184,19 @@ def fetch_live(scoring_format: str = "ppr") -> pd.DataFrame:
         frames.append(pd.concat(fp_frames, ignore_index=True))
 
     frames.append(FantasyProsECRFetcher().fetch(scoring_format=scoring_format))
-    frames.append(EspnFetcher().fetch(scoring_format=scoring_format))
-    frames.append(FFCFetcher().fetch(scoring_format=scoring_format))
-    frames.append(SleeperFetcher().fetch())
 
     merged = merge_sources([f for f in frames if f is not None and not f.empty])
     if merged.empty:
         return merged
 
-    # Enrichment: left-joined onto the core universe (not merged into it), so
-    # these sources add columns without adding non-fantasy players. Prior-season
-    # usage; multi-season injury history.
+    # Enrichment: market data (ESPN live ADP/auction value, FFC ADP fallback),
+    # prior-season usage, and multi-season injury history.
+    merged = _left_join_by_player(
+        merged, EspnFetcher().fetch(scoring_format=scoring_format),
+        ["adp", "auction_value", "overall_rank", "pct_owned", "pct_started"], "espn_")
+    merged = _left_join_by_player(
+        merged, FFCFetcher().fetch(scoring_format=scoring_format),
+        ["adp"], "ffc_")
     stat_seasons = _recent_seasons(1)
     try:
         merged = _left_join_by_player(

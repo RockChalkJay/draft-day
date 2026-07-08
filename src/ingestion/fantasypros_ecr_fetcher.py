@@ -17,12 +17,13 @@ NUMERIC_COLUMNS = ["rank_ecr", "rank_min", "rank_max", "rank_ave", "rank_std", "
 
 class FantasyProsECRFetcher(Fetcher):
     """
-    FantasyPros' draft cheat-sheet page embeds a JSON blob (`ecrData`) blending
-    every contributing expert's individual ranking for each player, with
-    rank_min/rank_max/rank_ave/rank_std already computed across all of them --
-    this is the real multi-expert variance signal the floor/ceiling calculation
-    needs, and isn't derivable from a single projection source. One call covers
-    every position plus FantasyPros' own tier and bye week.
+    FantasyPros' draft cheat-sheet page embeds a JSON blob (`ecrData`) with the
+    expert-consensus overall rank, positional rank, expert tier, and bye week
+    for every player -- one unauthenticated call covers all positions. The
+    per-expert variance stats (rank_min/max/ave/std, total_experts) are kept
+    too: expert disagreement is a risk/upside signal no single-source
+    projection can provide, held as data for future use even though nothing
+    downstream consumes them yet.
     """
 
     source_name = "fantasypros_ecr"

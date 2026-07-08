@@ -11,9 +11,8 @@ class InjuryHistoryFetcher(Fetcher):
     Aggregates nflverse's weekly injury report data (free, no key) into a
     per-player history summary across the requested seasons: how many weeks
     they carried any game-status report, and how many of those were "Out" or
-    "Doubtful" (the closest free proxy for games actually missed). This is
-    multi-season history, distinct from sleeper_fetcher's current-week
-    injury_status snapshot.
+    "Doubtful" (the closest free proxy for games actually missed). Feeds the
+    board's Low/Med/High injury-risk tier.
     """
 
     source_name = "nflverse_injuries"

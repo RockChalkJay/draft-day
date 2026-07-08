@@ -7,9 +7,8 @@ from src.ingestion.base import Fetcher
 class FFCFetcher(Fetcher):
     """
     Fantasy Football Calculator's ADP REST API. Free for personal/commercial use
-    (attribution requested); no API key. Also exposes adp.stdev/high/low, which
-    is a second, independent variance signal alongside ECR spread for the
-    floor/ceiling calculation.
+    (attribution requested); no API key. Used as the ADP fallback when ESPN's
+    live consensus doesn't cover a player.
     """
 
     source_name = "ffc"

@@ -25,7 +25,6 @@ document.getElementById("confirmStartBtn").onclick = async () => {
   const tmpl = buildRosterTemplate(rosterConfig);
   teams = names.map((name,i) => ({ id:"t"+i, name, bankroll, roster: tmpl.map(pos=>({pos, playerId:null})) }));
   myTeamId = teams[0].id;
-  draftStarted = true;
   modalOverlay.style.display = "none";
   await recomputeStatic();   // num_teams / num_tiers may have changed
 };

@@ -37,6 +37,8 @@ def test_fetch_parses_embedded_ecr_json(mock_get, fetcher):
     bijan = df[df["player_name"] == "Bijan Robinson"].iloc[0]
     assert bijan["team"] == "ATL"
     assert bijan["position"] == "RB"
+    assert bijan["rank_ecr"] == 1
+    assert bijan["pos_rank"] == "RB1"
     assert bijan["rank_std"] == 1.14
     assert bijan["tier"] == 1
     assert bijan["bye"] == 11

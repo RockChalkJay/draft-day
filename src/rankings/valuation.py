@@ -147,8 +147,9 @@ def apply_live_valuation(
     df = static_result.players.copy()
 
     df["tcm"] = calculate_tcm(df, league_state)
+    # PDM is a per-position scarcity dict exposed via the API's pdm_map; it is
+    # deliberately not written as a per-player column (nothing reads one).
     pdm_map = calculate_pdm(df, league_state)
-    df["pdm"] = df["position"].map(pdm_map).fillna(1.0)
 
     budget = league_state.initial_cash()
     total_slots = sum(len(t.roster) for t in league_state.teams)

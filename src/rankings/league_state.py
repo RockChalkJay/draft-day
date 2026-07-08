@@ -34,13 +34,10 @@ class Team:
 class LeagueState:
     teams: list[Team] = field(default_factory=list)
     drafted_player_ids: set[str] = field(default_factory=set)
-    starting_bankroll: float = 200.0  # per-team starting budget, for market-heat
+    starting_bankroll: float = 200.0  # per-team starting budget; sets the league's total Value pool
 
     def initial_cash(self) -> float:
         return len(self.teams) * self.starting_bankroll
-
-    def is_drafted(self, player_id: str) -> bool:
-        return player_id in self.drafted_player_ids
 
     def total_remaining_cash(self) -> float:
         return float(sum(t.bankroll for t in self.teams))

@@ -139,13 +139,19 @@ Force a fresh pull mid-session (bypasses the cache, rewrites it):
 
 ### Data sources (all free, no key, no login)
 
-| Source | What it provides | Auth |
+| Source | Role | What it provides |
 |---|---|---|
-| FantasyPros | Projections, ECR, expert tier, positional rank, bye | None |
-| ESPN | Consensus ADP, auction value, ownership%/start% | None |
-| FFC (Fantasy Football Calculator) | ADP (fallback if ESPN's is thin) | None |
-| Sleeper | Player IDs, current injury status | None |
-| nflverse | Prior-season target share/usage, injury history, Vegas-implied team totals | None |
+| FantasyPros | **Universe** | Projections, ECR, expert tier, positional rank, bye — defines which players exist on the board |
+| ESPN | Enrichment | Live consensus ADP + auction value |
+| FFC (Fantasy Football Calculator) | Enrichment | ADP (fallback if ESPN's is thin) |
+| nflverse | Enrichment | Prior-season target share/usage, injury history, Vegas-implied team totals |
+| Sleeper | League settings | Scoring + roster config import in Settings (browser-side; not a player-data source) |
+
+**Universe vs. enrichment** is the pipeline's core rule: only FantasyPros
+frames add *rows*; every other source left-joins *columns* onto those rows by
+canonical player id. Sources like ESPN carry thousands of players with no
+projections — merged as rows they'd flood the board with unrankable junk
+entries, but as enrichment their extra players simply don't match.
 
 FantasyPros' pages used here (projections, ECR/rankings) are public and
 unauthenticated; only its separate ADP page and salary-cap calculator are
@@ -262,7 +268,8 @@ request along with the current `LeagueState`.
 ```
 src/
   ingestion/     external data sources + merge + pipeline orchestrator
-  rankings/      the six-piece valuation engine (+ league_state, valuation)
+  rankings/      the valuation engine: scoring -> tiers -> replacement/VORP ->
+                 tcm/pdm -> inflation -> value/worth (+ league_state)
   api/           FastAPI app, request/response models, serialization
 web/             single-page frontend (served by the API at /); index.html is
                  markup only -- css/styles.css plus a dependency-ordered set
@@ -285,10 +292,10 @@ tests/           ingestion/, rankings/, api/  —  synthetic data, no network
   ESPN's own typical league settings, not necessarily yours. Computing Value
   from projections + your league's actual teams/budget/roster sidesteps both,
   and ESPN's auction value is instead surfaced as its own comparison signal —
-  see the ADP/±ADP columns.
+  see the ESPN Value and ADP/±ADP columns.
 - **FantasyPros isn't the sole source of truth.** Projections, ECR, and expert
-  tier come from FantasyPros' free (unauthenticated) pages, but ADP/auction
-  value/ownership come from ESPN's public player endpoint, and ADP falls back
+  tier come from FantasyPros' free (unauthenticated) pages, but ADP and
+  auction value come from ESPN's public player endpoint, and ADP falls back
   to FFC if ESPN's is thin. If any one of these sources goes down or changes
   its page, the pipeline degrades (missing columns, not a crash) rather than
   depending on a single provider.

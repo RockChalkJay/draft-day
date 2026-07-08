@@ -95,11 +95,11 @@ class EspnFetcher(Fetcher):
                 "team": team_map.get(p.get("proTeamId"), "FA"),
                 "position": pos,
                 "source": self.source_name,
-                # Bare names: merge_sources prefixes every source's columns
-                # with its source name (espn_), so these must NOT be
-                # pre-prefixed here or the result double-prefixes
-                # (espn_espn_adp) and silently vanishes from every downstream
-                # lookup, same convention FFC/nflverse/Sleeper follow.
+                # Bare names: the pipeline's enrichment join adds the espn_
+                # prefix, same convention as FFC/nflverse. Only adp and
+                # auction_value are joined onto the board today; the rest are
+                # held as data for future use (the enrichment keep-list in
+                # pipeline.fetch_live decides what flows through).
                 "adp": ownership.get("averageDraftPosition"),
                 "auction_value": ownership.get("auctionValueAverage") or ranks.get("auctionValue"),
                 "overall_rank": ranks.get("rank"),  # ESPN's own overall rank, not positional

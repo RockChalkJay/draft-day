@@ -1,4 +1,4 @@
-"""Pydantic request/response models for the stateless rankings API (Option A).
+"""Pydantic request/response models for the stateless rankings API.
 
 The browser owns all draft state and re-sends it each call; these models are the
 wire contract. Player rows are passed as free-form dicts so the raw merged-table
@@ -51,7 +51,7 @@ class LeagueStateModel(BaseModel):
 class PlayersResult(BaseModel):
     players: list[dict[str, Any]]
     count: int
-    source: str  # "cache", "live", or "sample"
+    source: str  # "cache", "live", "sample", or "empty"
 
 
 class StaticRequest(BaseModel):
